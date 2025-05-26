@@ -1,0 +1,2 @@
+cargo fmt
+leptosfmt ./src
