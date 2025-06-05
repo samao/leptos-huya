@@ -5,35 +5,35 @@ use leptos_meta::Script;
 cfg_block! {
     #[cfg(not(feature="ssr"))] {
         use wasm_bindgen::prelude::*;
-        use wasm_bindgen::JsValue;
         use serde::{Deserialize, Serialize};
 
         #[wasm_bindgen]
         extern "C" {
-            #[wasm_bindgen(js_namespace = console, js_name = log)]
-            fn console_log_str(s: &str);
-
             #[derive(Debug)]
-            type Player;
+            type Hls;
 
-            #[wasm_bindgen(js_namespace = flvjs, js_name = createPlayer)]
-            fn create_player(confg: JsValue) -> Player;
+            #[wasm_bindgen(constructor)]
+            fn new(config: JsValue) -> Hls;
 
-            #[wasm_bindgen(method, js_name = attachMediaElement)]
-            fn attach_media(this: &Player, el: JsValue);
-            #[wasm_bindgen(method, js_name = load)]
-            fn load(this: &Player);
-            #[wasm_bindgen(method, js_name = play)]
-            fn play(this: &Player);
+            #[wasm_bindgen(static_method_of = Hls, js_name=isSupported)]
+            fn is_hls_supported() -> bool;
+
+            #[wasm_bindgen(method, js_name=loadSource)]
+            fn load_source(this:&Hls, url: String);
+
+            #[wasm_bindgen(method, js_name=attachMedia)]
+            fn attach_media(this:&Hls, video: JsValue);
+
+            #[wasm_bindgen(method)]
+            fn on(this: &Hls, event_type: JsValue, cb: &Closure<dyn Fn(JsValue)>);
         }
 
         #[wasm_bindgen]
-        #[derive(Debug, Deserialize, Serialize)]
-        struct PlayerConfig {
-            islive: bool,
+        #[derive(Debug, Serialize, Deserialize)]
+        struct Config {
+            #[serde(rename="enableWorker")]
+            enable_worker: bool,
             debug: bool,
-            url: String,
-            r#type: String,
         }
     }
 }
@@ -44,30 +44,32 @@ pub fn Player() -> impl IntoView {
 
     #[cfg(not(feature = "ssr"))]
     {
+        use leptos::logging::log;
         Effect::new(move |_| {
-            if let Some(_el) = el.get() {
-                use leptos::logging::log;
-                // use wasm_bindgen::JsValue;
-
-                let config = PlayerConfig {
-                    islive: true,
-                    r#type: "flv".into(),
-                    debug: true,
-                    url: "https://www.youtu.tv/stream/live.flv".to_owned(),
-                };
-                let js_config = serde_wasm_bindgen::to_value(&config).unwrap();
-                // log!("{:?}", js_config);
-                let player = create_player(js_config);
-                log!("{:?}", player);
-                player.attach_media(_el.into());
-                player.load();
-                player.play();
+            if let Some(el) = el.get() {
+                if Hls::is_hls_supported() {
+                    let config = Config {
+                        enable_worker: true,
+                        debug: true,
+                    };
+                    let js_config = serde_wasm_bindgen::to_value(&config).unwrap();
+                    let player = Hls::new(js_config);
+                    log!("{:?}", player);
+                    player.load_source("https://www.youtu.tv/stream/hls/master.m3u8".into());
+                    player.attach_media(el.into());
+                    log!("VIDEO Manifest WAITING");
+                    // player.on("hlsManifestParsed".into(), &Closure::new(|_| {
+                    //     log!("VIDEO: Manifest OK");
+                    // }));
+                } else {
+                    log!("不支持hls播放");
+                }
             }
         });
     }
 
     view! {
-        <Script src="https://www.youtu.tv/js/flv.min.js"></Script>
-        <video class="aspect-video bg-black/30" node_ref=el></video>
+        <Script src="https://www.youtu.tv/js/hls.min.js"></Script>
+        <video controls autoplay class="aspect-video bg-black" node_ref=el></video>
     }
 }
