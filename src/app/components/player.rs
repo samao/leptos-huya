@@ -45,12 +45,18 @@ pub fn Player() -> impl IntoView {
     #[cfg(not(feature = "ssr"))]
     {
         use leptos::logging::log;
+        use wasm_bindgen::{prelude::Closure, JsValue};
+
+        let parsed_handle = Closure::new(|data: JsValue| {
+            log!("rust {:?}", data);
+        });
+
         Effect::new(move |_| {
             if let Some(el) = el.get() {
                 if Hls::is_hls_supported() {
                     let config = Config {
                         enable_worker: true,
-                        debug: true,
+                        debug: false,
                     };
                     let js_config = serde_wasm_bindgen::to_value(&config).unwrap();
                     let player = Hls::new(js_config);
@@ -58,9 +64,7 @@ pub fn Player() -> impl IntoView {
                     player.load_source("https://www.youtu.tv/stream/hls/master.m3u8".into());
                     player.attach_media(el.into());
                     log!("VIDEO Manifest WAITING");
-                    // player.on("hlsManifestParsed".into(), &Closure::new(|_| {
-                    //     log!("VIDEO: Manifest OK");
-                    // }));
+                    player.on(JsValue::from_str("hlsManifestParsed"), &parsed_handle);
                 } else {
                     log!("不支持hls播放");
                 }
@@ -70,6 +74,13 @@ pub fn Player() -> impl IntoView {
 
     view! {
         <Script src="https://www.youtu.tv/js/hls.min.js"></Script>
-        <video controls autoplay class="aspect-video bg-black" node_ref=el></video>
+        <video
+            controls
+            autoplay
+            loop
+            muted
+            class="aspect-video bg-black shadow-md shadow-black/60"
+            node_ref=el
+        ></video>
     }
 }
