@@ -54,7 +54,7 @@ fn Ad() -> impl IntoView {
                     height="65"
                 />
                 <span
-                    class="size-5 bg-gray-300/50 text-black/20 absolute top-0 right-0"
+                    class="size-5 bg-gray-300/50 text-black/20 absolute top-0 right-0 hover:text-white"
                     on:click=move |_| show_ad.set(false)
                 >
                     x
@@ -83,7 +83,7 @@ pub fn Header() -> impl IntoView {
                             ev.prevent_default();
                         }
                         data-active
-                        class="hidden before:h-2 before:w-full before:absolute before:-top-2 flex-col gap-y-2 text-[12px]/[20px] text-[#333] w-[304px] p-4 bg-white rounded-md absolute -translate-x-1/2 translate-y-2 z-10 left-1/2 top-full"
+                        class="hidden cursor-default before:h-2 before:w-full before:absolute before:-top-2 flex-col gap-y-2 text-[12px]/[20px] text-[#333] w-[304px] p-4 pb-6 bg-white rounded-md absolute -translate-x-1/2 translate-y-2 z-10 left-1/2 top-full"
                     >
                         <For
                             each=|| CATEGROY.clone().into_iter()
@@ -99,10 +99,9 @@ pub fn Header() -> impl IntoView {
                                 </For>
                             </div>
                         </For>
-                        <div class="rounded-md bg-gray-300/80 text-center text-[12px]/[28px]  hover:text-white hover:bg-[#ff9600]">
+                        <div class="rounded-3xl bg-gray-300/80 text-center text-[12px]/[28px]  hover:text-white hover:bg-[#ff9600]">
                             更多 >
                         </div>
-
                         <Ad />
                     </div>
                 </A>
@@ -134,7 +133,7 @@ pub fn Header() -> impl IntoView {
                     />
                 </Form>
             </nav>
-            <ul class="flex gap-x-6 text-xs/1.5 items-center *:flex *:flex-col *:justify-center *:before:size-[26px] *:gap-1.5 *:before:bg-cover *:before:bg-no-repeat *:bg-center">
+            <ul class="flex gap-x-6 text-xs/1.5 items-center *:relative *:flex *:flex-col *:justify-center *:before:size-[26px] *:gap-1.5 *:before:bg-cover *:before:bg-no-repeat *:bg-center">
                 <li class="before:bg-[url(https://a.msstatic.com/huya/hd/h5/header/components/HeaderDynamic/NavItem/img/ls-2.9113b9d316856ca1d795c0e54079d940.png)]">
                     开播
                 </li>
@@ -147,8 +146,33 @@ pub fn Header() -> impl IntoView {
                 <li class="before:bg-[url(https://a.msstatic.com/huya/hd/h5/header/components/HeaderDynamic/NavItem/img/cal-3.e73b55e606fac48daf82cf9982d6ef25.png)]">
                     任务
                 </li>
-                <li class="border-white/35 ring-2 rounded-full text-[14px]/[34px] size-[34px] before:hidden">
+                <li class="border-white/35 ring-2 rounded-full text-[14px]/[34px] size-[34px] before:hidden
+                hover:*:[div]:block">
                     登录
+                    <div class="hidden rounded-md text-[#333] px-[25px] pb-[13px] pt-2 bg-white absolute -translate-x-full left-full top-full mt-3 z-10
+                    before:h-3 before:-top-3 before:left-0 before:w-[200px] before:absolute">
+                        <h1 class="text-left font-bold">登陆后可享受:</h1>
+                        <ul class="flex flex-col text-left *:[li]:flex *:[li]:items-center *:[li]:gap-x-2.5 *:[li]:before:size-[18px] *:[li]:before:bg-cover *:[li]:before:bg-no-repeat">
+                            <li class="before:bg-[url(https://a.msstatic.com/huya/hd/h5/header/components/HeaderDynamic/Login/img/a.bd84283473df965f75a07ee3f1933e57.png)]">
+                                蓝光6M高清画质
+                            </li>
+                            <li class="before:bg-[url(https://a.msstatic.com/huya/hd/h5/header/components/HeaderDynamic/Login/img/b.101344f1440dd469268eb425d1ae573a.png)]">
+                                独家赛事超前关注
+                            </li>
+                            <li class="before:bg-[url(https://a.msstatic.com/huya/hd/h5/header/components/HeaderDynamic/Login/img/c.23d9778a52ccd563d5c7ebbbf525235f.png)]">
+                                多元玩法精彩互动
+                            </li>
+                        </ul>
+                        <div class="bg-[#ffa900] text-[14px]/[30px] rounded-3xl hover:opacity-85 text-white my-2">
+                            登录
+                        </div>
+                        <a
+                            href=""
+                            class="text-sky-500 text-xs flex justify-center gap-x-1 [before,after]:text-gray-400/80 before:content-['>>'] after:content-['<<']"
+                        >
+                            点我注册
+                        </a>
+                    </div>
                 </li>
             </ul>
         </header>
