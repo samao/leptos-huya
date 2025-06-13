@@ -95,9 +95,7 @@ struct Size(u32, u32);
 type Sequment<'a> = (&'a str, &'a str, &'a str, &'a str, u32, u32);
 
 impl<'a> From<Sequment<'a>> for DownloadItem<'a> {
-    fn from(
-        (title, description, img_url, type_label, width, height): Sequment<'a>,
-    ) -> Self {
+    fn from((title, description, img_url, type_label, width, height): Sequment<'a>) -> Self {
         DownloadItem {
             title,
             description,
@@ -118,7 +116,7 @@ struct Task<'a> {
 async fn get_adv_info() -> String {
     // #[cfg(not(feature="ssr"))]
     // gloo_timers::future::TimeoutFuture::new(2000).await;
-    
+
     "https://livewebbs2.msstatic.com/huya_1716264051_content.gif".to_owned()
 }
 
@@ -132,11 +130,7 @@ fn Ad() -> impl IntoView {
         <Suspense fallback=move || "loading">
             <Show when=move || show_ad.get() fallback=|| "">
                 <div class="relative">
-                    <img
-                        src=result
-                        width="274"
-                        height="65"
-                    />
+                    <img src=result width="274" height="65" />
                     <span
                         class="size-5 bg-gray-300/50 text-black/20 absolute top-0 right-0 hover:text-white"
                         on:click=move |_| show_ad.set(false)
