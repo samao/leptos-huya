@@ -44,7 +44,7 @@ static CATEGROY: LazyLock<HashMap<&str, Vec<&str>>> = LazyLock::new(|| {
 
 static DOWNLOADS: LazyLock<Vec<DownloadItem>> = LazyLock::new(|| {
     vec![
-        ("虎牙APP", "独家赛事随时享", "https://a.msstatic.com/huya/hd/h5/header/components/Download/img/h-code.1d32b4ae284a3920100014734278a934.png", "扫码下载", 100, 100).into(),
+        ("虎牙APP", "独家赛事随时享", "https://a.msstatic.com/huya/hd/h5/header/components/Download/img/h-code.1d32b4ae284a3920100014734278a934.png", "扫码下载", 108, 108).into(),
         ("虎牙PC客户端", "畅想蓝光臻画质", "https://a.msstatic.com/huya/hd/h5/header/components/Download/img/h-pc2.ce21ce5e431fc4b57e21a4b97566759d.png", "点击下载", 108, 108).into(),
         ("虎牙TV电视端", "巨幕蓝光沉浸体验", "https://a.msstatic.com/huya/hd/h5/header/components/Download/img/h-TV.b00384c2386a51590fae10da845d8ed0.png", "点击下载",  108, 1088).into()
     ]
@@ -92,16 +92,11 @@ struct DownloadItem<'a> {
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 struct Size(u32, u32);
 
-impl<'a> From<(&'a str, &'a str, &'a str, &'a str, u32, u32)> for DownloadItem<'a> {
+type Sequment<'a> = (&'a str, &'a str, &'a str, &'a str, u32, u32);
+
+impl<'a> From<Sequment<'a>> for DownloadItem<'a> {
     fn from(
-        (title, description, img_url, type_label, width, height): (
-            &'a str,
-            &'a str,
-            &'a str,
-            &'a str,
-            u32,
-            u32,
-        ),
+        (title, description, img_url, type_label, width, height): Sequment<'a>,
     ) -> Self {
         DownloadItem {
             title,
@@ -120,26 +115,37 @@ struct Task<'a> {
     value: u32,
 }
 
+async fn get_adv_info() -> String {
+    // #[cfg(not(feature="ssr"))]
+    // gloo_timers::future::TimeoutFuture::new(2000).await;
+    
+    "https://livewebbs2.msstatic.com/huya_1716264051_content.gif".to_owned()
+}
+
 #[component]
 fn Ad() -> impl IntoView {
     let show_ad = RwSignal::new(true);
+    let result = Resource::new(|| (), |_| get_adv_info());
+    let result = move || result.get().unwrap_or_else(|| "".to_owned());
 
     view! {
-        <Show when=move || show_ad.get() fallback=|| "">
-            <div class="relative">
-                <img
-                    src="https://livewebbs2.msstatic.com/huya_1716264051_content.gif"
-                    width="274"
-                    height="65"
-                />
-                <span
-                    class="size-5 bg-gray-300/50 text-black/20 absolute top-0 right-0 hover:text-white"
-                    on:click=move |_| show_ad.set(false)
-                >
-                    x
-                </span>
-            </div>
-        </Show>
+        <Suspense fallback=move || "loading">
+            <Show when=move || show_ad.get() fallback=|| "">
+                <div class="relative">
+                    <img
+                        src=result
+                        width="274"
+                        height="65"
+                    />
+                    <span
+                        class="size-5 bg-gray-300/50 text-black/20 absolute top-0 right-0 hover:text-white"
+                        on:click=move |_| show_ad.set(false)
+                    >
+                        x
+                    </span>
+                </div>
+            </Show>
+        </Suspense>
     }
 }
 #[component]
@@ -225,15 +231,15 @@ pub fn Header() -> impl IntoView {
                     </li>
                     <li class="before:bg-[url(https://a.msstatic.com/huya/hd/h5/header/components/HeaderDynamic/NavItem/img/download-2.c9310be282ee8f2196da396cf89c916b.png)]">
                         下载
-                        <div class="hidden w-[436px] z-10 bg-white rounded-md text-[#666] absolute -translate-x-1/2 top-full mt-3 left-1/2 before:h-3 before:-top-3
+                        <div class="hidden w-[436px] z-10 bg-white rounded-md text-[#666] absolute -translate-x-1/2 top-full mt-3 -left-2.5 before:h-3 before:-top-3
                         before:left-0 before:w-full before:absolute">
-                            <div class="flex justify-between p-5">
+                            <div class="flex justify-between p-5 leading-3.5">
                                 <For
                                     each=move || DOWNLOADS.clone().into_iter()
                                     key=|item| item.title
                                     let(item)
                                 >
-                                    <div class="flex flex-col items-center gap-y-2 justify-between hover:*:[a]:text-[#f40]
+                                    <div class="flex flex-col items-center gap-y-0 justify-between hover:*:[a]:text-[#f40]
                                     first:after:bg-[#e5e5e5] first:after:absolute first:after:w-[1px] first:after:h-full first:after:-right-4">
                                         <h1 class="font-bold">{item.title}</h1>
                                         <h2 class="py-1">{item.description}</h2>
