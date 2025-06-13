@@ -1,11 +1,12 @@
 use cfg_block::cfg_block;
 use leptos::{html::Video, prelude::*};
 use leptos_meta::Script;
+use serde::{Deserialize, Serialize};
 
 cfg_block! {
     #[cfg(not(feature="ssr"))] {
-        use wasm_bindgen::prelude::*;
-        use serde::{Deserialize, Serialize};
+        use wasm_bindgen::{prelude::*, JsValue};
+        use leptos::logging::log;
 
         #[wasm_bindgen]
         extern "C" {
@@ -38,14 +39,27 @@ cfg_block! {
     }
 }
 
+#[allow(dead_code)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum MediaType {
+    Flv(String),
+    Hls(String),
+}
+
 #[component]
-pub fn Player() -> impl IntoView {
+pub fn Player(
+    #[prop(default=MediaType::Hls("https://www.youtu.tv/stream/hls/master.m3u8".to_owned()))] media: MediaType,
+) -> impl IntoView {
     let el = NodeRef::<Video>::new();
+
+    let lib_url = match media {
+        MediaType::Flv(_) => "https://www.youtu.tv/js/flv.min.js",
+        MediaType::Hls(_) => "https://www.youtu.tv/js/hls.min.js",
+    };
 
     #[cfg(not(feature = "ssr"))]
     {
-        use leptos::logging::log;
-        use wasm_bindgen::{prelude::Closure, JsValue};
+        log!("media: {:?}", lib_url);
 
         let parsed_handle = Closure::new(|data: JsValue| {
             log!("rust {:?}", data);
@@ -53,27 +67,34 @@ pub fn Player() -> impl IntoView {
 
         Effect::new(move |_| {
             if let Some(el) = el.get() {
-                if Hls::is_hls_supported() {
-                    let config = Config {
-                        enable_worker: true,
-                        debug: false,
-                    };
-                    let js_config = serde_wasm_bindgen::to_value(&config).unwrap();
-                    let player = Hls::new(js_config);
-                    log!("{:?}", player);
-                    player.load_source("https://www.youtu.tv/stream/hls/master.m3u8".into());
-                    player.attach_media(el.into());
-                    log!("VIDEO Manifest WAITING");
-                    player.on(JsValue::from_str("hlsManifestParsed"), &parsed_handle);
-                } else {
-                    log!("不支持hls播放");
+                match media.clone() {
+                    MediaType::Flv(video_url) => {
+                        log!("FLV 暂不支持: {}", video_url)
+                    }
+                    MediaType::Hls(video_url) => {
+                        if Hls::is_hls_supported() {
+                            let config = Config {
+                                enable_worker: true,
+                                debug: false,
+                            };
+                            let js_config = serde_wasm_bindgen::to_value(&config).unwrap();
+                            let player = Hls::new(js_config);
+                            log!("instance: {:?}", player);
+                            player.load_source(video_url.clone());
+                            player.attach_media(el.into());
+                            log!("VIDEO Manifest WAITING");
+                            player.on(JsValue::from_str("hlsManifestParsed"), &parsed_handle);
+                        } else {
+                            log!("不支持hls播放");
+                        }
+                    }
                 }
             }
         });
     }
 
     view! {
-        <Script src="https://www.youtu.tv/js/hls.min.js"></Script>
+        <Script src=lib_url></Script>
         <video
             controls
             autoplay

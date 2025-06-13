@@ -51,11 +51,33 @@ static DOWNLOADS: LazyLock<Vec<DownloadItem>> = LazyLock::new(|| {
 });
 
 static TASKS: LazyLock<Vec<Task>> = LazyLock::new(|| {
-    vec![Task {
-        img_url: "",
-        cost_value: 60,
-        value: 6000,
-    }]
+    vec![
+        Task {
+            img_url: "https://diy-assets.msstatic.com/dimoga/daoju/wz_dianquan_s.png",
+            cost_value: "60点券",
+            value: 6000,
+        },
+        Task {
+            img_url: "https://diy-assets.msstatic.com/dimoga/daoju/cfm_dianquan_s.png",
+            cost_value: "60点券",
+            value: 6000,
+        },
+        Task {
+            img_url: "https://diy-assets.msstatic.com/dimoga/daoju/lolm_dianquan_s.png",
+            cost_value: "500CF点",
+            value: 5000,
+        },
+        Task {
+            img_url: "https://diy-assets.msstatic.com/dimoga/daoju/hy_huliang_s.png",
+            cost_value: "虎粮*2",
+            value: 200,
+        },
+        Task {
+            img_url: "https://diy-assets.msstatic.com/dimoga/daoju/hy_huliang_s.png",
+            cost_value: "虎粮*10",
+            value: 1000,
+        },
+    ]
 });
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -94,7 +116,7 @@ impl<'a> From<(&'a str, &'a str, &'a str, &'a str, u32, u32)> for DownloadItem<'
 #[derive(Debug, Serialize, Deserialize, Clone)]
 struct Task<'a> {
     img_url: &'a str,
-    cost_value: u32,
+    cost_value: &'a str,
     value: u32,
 }
 
@@ -240,25 +262,39 @@ pub fn Header() -> impl IntoView {
                         历史
                     </li>
                     <li class="before:bg-[url(https://a.msstatic.com/huya/hd/h5/header/components/HeaderDynamic/NavItem/img/cal-3.e73b55e606fac48daf82cf9982d6ef25.png)]">
-                        任务 <div class="hidden">
-                            <div>
-                                <div class="flex justify-between">
+                        任务
+                        <div class="hidden w-[375px] min-h-[182px] bg-[#f5f6f7] bg-no-repeat bg-top bg-[url(https://a.msstatic.com/huya/hd/h5/header/components/UserExp/Panel/img/bg.b731e17e25af5baf19d32124b8a98d96.png)] p-3 z-10 text-[12px]/[20px] rounded-md text-[#666] absolute -translate-x-1/2 top-full mt-3 -left-[100px] before:h-3 before:-top-3
+                        before:left-0 before:w-full before:absolute">
+                            <div class="p-4 bg-white rounded-md">
+                                <div class="flex justify-between mb-2.5">
                                     "登录领取积分，兑换超多福利"
-                                    <button>立即登录</button>
+                                    // linear-gradient(221deg, #ffe44d 0%, #ffd736 100%)
+                                    <button class="bg-linear-[221deg] from-0% from-[#ffe44d] to-100% to-[#ffd736] font-bold px-2.5 py-0.5 rounded-[44px]">
+                                        立即登录
+                                    </button>
                                 </div>
-                                <For
-                                    each=|| TASKS.clone().into_iter()
-                                    key=|item| item.img_url
-                                    let(item)
-                                >
-                                    <div class="flex flex-col">
-                                        <img src=item.img_url />
-                                        <span>{item.cost_value}"点券"</span>
-                                        <div class="flex before:content-['*'] items-center gap-x-1 rounded-3xl">
-                                            {item.value}
+                                <div class="flex justify-between">
+                                    <For
+                                        each=|| TASKS.clone().into_iter()
+                                        key=|item| {
+                                            format!(
+                                                "{}_{}_{}",
+                                                item.img_url,
+                                                item.cost_value,
+                                                item.value,
+                                            )
+                                        }
+                                        let(item)
+                                    >
+                                        <div class="flex flex-col items-center gap-y-2.5">
+                                            <img src=item.img_url class="w-9 h-auto" />
+                                            <span>{item.cost_value}</span>
+                                            <div class="flex text-[12px]/[30px] font-bold before:size-3.5 before:bg-cover before:bg-center before:bg-[url(https://a.msstatic.com/huya/hd/h5/header/components/UserExp/img/icon.f100d39ed2920efdfe978c7d1cccdd71.png)] border border-gray-300 items-center gap-x-1 rounded-3xl px-1.5">
+                                                {item.value}
+                                            </div>
                                         </div>
-                                    </div>
-                                </For>
+                                    </For>
+                                </div>
                             </div>
                         </div>
                     </li>
