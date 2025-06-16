@@ -103,7 +103,7 @@ pub fn Player(
             disablepictureinpicture
             disableremoteplayback
             controlslist="play volume nofullscreen nodownload noremoteplayback noplaybackrate"
-            class="aspect-video bg-black shadow-md shadow-black/60"
+            class="bg-black shadow-md aspect-video shadow-black/60"
             node_ref=el
         ></video>
     }

@@ -1,0 +1,8 @@
+max_width=100
+tab_spaces=4
+indentation_style="Spaces"
+newline_style="Unix"
+macro_names=["leptos::view", "view"]
+
+[attr_values]
+class="Tailwind"

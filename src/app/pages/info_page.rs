@@ -5,6 +5,6 @@ use leptos_meta::Title;
 pub fn InfoPage() -> impl IntoView {
     view! {
         <Title text="信息工程" />
-        <div class="relative w-3/4 mx-auto">GOD INFO PAGE</div>
+        <div class="relative mx-auto w-3/4">GOD INFO PAGE</div>
     }
 }
