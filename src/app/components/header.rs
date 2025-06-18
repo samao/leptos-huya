@@ -1,5 +1,8 @@
 use leptos::prelude::*;
-use leptos_router::components::{Form, A};
+use leptos_router::{
+    components::{Form, A},
+    hooks::use_url,
+};
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, sync::LazyLock};
 
@@ -141,12 +144,25 @@ fn Ad() -> impl IntoView {
 }
 #[component]
 pub fn Header() -> impl IntoView {
+    let matched = use_url();
     view! {
-        <header class="w-full">
-            <div class="flex justify-start items-center mx-auto text-white whitespace-nowrap w-[980px] min-[1440px]:w-[1220px] h-[60px] text-[16px]/[32px]">
+        <header
+            style=(
+                "--logo-url",
+                move || match matched.get().path() {
+                    "/" => "url(https://a.msstatic.com/huya/hd/h5/static-source/main/logo.png)",
+                    _ => "url(https://a.msstatic.com/huya/hd/h5/static-source/main/logo2.png)",
+                },
+            )
+            class=move || match matched.get().path() {
+                "/" => "w-full text-white",
+                _ => "w-full text-[#555] bg-white",
+            }
+        >
+            <div class="flex justify-start items-center mx-auto whitespace-nowrap w-[980px] min-[1440px]:w-[1220px] h-[60px] text-[16px]/[32px]">
                 <a
                     href="/"
-                    class="inline-block object-contain flex-none mr-5 h-9 bg-center bg-[url(https://a.msstatic.com/huya/hd/h5/static-source/main/logo.png)] w-30 bg-size-[100%]"
+                    class="inline-block object-contain flex-none mr-5 h-9 bg-center bg-[image:var(--logo-url)] w-30 bg-size-[100%]"
                 />
                 <nav class="flex flex-auto gap-x-2 *:hover:bg-[#ff9600] *:rounded-2xl *:px-4 *:hover:[form]:bg-transparent *:[form]:relative *:[form]:mr-2 *:[form]:flex *:[form]:items-center *:[form]:px-0 *:aria-[current]:bg-[#ff9600] **:[i]:inline-block *:flex *:items-center **:[i]:duration-200 *:gap-x-2 *:has-[i]:hover:*:[i]:rotate-180 *:relative *:has-[i]:hover:*:data-[active]:flex **:[i]:w-[9px] **:[i]:h-[5px] **:[i]:bg-[url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAFCAYAAACXU8ZrAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAAALUlEQVQI12P8////fwYCgJGBgYEBn0JGRkZGRhgHm0KYPCOyILJCZAMwADYTAdkUE/0YEgvwAAAAAElFTkSuQmCC)]">
                     <A href="">首页</A>
