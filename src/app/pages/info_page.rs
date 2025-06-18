@@ -48,9 +48,9 @@ pub fn InfoPage() -> impl IntoView {
     view! {
         <Title text="信息工程" />
         <div class="relative mx-auto w-3/4">
-            GOD INFO PAGE <div>
+            GOD INFO PAGE <div class="text-xs/loose">
                 <input
-                    class="px-1 rounded-md border border-gray-400 placeholder:text-xs"
+                    class="px-2 rounded-md border border-gray-400"
                     type="text"
                     node_ref=input_ref
                     placeholder="type something here"
@@ -69,7 +69,7 @@ pub fn InfoPage() -> impl IntoView {
                 </Show>
                 <p>You submitted: {move || format!("{:?}", action.input().get())}</p>
                 <p>You submitted: {move || format!("{:?}", action.value().get())}</p>
-                <Transition fallback=|| "getting size">
+                <Transition fallback=|| "">
                     <p class="text-2xl font-bold">Total rows: {size}</p>
                 </Transition>
             </div> <SimpleQueryCounter />

@@ -6,7 +6,7 @@ use leptos_router::{
 };
 
 mod components;
-use components::Header;
+use components::{Footer, Header};
 
 mod pages;
 use pages::{HomePage, InfoPage, NotFound};
@@ -51,6 +51,7 @@ pub fn App() -> impl IntoView {
                     <Route path=StaticSegment("/g") view=InfoPage />
                 </FlatRoutes>
             </main>
+            <Footer />
         </Router>
     }
 }

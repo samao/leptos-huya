@@ -153,7 +153,7 @@ pub fn LiveRooms() -> impl IntoView {
                                     key=|item| item.clone()
                                     let(tag)
                                 >
-                                    <li class="flex items-center before:content-['·'] before:px-2 first:before:hidden">
+                                    <li class="flex items-center before:text-[#555] before:content-['·'] before:px-2 first:before:hidden">
                                         {tag}
                                     </li>
                                 </For>

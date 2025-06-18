@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 cfg_block! {
     #[cfg(not(feature="ssr"))] {
         use wasm_bindgen::{prelude::*, JsValue};
-        use leptos::logging::log;
+        use leptos::{logging::log, task::spawn_local};
 
         #[wasm_bindgen]
         extern "C" {
@@ -16,8 +16,8 @@ cfg_block! {
             #[wasm_bindgen(constructor)]
             fn new(config: JsValue) -> Hls;
 
-            #[wasm_bindgen(static_method_of = Hls, js_name=isSupported)]
-            fn is_hls_supported() -> bool;
+            #[wasm_bindgen(static_method_of = Hls, js_name=isSupported, catch)]
+            fn is_hls_supported() -> Result<bool, JsValue>;
 
             #[wasm_bindgen(method, js_name=loadSource)]
             fn load_source(this:&Hls, url: String);
@@ -26,7 +26,7 @@ cfg_block! {
             fn attach_media(this:&Hls, video: JsValue);
 
             #[wasm_bindgen(method)]
-            fn on(this: &Hls, event_type: JsValue, cb: &Closure<dyn Fn(JsValue)>);
+            fn once(this: &Hls, event_type: JsValue, cb: &Closure<dyn Fn(JsValue)>);
         }
 
         #[wasm_bindgen]
@@ -61,10 +61,6 @@ pub fn Player(
     {
         log!("media: {:?}", lib_url);
 
-        let parsed_handle = Closure::new(|data: JsValue| {
-            log!("rust {:?}", data);
-        });
-
         Effect::new(move |_| {
             if let Some(el) = el.get() {
                 match media.clone() {
@@ -72,21 +68,42 @@ pub fn Player(
                         log!("FLV 暂不支持: {}", video_url)
                     }
                     MediaType::Hls(video_url) => {
-                        if Hls::is_hls_supported() {
-                            let config = Config {
-                                enable_worker: true,
-                                debug: false,
-                            };
-                            let js_config = serde_wasm_bindgen::to_value(&config).unwrap();
-                            let player = Hls::new(js_config);
-                            log!("instance: {:?}", player);
-                            player.load_source(video_url.clone());
-                            player.attach_media(el.into());
-                            log!("VIDEO Manifest WAITING");
-                            player.on(JsValue::from_str("hlsManifestParsed"), &parsed_handle);
-                        } else {
-                            log!("不支持hls播放");
-                        }
+                        spawn_local(async move {
+                            let handle = Closure::new(|data: JsValue| {
+                                log!("Rust {:?}", data);
+                            });
+                            loop {
+                                match Hls::is_hls_supported() {
+                                    Ok(true) => {
+                                        let config = Config {
+                                            enable_worker: true,
+                                            debug: true,
+                                        };
+                                        let js_config =
+                                            serde_wasm_bindgen::to_value(&config).unwrap();
+                                        let player = Hls::new(js_config);
+                                        log!("instance: {:?}", player);
+                                        player.load_source(video_url.clone());
+                                        player.attach_media(el.into());
+                                        log!("VIDEO Manifest WAITING");
+
+                                        player
+                                            .once(JsValue::from_str("hlsManifestParsed"), &handle);
+
+                                        break;
+                                    }
+                                    Ok(false) => {
+                                        log!("浏览器不支持播放");
+                                        break;
+                                    }
+                                    Err(_) => {
+                                        use gloo_timers::future::TimeoutFuture;
+                                        TimeoutFuture::new(100).await;
+                                    }
+                                }
+                            }
+                            handle.forget();
+                        });
                     }
                 }
             }
