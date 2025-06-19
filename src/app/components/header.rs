@@ -172,7 +172,7 @@ pub fn Header() -> impl IntoView {
                             hover: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAFCAYAAACXU8ZrAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAAALUlEQVQI12P8////fwYCgJGBgYEBn0JGRkZGRhgHm0KYPCOyILJCZAMwADYTAdkUE/0YEgvwAAAAAElFTkSuQmCC",
                             normal: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAFCAYAAACXU8ZrAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAAALUlEQVQI12P8////fwYCgJGBgYEBn0JGRkZGRhgHm0KYPCOyILJCZAMwADYTAdkUE/0YEgvwAAAAAElFTkSuQmCC",
                         },
-                        0.6,
+                        0.8,
                         "white",
                         "white",
                         "https://a.msstatic.com/huya/hd/h5/static-source/main/logo.png",

@@ -6,3 +6,6 @@ pub use info_page::InfoPage;
 
 pub mod not_found;
 pub use not_found::NotFound;
+
+pub mod video;
+pub use video::VideoPage;

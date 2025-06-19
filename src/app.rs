@@ -9,7 +9,7 @@ mod components;
 use components::{Footer, Header};
 
 mod pages;
-use pages::{HomePage, InfoPage, NotFound};
+use pages::{HomePage, InfoPage, NotFound, VideoPage};
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
     view! {
@@ -49,6 +49,7 @@ pub fn App() -> impl IntoView {
                 <FlatRoutes fallback=NotFound>
                     <Route path=StaticSegment("/") view=HomePage />
                     <Route path=StaticSegment("/g") view=InfoPage />
+                    <Route path=StaticSegment("/video") view=VideoPage />
                 </FlatRoutes>
             </main>
             <Footer />
