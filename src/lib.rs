@@ -16,3 +16,9 @@ macro_rules! json {
         obj
     }};
 }
+
+#[cfg(feature = "hydrate")]
+pub fn has(lib_name: &str) -> bool {
+    let window = js_sys::global();
+    js_sys::Reflect::has(&window, &lib_name.into()).unwrap_or(false)
+}

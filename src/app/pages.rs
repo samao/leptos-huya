@@ -9,3 +9,6 @@ pub use not_found::NotFound;
 
 pub mod video;
 pub use video::VideoPage;
+
+pub mod user;
+pub use user::UserPage;

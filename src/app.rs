@@ -1,7 +1,7 @@
 use leptos::prelude::*;
 use leptos_meta::{provide_meta_context, MetaTags, Stylesheet, Title};
 use leptos_router::{
-    components::{FlatRoutes, Route, Router},
+    components::{Route, Router, Routes},
     StaticSegment,
 };
 
@@ -9,7 +9,7 @@ mod components;
 use components::{Footer, Header};
 
 mod pages;
-use pages::{HomePage, InfoPage, NotFound, VideoPage};
+use pages::{HomePage, InfoPage, NotFound, UserPage, VideoPage};
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
     view! {
@@ -46,11 +46,12 @@ pub fn App() -> impl IntoView {
         <Router>
             <Header />
             <main>
-                <FlatRoutes fallback=NotFound>
+                <Routes fallback=NotFound>
                     <Route path=StaticSegment("/") view=HomePage />
                     <Route path=StaticSegment("/g") view=InfoPage />
-                    <Route path=StaticSegment("/video") view=VideoPage />
-                </FlatRoutes>
+                    <Route path=StaticSegment("/video") view=UserPage />
+                    <Route path=StaticSegment("/l") view=VideoPage />
+                </Routes>
             </main>
             <Footer />
         </Router>

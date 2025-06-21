@@ -17,4 +17,5 @@
   },
   "css.validate": false,
   "rust-analyzer.cargo.features": "all",
+  "rust-analyzer.checkOnSave": false,
 }
