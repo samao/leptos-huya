@@ -68,7 +68,7 @@ pub fn VideoPage() -> impl IntoView {
         let clear_destoryed = Arc::clone(&destoryed);
 
         Effect::new(move || {
-            if let None = node_ref.get() {
+            if node_ref.get().is_none() {
                 return;
             }
             let clear_destoryed = Arc::clone(&destoryed);

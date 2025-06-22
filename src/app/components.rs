@@ -6,3 +6,6 @@ pub use footer::Footer;
 
 mod player;
 pub use player::{MediaType, Player};
+
+mod carousel;
+pub use carousel::{Carousel, SlideItem};

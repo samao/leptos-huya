@@ -148,7 +148,7 @@ pub fn Footer() -> impl IntoView {
     let us_links = Resource::new(|| (), move |_| get_us_concat());
 
     view! {
-        <footer class="w-full text-xs text-gray-400 bg-white **:[a]:hover:text-[#f80] **:[a]:cursor-pointer">
+        <footer class="mt-10 w-full text-xs text-gray-400 bg-white **:[a]:hover:text-[#f80] **:[a]:cursor-pointer">
             <div class="flex justify-between py-10 mx-auto leading-5 text-left w-[980px] min-[1440px]:w-[1220px] **:[h2]:text-sm **:[h2]:font-bold **:[h2]:mb-2.5">
                 <Suspense fallback=|| "loading...">
                     <div>

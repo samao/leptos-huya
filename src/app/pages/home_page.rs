@@ -8,6 +8,9 @@ use crate::app::components::{MediaType, Player};
 mod home_recommend_room;
 use home_recommend_room::LiveRooms;
 
+mod hot_news;
+use hot_news::HotNews;
+
 static ROOM_RECOMMEND: LazyLock<Vec<&str>> = LazyLock::new(|| {
     vec![
         "https://livewebbs2.msstatic.com/home_recommend_live_web_1738919767.jpg",
@@ -40,6 +43,9 @@ pub fn HomePage() -> impl IntoView {
                 </ul>
             </div>
             <LiveRooms />
+            <HotNews />
+        </div>
+        <div class="mt-10 w-full bg-center bg-no-repeat bg-cover h-[397px] min-[1440px]:h-[482px] bg-[url(https://a.msstatic.com/huya/main3/assets/img/index/recomBg.jpg)]">
             <button on:click=move |_| *set_count.write() += 1>"Click me: " {count}</button>
             <p>"Double count: " {move || count.get() * 2}</p>
         </div>

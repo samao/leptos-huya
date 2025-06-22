@@ -1,3 +1,4 @@
+use crate::app::components::{Carousel, SlideItem};
 use leptos::ev::click;
 use leptos::logging::log;
 use leptos::prelude::*;
@@ -33,6 +34,38 @@ pub fn UserPage() -> impl IntoView {
             <p use:add_dot=15 title="UNKNOWN">
                 HAHAHA
             </p>
+            <Carousel items=vec![
+                SlideItem {
+                    img_url: "https://huyaimg.msstatic.com/cdnimage/roompublicity/pic_1750388549.jpg"
+                        .to_string(),
+                    link: None,
+                },
+                SlideItem {
+                    img_url: "https://huyaimg.msstatic.com/cdnimage/roompublicity/pic_1750413784.jpg"
+                        .to_string(),
+                    link: None,
+                },
+                SlideItem {
+                    img_url: "https://huyaimg.msstatic.com/cdnimage/roompublicity/pic_1750388850.png"
+                        .to_string(),
+                    link: None,
+                },
+                SlideItem {
+                    img_url: "https://huyaimg.msstatic.com/cdnimage/roompublicity/pic_1750387905.jpg"
+                        .to_string(),
+                    link: None,
+                },
+                SlideItem {
+                    img_url: "https://huyaimg.msstatic.com/cdnimage/roompublicity/pic_1750327374.jpg"
+                        .to_string(),
+                    link: None,
+                },
+                SlideItem {
+                    img_url: "https://huyaimg.msstatic.com/cdnimage/roompublicity/pic_1750322434.jpg"
+                        .to_string(),
+                    link: None,
+                },
+            ] />
         </div>
     }
 }

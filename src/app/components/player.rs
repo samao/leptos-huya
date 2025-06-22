@@ -1,4 +1,4 @@
-use leptos::{html::Video, logging::log, prelude::*};
+use leptos::{html::Video, prelude::*};
 use serde::{Deserialize, Serialize};
 
 #[allow(dead_code)]
@@ -21,12 +21,11 @@ pub fn Player(
         MediaType::Full(_, _) => "/nextStatic/js/player/3.8.3/qie.player.js",
     };
 
-    log!("media: {:?}", lib_url);
     #[cfg(not(feature = "ssr"))]
     {
         use crate::{has, json};
         use gloo_timers::future::TimeoutFuture;
-        use leptos::task::spawn_local;
+        use leptos::{logging::log, task::spawn_local};
         use std::sync::{Arc, Mutex};
         use wasm_bindgen::{
             prelude::{wasm_bindgen, Closure},
@@ -87,6 +86,8 @@ pub fn Player(
             #[wasm_bindgen(js_name=applyConfig, js_namespace=["flvjs", "LoggingControl"])]
             fn apply_config(config: JsValue);
         }
+
+        log!("media: {:?}", lib_url);
 
         let destoryed = Arc::new(Mutex::new(false));
         let clear_destoryed = Arc::clone(&destoryed);
