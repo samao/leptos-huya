@@ -11,6 +11,9 @@ use home_recommend_room::LiveRooms;
 mod hot_news;
 use hot_news::HotNews;
 
+mod cate_rooms;
+use cate_rooms::CateRooms;
+
 static ROOM_RECOMMEND: LazyLock<Vec<&str>> = LazyLock::new(|| {
     vec![
         "https://livewebbs2.msstatic.com/home_recommend_live_web_1738919767.jpg",
@@ -25,10 +28,10 @@ static ROOM_RECOMMEND: LazyLock<Vec<&str>> = LazyLock::new(|| {
 #[component]
 pub fn HomePage() -> impl IntoView {
     let (count, set_count) = signal(0);
-
+    let section = "mx-auto w-[980px] min-[1440px]:w-[1220px]";
     view! {
         <Title text="Home" />
-        <div class="mx-auto w-[980px] min-[1440px]:w-[1220px]">
+        <div class=section>
             <div class="absolute top-0 left-0 w-full bg-center bg-cover h-[549px] min-[1440px]:h-[668px] bg-[url(https://livewebbs2.msstatic.com/huya_1706588003_content.jpg)] -z-10" />
             <div class="flex relative gap-x-2 justify-evenly mt-2 h-[467px] min-[1440px]:h-[576px]">
                 <Player media=MediaType::Hls(
@@ -48,6 +51,9 @@ pub fn HomePage() -> impl IntoView {
         <div class="mt-10 w-full bg-center bg-no-repeat bg-cover h-[397px] min-[1440px]:h-[482px] bg-[url(https://a.msstatic.com/huya/main3/assets/img/index/recomBg.jpg)]">
             <button on:click=move |_| *set_count.write() += 1>"Click me: " {count}</button>
             <p>"Double count: " {move || count.get() * 2}</p>
+        </div>
+        <div class=section>
+            <CateRooms />
         </div>
     }
 }
