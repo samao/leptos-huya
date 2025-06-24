@@ -14,6 +14,12 @@ use hot_news::HotNews;
 mod cate_rooms;
 use cate_rooms::CateRooms;
 
+mod hot_cate;
+use hot_cate::HotCate;
+
+mod playbill;
+use playbill::PlayBill;
+
 static ROOM_RECOMMEND: LazyLock<Vec<&str>> = LazyLock::new(|| {
     vec![
         "https://livewebbs2.msstatic.com/home_recommend_live_web_1738919767.jpg",
@@ -27,7 +33,6 @@ static ROOM_RECOMMEND: LazyLock<Vec<&str>> = LazyLock::new(|| {
 
 #[component]
 pub fn HomePage() -> impl IntoView {
-    let (count, set_count) = signal(0);
     let section = "mx-auto w-[980px] min-[1440px]:w-[1220px]";
     view! {
         <Title text="Home" />
@@ -48,9 +53,10 @@ pub fn HomePage() -> impl IntoView {
             <LiveRooms />
             <HotNews />
         </div>
-        <div class="mt-10 w-full bg-center bg-no-repeat bg-cover h-[397px] min-[1440px]:h-[482px] bg-[url(https://a.msstatic.com/huya/main3/assets/img/index/recomBg.jpg)]">
-            <button on:click=move |_| *set_count.write() += 1>"Click me: " {count}</button>
-            <p>"Double count: " {move || count.get() * 2}</p>
+        <div class="relative py-4 mt-10 w-full bg-center bg-no-repeat bg-cover min-[1440px]:py-9 h-[397px] min-[1440px]:h-[482px] bg-[url(https://a.msstatic.com/huya/main3/assets/img/index/recomBg.jpg)]">
+            <div class=format!("h-full {}", section)>
+                <HotCate />
+            </div>
         </div>
         <div class=section>
             <CateRooms />

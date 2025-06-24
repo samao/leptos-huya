@@ -1,6 +1,8 @@
 use leptos::prelude::*;
 
 use crate::app::components::{Carousel, SlideItem};
+use crate::app::pages::home_page::PlayBill;
+
 #[component]
 pub fn HotNews() -> impl IntoView {
     view! {
@@ -72,7 +74,7 @@ pub fn HotNews() -> impl IntoView {
                     </li>
                     <li>
                         <a href="">
-                            r#"“拳霸天下"拳头系品类营收活动-第五期奖励公示"#r
+                            {r#""拳霸天下"拳头系品类营收活动-第五期奖励公示"#}
                         </a>
                         <span>06/20</span>
                     </li>
@@ -104,7 +106,16 @@ pub fn HotNews() -> impl IntoView {
                     />
                 </a>
             </div>
-            <div class="w-[290px]">2</div>
+            <div class="w-[290px]">
+                <h1 class="flex gap-2.5 items-center">
+                    <img
+                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkVENDdBQTc4OUM2QzExRTg5MDkxQTk3NThEOUQxMDIzIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkVENDdBQTc5OUM2QzExRTg5MDkxQTk3NThEOUQxMDIzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RUQ0N0FBNzY5QzZDMTFFODkwOTFBOTc1OEQ5RDEwMjMiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RUQ0N0FBNzc5QzZDMTFFODkwOTFBOTc1OEQ5RDEwMjMiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6o1sqVAAAC7ElEQVR42qyWX0hTURzHf3Mbzcw/afWQRSX+eejBRlJmhYllrnpaD0XWgwTZg1APPhWUlYhED/lUvYQQUhmNwmQPFWJS1BREmUQQVpgmE/JPs7W53fW9u2fbOdu92xwe+PA7d/fe89k5v9+95+qCwSCpNYvlpBxyQBkYotTaVrAMZuQDu/155ERGkhs7gQO0piA5Dj6Dj2onk4leggC4nkR2kV2bBfrSEb0ADQlkOtAO7gE9uAGa1QbSyTli+UjUToFubrBW1u8CZ4EfNIGHWgMIInubrcTn1d9+NVRUP+gsNP1w5ZDHZ6AVNDdwgsfgPvCFT0RGsd+ylc3OZTpau6tyJmZyKc22DlQyGsEJMCWIfD59R1hSmO+mxlonmbfP0lojqlV+AiRSYrgvkQv9fZa71glOJD8Oh0EH2MUKYy/wRoqhz7GjPiQpcFPn+X7aXzqtSCROIrGyUH7bhP5Te7ONL6hFYAN7wBdQDi4IVfdufItJjo01TsriBWpEZRXon1ZZwnlwhfXPCKKvv/JC0bxtNn7AQJSWnmpqeVbNnz+nka/XLJqFHPkDilPICb9kLI5PF7AbIjkr1xD9YXGNIIo0KSbxgZhj/rogy1UKTVskkTgzSUWkoE9PFNAQxIr461Z1RqyfafSTZ9lAli4rf9cgOJhIlJFQFFvSoGj9guqrLL2l08oPuFM3EDvTgKXHeiCZKDIjg15Z7L//jHHPjnAcv7SuBO+98Is2KireMB+KI5Mbk78RROGohqiORacgOlQ8GYpdjp205DHG/3tJRaL0H6lI8tiGSGzLiIqOlX5bLMpfoJ8L2XSpt4bef99MHq9BbQY8w+AJJ8gGcjl+Yh81Y+CBUAxGkt7crP1gvfa2iiZ+51LbQGUqj0cF+xtqbZR9sHjF8pboaoHJM995tJ+ado9RSf4cmQz+lW58S2AYXGZbxZT6Vt5gK0MltUN6BDGbL2HgCi1VEEsFLL1WaSX/QKf1Abna7b8AAwCTgWFkmVE+1wAAAABJRU5ErkJggg=="
+                        alt=""
+                    />
+                    节目预告
+                </h1>
+                <PlayBill />
+            </div>
         </div>
     }
 }

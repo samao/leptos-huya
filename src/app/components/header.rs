@@ -243,7 +243,7 @@ pub fn Header() -> impl IntoView {
                     href="/"
                     class="inline-block object-contain flex-none mr-5 h-9 bg-center bg-[image:var(--logo-url)] w-30 bg-size-[100%]"
                 />
-                <nav class="flex flex-auto gap-x-2 *:hover:bg-[#ff9600] *:hover:text-white *:rounded-2xl *:px-4 *:hover:[form]:bg-transparent *:[form]:relative *:[form]:mr-2 *:[form]:flex *:[form]:items-center *:[form]:px-0 *:aria-[current]:bg-[#ff9600] *:aria-[current]:text-white *:aria-[current]:has-[i]:*:[i]:bg-[image:var(--triangle-hover)] **:[i]:inline-block *:flex *:items-center **:[i]:duration-200 *:gap-x-2 *:has-[i]:hover:*:[i]:rotate-180 *:relative *:has-[i]:hover:*:data-[active]:flex **:[i]:w-[9px] **:[i]:h-[5px] *:has-[i]:hover:*:[i]:opacity-100 *:has-[i]:*:[i]:opacity-[var(--triangle-opacity)] *:has-[i]:hover:*:[i]:bg-[image:var(--triangle-hover)] *:has-[i]:*:[i]:bg-[image:var(--triangle-icon)]">
+                <nav class="flex flex-auto gap-x-2 *:[a]:h-8 *:[a]:leading-8 *:hover:bg-[#ff9600] *:hover:text-white *:rounded-2xl *:px-4 *:hover:[form]:bg-transparent *:[form]:relative *:[form]:mr-2 *:[form]:flex *:[form]:items-center *:[form]:px-0 *:aria-[current]:bg-[#ff9600] *:aria-[current]:text-white *:aria-[current]:has-[i]:*:[i]:bg-[image:var(--triangle-hover)] **:[i]:inline-block *:flex *:items-center **:[i]:duration-200 *:gap-x-2 *:has-[i]:hover:*:[i]:rotate-180 *:relative *:has-[i]:hover:*:data-[active]:flex **:[i]:w-[9px] **:[i]:h-[5px] *:has-[i]:hover:*:[i]:opacity-100 *:has-[i]:*:[i]:opacity-[var(--triangle-opacity)] *:has-[i]:hover:*:[i]:bg-[image:var(--triangle-hover)] *:has-[i]:*:[i]:bg-[image:var(--triangle-icon)]">
                     <A href="">首页</A>
                     <A href="l">直播</A>
                     <A href="g">
@@ -279,10 +279,11 @@ pub fn Header() -> impl IntoView {
                             <Ad />
                         </div>
                     </A>
-                    <a
-                        href="m"
-                        class="inline-block bg-center bg-no-repeat bg-contain bg-[url(https://diy-assets.msstatic.com/header-match-icon/icon.png)] w-[74px] hover:bg-transparent!"
-                    ></a>
+                    // <a
+                    // href="m"
+                    // class="inline-block bg-center bg-no-repeat bg-contain bg-[url(https://diy-assets.msstatic.com/header-match-icon/icon.png)] w-[74px] hover:bg-transparent!"
+                    // ></a>
+                    <A href="m">赛事<i /></A>
                     <A href="video">视频<i /></A>
                     <A href="game">游戏<i /></A>
 

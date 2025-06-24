@@ -23,7 +23,7 @@ pub fn Carousel(#[prop(default=Vec::new())] items: Vec<SlideItem>) -> impl IntoV
                 if paused.get() {
                     return;
                 }
-                log!("running {}", index.get_untracked());
+                // log!("running {}", index.get_untracked());
                 set_index.update(|index| {
                     *index = (*index + 1) % data.get_untracked().len();
                 })
