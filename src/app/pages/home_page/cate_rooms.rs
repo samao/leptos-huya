@@ -1,3 +1,4 @@
+use leptos::either::EitherOf3;
 use leptos::{prelude::*, task::spawn_local};
 use serde::{Deserialize, Serialize};
 
@@ -34,14 +35,14 @@ struct Room<T: ToString> {
 struct User<T: ToString> {
     id: usize,
     name: T,
-    avator_url: T,
+    avatar_url: T,
 }
 #[derive(Debug, Serialize, Deserialize, Clone)]
 enum Tag<T: ToString> {
     // 蓝光
-    Blue,
+    Blue(T),
     Play(T),
-    Offical(T),
+    Official(T),
 }
 
 async fn get_recommend_cate_rooms() -> Result<Vec<Cate<&'static str>>, ServerFnError> {
@@ -90,12 +91,12 @@ async fn get_recommend_cate_rooms() -> Result<Vec<Cate<&'static str>>, ServerFnE
                     hot,
                     img_url,
                     name: room_name,
-                    owner: User { id: id + 10000, name: user_name, avator_url },
+                    owner: User { id: id + 10000, name: user_name, avatar_url: avator_url },
                     is_live: true,
                     tags: [
-                        Tag::Blue,
+                        Tag::Blue("蓝光10M"),
                         Tag::Play("摸个鱼"),
-                        Tag::Offical("潜力新秀")
+                        Tag::Official("潜力新秀")
                     ].to_vec()
                 }
             }).collect::<Vec<Room<&'static str>>>(),
@@ -144,13 +145,9 @@ async fn get_recommend_cate_rooms() -> Result<Vec<Cate<&'static str>>, ServerFnE
                     hot,
                     img_url,
                     name: room_name,
-                    owner: User { id: id + 10000, name: user_name, avator_url },
+                    owner: User { id: id + 10000, name: user_name, avatar_url: avator_url },
                     is_live: true,
-                    tags: [
-                        Tag::Blue,
-                        Tag::Play("妲己"),
-                        Tag::Offical("潜力新秀")
-                    ].to_vec()
+                    tags: [].to_vec()
                 }
             }).collect::<Vec<Room<&'static str>>>(),
         },
@@ -195,12 +192,12 @@ async fn get_recommend_cate_rooms() -> Result<Vec<Cate<&'static str>>, ServerFnE
                     hot,
                     img_url,
                     name: room_name,
-                    owner: User { id: id + 10000, name: user_name, avator_url },
+                    owner: User { id: id + 10000, name: user_name, avatar_url: avator_url },
                     is_live: true,
                     tags: [
-                        Tag::Blue,
+                        Tag::Blue("蓝光6M"),
                         Tag::Play("妲己"),
-                        Tag::Offical("潜力新秀")
+                        Tag::Official("潜力新秀")
                     ].to_vec()
                 }
             }).collect::<Vec<Room<&'static str>>>(),
@@ -249,12 +246,12 @@ async fn get_recommend_cate_rooms() -> Result<Vec<Cate<&'static str>>, ServerFnE
                     hot,
                     img_url,
                     name: room_name,
-                    owner: User { id: id + 10000, name: user_name, avator_url },
+                    owner: User { id: id + 10000, name: user_name, avatar_url: avator_url },
                     is_live: true,
                     tags: [
-                        Tag::Blue,
+                        Tag::Blue("蓝光8M"),
                         Tag::Play("妲己"),
-                        Tag::Offical("潜力新秀")
+                        Tag::Official("潜力新秀")
                     ].to_vec()
                 }
             }).collect::<Vec<Room<&'static str>>>(),
@@ -303,12 +300,12 @@ async fn get_recommend_cate_rooms() -> Result<Vec<Cate<&'static str>>, ServerFnE
                     hot,
                     img_url,
                     name: room_name,
-                    owner: User { id: id + 10000, name: user_name, avator_url },
+                    owner: User { id: id + 10000, name: user_name, avatar_url: avator_url },
                     is_live: true,
                     tags: [
-                        Tag::Blue,
+                        Tag::Blue("蓝光10M"),
                         Tag::Play("妲己"),
-                        Tag::Offical("潜力新秀")
+                        Tag::Official("潜力新秀")
                     ].to_vec()
                 }
             }).collect::<Vec<Room<&'static str>>>(),
@@ -354,12 +351,12 @@ async fn get_recommend_cate_rooms() -> Result<Vec<Cate<&'static str>>, ServerFnE
                     hot,
                     img_url,
                     name: room_name,
-                    owner: User { id: id + 10000, name: user_name, avator_url },
+                    owner: User { id: id + 10000, name: user_name, avatar_url: avator_url },
                     is_live: true,
                     tags: [
-                        Tag::Blue,
+                        Tag::Blue("蓝光8M"),
                         Tag::Play("妲己"),
-                        Tag::Offical("潜力新秀")
+                        Tag::Official("潜力新秀")
                     ].to_vec()
                 }
             }).collect::<Vec<Room<&'static str>>>(),
@@ -407,12 +404,12 @@ async fn get_recommend_cate_rooms() -> Result<Vec<Cate<&'static str>>, ServerFnE
                     hot,
                     img_url,
                     name: room_name,
-                    owner: User { id: id + 10000, name: user_name, avator_url },
+                    owner: User { id: id + 10000, name: user_name, avatar_url: avator_url },
                     is_live: true,
                     tags: [
-                        Tag::Blue,
+                        Tag::Blue("蓝光6M"),
                         Tag::Play("妲己"),
-                        Tag::Offical("潜力新秀")
+                        Tag::Official("潜力新秀")
                     ].to_vec()
                 }
             }).collect::<Vec<Room<&'static str>>>(),
@@ -460,12 +457,12 @@ async fn get_recommend_cate_rooms() -> Result<Vec<Cate<&'static str>>, ServerFnE
                     hot,
                     img_url,
                     name: room_name,
-                    owner: User { id: id + 10000, name: user_name, avator_url },
+                    owner: User { id: id + 10000, name: user_name, avatar_url: avator_url },
                     is_live: true,
                     tags: [
-                        Tag::Blue,
+                        Tag::Blue("蓝光4M"),
                         Tag::Play("妲己"),
-                        Tag::Offical("潜力新秀")
+                        Tag::Official("潜力新秀")
                     ].to_vec()
                 }
             }).collect::<Vec<Room<&'static str>>>(),
@@ -511,12 +508,12 @@ async fn get_recommend_cate_rooms() -> Result<Vec<Cate<&'static str>>, ServerFnE
                     hot,
                     img_url,
                     name: room_name,
-                    owner: User { id: id + 10000, name: user_name, avator_url },
+                    owner: User { id: id + 10000, name: user_name, avatar_url: avator_url },
                     is_live: true,
                     tags: [
-                        Tag::Blue,
+                        Tag::Blue("蓝光10M"),
                         Tag::Play("妲己"),
-                        Tag::Offical("潜力新秀")
+                        Tag::Official("潜力新秀")
                     ].to_vec()
                 }
             }).collect::<Vec<Room<&'static str>>>(),
@@ -555,12 +552,12 @@ async fn get_recommend_cate_rooms() -> Result<Vec<Cate<&'static str>>, ServerFnE
                     hot,
                     img_url,
                     name: room_name,
-                    owner: User { id: id + 10000, name: user_name, avator_url },
+                    owner: User { id: id + 10000, name: user_name, avatar_url: avator_url },
                     is_live: true,
                     tags: [
-                        Tag::Blue,
+                        Tag::Blue("蓝光10M"),
                         Tag::Play("妲己"),
-                        Tag::Offical("潜力新秀")
+                        Tag::Official("潜力新秀")
                     ].to_vec()
                 }
             }).collect::<Vec<Room<&'static str>>>(),
@@ -607,12 +604,12 @@ async fn get_recommend_cate_rooms() -> Result<Vec<Cate<&'static str>>, ServerFnE
                     hot,
                     img_url,
                     name: room_name,
-                    owner: User { id: id + 10000, name: user_name, avator_url },
+                    owner: User { id: id + 10000, name: user_name, avatar_url: avator_url },
                     is_live: true,
                     tags: [
-                        Tag::Blue,
+                        Tag::Blue("蓝光10M"),
                         Tag::Play("妲己"),
-                        Tag::Offical("潜力新秀")
+                        Tag::Official("潜力新秀")
                     ].to_vec()
                 }
             }).collect::<Vec<Room<&'static str>>>(),
@@ -657,12 +654,12 @@ async fn get_recommend_cate_rooms() -> Result<Vec<Cate<&'static str>>, ServerFnE
                     hot,
                     img_url,
                     name: room_name,
-                    owner: User { id: id + 10000, name: user_name, avator_url },
+                    owner: User { id: id + 10000, name: user_name, avatar_url: avator_url },
                     is_live: true,
                     tags: [
-                        Tag::Blue,
+                        Tag::Blue("蓝光6M"),
                         Tag::Play("妲己"),
-                        Tag::Offical("潜力新秀")
+                        Tag::Official("潜力新秀")
                     ].to_vec()
                 }
             }).collect::<Vec<Room<&'static str>>>(),
@@ -708,12 +705,12 @@ async fn get_recommend_cate_rooms() -> Result<Vec<Cate<&'static str>>, ServerFnE
                     hot,
                     img_url,
                     name: room_name,
-                    owner: User { id: id + 10000, name: user_name, avator_url },
+                    owner: User { id: id + 10000, name: user_name, avatar_url: avator_url },
                     is_live: true,
                     tags: [
-                        Tag::Blue,
+                        Tag::Blue("蓝光10M"),
                         Tag::Play("妲己"),
-                        Tag::Offical("潜力新秀")
+                        Tag::Official("潜力新秀")
                     ].to_vec()
                 }
             }).collect::<Vec<Room<&'static str>>>(),
@@ -821,16 +818,46 @@ pub fn CateRooms() -> impl IntoView {
 
 #[component]
 fn RoomCard(data: Room<&'static str>) -> impl IntoView {
+    let tag = !data.tags.is_empty();
+    let tags = data.tags;
     view! {
         <div class="flex overflow-hidden relative flex-col bg-white rounded-md duration-200 group/room-card hover:drop-shadow-md hover:drop-shadow-black/20">
             <div class="overflow-hidden relative after:duration-300 after:bg-no-repeat after:bg-transparent after:scale-150 after:opacity-0 after:absolute after:bg-center after:left-1/2 after:top-1/2 after:-translate-1/2 after:size-full after:bg-[url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpGNjc3QzBENEZBNTkxMUU2QjkyNzlGRkY5QzBBMkE1QSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpGNjc3QzBENUZBNTkxMUU2QjkyNzlGRkY5QzBBMkE1QSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkY2NzdDMEQyRkE1OTExRTZCOTI3OUZGRjlDMEEyQTVBIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkY2NzdDMEQzRkE1OTExRTZCOTI3OUZGRjlDMEEyQTVBIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+7vnOlQAAB19JREFUeNrcWmtMVEcU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)] hover:after:scale-100 hover:after:opacity-100 hover:after:bg-black/40">
                 <img src=data.img_url alt="" loading="lazy" class="aspect-290/163" />
+                <Show when=move || tag>
+                    <div class="flex absolute top-0 left-0 flex-row-reverse gap-x-2 justify-start items-center p-1 w-full text-xs leading-5 text-white *:rounded-md *:px-2">
+                        {tags
+                            .iter()
+                            .map(|tag| {
+                                match tag {
+                                    Tag::Blue(title) => {
+                                        EitherOf3::A(
+                                            view! { <span class="bg-sky-500">{*title}</span> },
+                                        )
+                                    }
+                                    Tag::Play(title) => {
+                                        EitherOf3::B(
+                                            view! { <span class="text-right">{*title}</span> },
+                                        )
+                                    }
+                                    Tag::Official(title) => {
+                                        EitherOf3::C(
+                                            view! {
+                                                <span class="absolute left-1 bg-black/50">{*title}</span>
+                                            },
+                                        )
+                                    }
+                                }
+                            })
+                            .collect_view()}
+                    </div>
+                </Show>
             </div>
             <div class="flex flex-col gap-y-1.5 p-2.5 text-left">
                 <p class="w-4/5 truncate group-hover/room-card:text-[#f80]">{data.name}</p>
                 <div class="flex relative gap-x-1 justify-start items-center text-xs text-gray-400">
                     <img
-                        src=data.owner.avator_url
+                        src=data.owner.avatar_url
                         class="rounded-full"
                         alt=""
                         width=24

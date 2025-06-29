@@ -93,6 +93,9 @@ pub fn Carousel(#[prop(default=Vec::new())] items: Vec<SlideItem>) -> impl IntoV
                                 <li
                                     aria_current=if id == index.get() { Some("page") } else { None }
                                     class="bg-white size-2 rounded-[8px]"
+                                    on:click=move |_| {
+                                        set_index.set(id);
+                                    }
                                 />
                             }
                         })
