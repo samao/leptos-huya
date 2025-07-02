@@ -3,7 +3,7 @@ use std::{sync::LazyLock, vec};
 use leptos::prelude::*;
 use leptos_meta::Title;
 
-use crate::app::components::{MediaType, Player};
+use crate::app::components::{MediaType, Player, Sider};
 
 mod home_recommend_room;
 use home_recommend_room::LiveRooms;
@@ -22,12 +22,12 @@ use playbill::PlayBill;
 
 static ROOM_RECOMMEND: LazyLock<Vec<&str>> = LazyLock::new(|| {
     vec![
-        "https://livewebbs2.msstatic.com/home_recommend_live_web_1738919767.jpg",
-        "https://livewebbs2.msstatic.com/home_recommend_live_web_1748937095.jpg",
-        "https://livewebbs2.msstatic.com/home_recommend_live_web_1749051394.jpg",
-        "https://livewebbs2.msstatic.com/home_recommend_live_web_1745225789.jpg",
-        "https://livewebbs2.msstatic.com/home_recommend_live_web_1748920899.jpg",
-        "https://livewebbs2.msstatic.com/home_recommend_live_web_1749520873.jpg",
+        "/imgs/home_recommend_live_web_1738919767.jpg",
+        "/imgs/home_recommend_live_web_1748937095.jpg",
+        "/imgs/home_recommend_live_web_1749051394.jpg",
+        "/imgs/home_recommend_live_web_1745225789.jpg",
+        "/imgs/home_recommend_live_web_1748920899.jpg",
+        "/imgs/home_recommend_live_web_1749520873.jpg",
     ]
 });
 
@@ -36,8 +36,8 @@ pub fn HomePage() -> impl IntoView {
     let section = "mx-auto w-[980px] min-[1440px]:w-[1220px]";
     view! {
         <Title text="Home" />
-        <div class=section>
-            <div class="absolute top-0 left-0 w-full bg-center bg-cover h-[549px] min-[1440px]:h-[668px] bg-[url(https://livewebbs2.msstatic.com/huya_1706588003_content.jpg)] -z-10" />
+        <div id="top" class=section>
+            <div class="absolute top-0 left-0 w-full bg-center bg-cover h-[549px] min-[1440px]:h-[668px] bg-[url(/imgs/huya_1706588003_content.jpg)] -z-10" />
             <div class="flex relative gap-x-2 justify-evenly mt-2 h-[467px] min-[1440px]:h-[576px]">
                 <Player media=MediaType::Hls(
                     "https://www.youtu.tv/stream/hls/master.m3u8".to_owned(),
@@ -53,7 +53,7 @@ pub fn HomePage() -> impl IntoView {
             <LiveRooms />
             <HotNews />
         </div>
-        <div class="relative py-4 mt-10 w-full bg-center bg-no-repeat bg-cover min-[1440px]:py-9 h-[397px] min-[1440px]:h-[482px] bg-[url(https://a.msstatic.com/huya/main3/assets/img/index/recomBg.jpg)]">
+        <div class="relative py-4 mt-10 w-full bg-center bg-no-repeat bg-cover min-[1440px]:py-9 h-[397px] min-[1440px]:h-[482px] bg-[url(/imgs/recomBg.jpg)]">
             <div class=format!("h-full {}", section)>
                 <HotCate />
             </div>
@@ -61,5 +61,6 @@ pub fn HomePage() -> impl IntoView {
         <div class=section>
             <CateRooms />
         </div>
+        <Sider />
     }
 }

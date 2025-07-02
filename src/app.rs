@@ -9,7 +9,7 @@ mod components;
 use components::{Footer, Header};
 
 mod pages;
-use pages::{HomePage, InfoPage, NotFound, UserPage, VideoPage};
+use pages::{Game, HomePage, InfoPage, NotFound, UserPage, VideoPage};
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
     view! {
@@ -22,7 +22,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 <HydrationScripts options islands=true />
                 <MetaTags />
             </head>
-            <body class="bg-[#f4f5f8] font-leptos!">
+            <body class="select-none bg-[#f4f5f8] font-leptos!">
                 <App />
             </body>
         </html>
@@ -51,6 +51,7 @@ pub fn App() -> impl IntoView {
                     <Route path=StaticSegment("/g") view=InfoPage />
                     <Route path=StaticSegment("/video") view=UserPage />
                     <Route path=StaticSegment("/l") view=VideoPage />
+                    <Route path=StaticSegment("/game") view=Game />
                 </Routes>
             </main>
             <Footer />

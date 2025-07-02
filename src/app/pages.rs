@@ -12,3 +12,6 @@ pub use video::VideoPage;
 
 pub mod user;
 pub use user::UserPage;
+
+mod game;
+pub use game::Game;

@@ -9,3 +9,6 @@ pub use player::{MediaType, Player};
 
 mod carousel;
 pub use carousel::{Carousel, SlideItem};
+
+pub mod sider;
+pub use sider::Sider;
