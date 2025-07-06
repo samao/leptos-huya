@@ -15,3 +15,6 @@ pub use user::UserPage;
 
 mod game;
 pub use game::Game;
+
+mod match_page;
+pub use match_page::MatchPage;

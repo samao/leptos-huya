@@ -164,6 +164,7 @@ pub fn VideoPage() -> impl IntoView {
                         "giftBar" => false,
                         "pip" => true,
                         "filter" => true,
+                        "eq" => true,
                     },
                     "websocket" => false,
                     "el" => node_ref.get_untracked().unwrap(),
@@ -187,7 +188,7 @@ pub fn VideoPage() -> impl IntoView {
         <script nonce="qie-player.js" src="/nextStatic/js/player/3.8.3/qie.player.js" />
         <div
             id="leptos-player"
-            class="my-3 mx-auto w-2/3 min-h-[500px] aspect-video"
+            class="flex-auto mr-2.5 w-full h-full **:[[class^='auto-play-failed']]:after:left-[70px]! **:[[class^='auto-play-failed']]:after:bottom-[80px]! **:[[class^='video-stats']]:text-left! **:[[class^='speed-range']]:*:[span]:right-0! **:[[class^='speed-range']]:*:nth-[2]:top-0!"
             node_ref=node_ref
         ></div>
     }

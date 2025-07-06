@@ -36,33 +36,27 @@ pub fn UserPage() -> impl IntoView {
             </p>
             <Carousel items=vec![
                 SlideItem {
-                    img_url: "/imgs/room/pic_1750388549.jpg"
-                        .to_string(),
+                    img_url: "/imgs/room/pic_1750388549.jpg".to_string(),
                     link: None,
                 },
                 SlideItem {
-                    img_url: "/imgs/room/pic_1750413784.jpg"
-                        .to_string(),
+                    img_url: "/imgs/room/pic_1750413784.jpg".to_string(),
                     link: None,
                 },
                 SlideItem {
-                    img_url: "/imgs/room/pic_1750388850.png"
-                        .to_string(),
+                    img_url: "/imgs/room/pic_1750388850.png".to_string(),
                     link: None,
                 },
                 SlideItem {
-                    img_url: "/imgs/room/pic_1750387905.jpg"
-                        .to_string(),
+                    img_url: "/imgs/room/pic_1750387905.jpg".to_string(),
                     link: None,
                 },
                 SlideItem {
-                    img_url: "/imgs/room/pic_1750327374.jpg"
-                        .to_string(),
+                    img_url: "/imgs/room/pic_1750327374.jpg".to_string(),
                     link: None,
                 },
                 SlideItem {
-                    img_url: "/imgs/room/pic_1750322434.jpg"
-                        .to_string(),
+                    img_url: "/imgs/room/pic_1750322434.jpg".to_string(),
                     link: None,
                 },
             ] />

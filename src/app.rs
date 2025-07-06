@@ -1,15 +1,15 @@
 use leptos::prelude::*;
 use leptos_meta::{provide_meta_context, MetaTags, Stylesheet, Title};
 use leptos_router::{
-    components::{Route, Router, Routes},
-    StaticSegment,
+    components::{Outlet, ParentRoute, Route, Router, Routes},
+    path, StaticSegment,
 };
 
 mod components;
-use components::{Footer, Header};
+use components::{Footer, Header, LeftNav};
 
 mod pages;
-use pages::{Game, HomePage, InfoPage, NotFound, UserPage, VideoPage};
+use pages::{Game, HomePage, InfoPage, MatchPage, NotFound, UserPage, VideoPage};
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
     view! {
@@ -17,7 +17,10 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
         <html lang="en">
             <head>
                 <meta charset="utf-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <meta
+                    name="viewport"
+                    content="width=device-width, height=device-height, initial-scale=1"
+                />
                 <AutoReload options=options.clone() />
                 <HydrationScripts options islands=true />
                 <MetaTags />
@@ -47,14 +50,36 @@ pub fn App() -> impl IntoView {
             <Header />
             <main>
                 <Routes fallback=NotFound>
-                    <Route path=StaticSegment("/") view=HomePage />
-                    <Route path=StaticSegment("/g") view=InfoPage />
-                    <Route path=StaticSegment("/video") view=UserPage />
-                    <Route path=StaticSegment("/l") view=VideoPage />
-                    <Route path=StaticSegment("/game") view=Game />
+                    <ParentRoute
+                        path=StaticSegment("/")
+                        view=|| {
+                            view! {
+                                <Outlet />
+                                <Footer />
+                            }
+                        }
+                    >
+                        <Route path=path!("") view=HomePage />
+                        <Route path=path!("video") view=UserPage />
+                        <Route path=path!("game") view=Game />
+                    </ParentRoute>
+                    <ParentRoute
+                        path=StaticSegment("/")
+                        view=|| {
+                            view! {
+                                <div class="flex relative gap-x-3 h-[calc(100vh-60px)]">
+                                    <LeftNav />
+                                    <Outlet />
+                                </div>
+                            }
+                        }
+                    >
+                        <Route path=path!("g") view=InfoPage />
+                        <Route path=path!("l") view=VideoPage />
+                    </ParentRoute>
+                    <Route path=path!("m") view=MatchPage />
                 </Routes>
             </main>
-            <Footer />
         </Router>
     }
 }

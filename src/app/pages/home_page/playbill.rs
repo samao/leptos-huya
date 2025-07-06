@@ -1,4 +1,3 @@
-use chrono::Utc;
 use leptos::{either::Either, prelude::*};
 use serde::{Deserialize, Serialize};
 
@@ -65,11 +64,6 @@ async fn get_playbills() -> Result<Vec<PlayBill<String>>, ServerFnError> {
     .to_vec())
 }
 
-fn to_time_str(timestamp: i64) -> String {
-    let d = chrono::DateTime::from_timestamp(timestamp, 0).unwrap_or(Utc::now());
-    format!("{}", d.format("%d日 %H:%M"))
-}
-
 #[component]
 pub fn PlayBill() -> impl IntoView {
     let play_bills = LocalResource::new(async || get_playbills().await);
@@ -127,7 +121,7 @@ pub fn PlayBill() -> impl IntoView {
                                                             Either::Left(
                                                                 view! {
                                                                     <span class="mr-2 text-sky-400 text-[12px]/[20px]">
-                                                                        {to_time_str(bill.time)}
+                                                                        {crate::to_time_str(bill.time)}
                                                                     </span>
                                                                 },
                                                             )

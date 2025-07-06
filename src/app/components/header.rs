@@ -277,9 +277,11 @@ pub fn Header() -> impl IntoView {
                 }
             }
             class=move || match (matched.get().path(), stickied.get()) {
-                ("/", false) => "w-full text-white duration-500",
-                ("/", true) => "w-full text-[#555] duration-500 bg-white sticky top-0 z-20",
-                _ => "w-full text-[#555] bg-white duration-500",
+                ("/", false) => "min-w-[980px] w-full text-white duration-500",
+                ("/", true) => {
+                    "min-w-[980px] w-full text-[#555] duration-500 bg-white sticky top-0 z-20"
+                }
+                _ => "min-w-[980px] w-full text-[#555] bg-white duration-500",
             }
         >
             <div class="flex justify-start items-center mx-auto whitespace-nowrap w-[980px] min-[1440px]:w-[1220px] h-[60px] text-[16px]/[32px]">
