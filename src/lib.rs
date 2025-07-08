@@ -8,6 +8,7 @@ pub fn hydrate() {
     leptos::mount::hydrate_body(App);
 }
 
+#[cfg(feature = "hydrate")]
 #[macro_export]
 macro_rules! json {
     ($($key:expr => $value:expr),* $(,)?) => {{

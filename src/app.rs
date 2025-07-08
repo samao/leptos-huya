@@ -22,7 +22,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                     content="width=device-width, height=device-height, initial-scale=1"
                 />
                 <AutoReload options=options.clone() />
-                <HydrationScripts options islands=true />
+                <HydrationScripts options islands=false />
                 <MetaTags />
             </head>
             <body class="select-none bg-[#f4f5f8] font-leptos!">

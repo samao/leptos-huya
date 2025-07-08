@@ -1,10 +1,13 @@
 use leptos::prelude::*;
+#[cfg(feature = "hydrate")]
 use leptos_use::use_window_scroll;
 
 #[component]
 pub fn Sider() -> impl IntoView {
+    #[allow(unused)]
     let (active, set_active) = signal(false);
 
+    #[cfg(feature = "hydrate")]
     Effect::new(move || {
         let (_, offset_y) = use_window_scroll();
 

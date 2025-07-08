@@ -185,7 +185,7 @@ pub fn VideoPage() -> impl IntoView {
     view! {
         <Title text="视频播放" />
         <script nonce="mock.min.js" src="/nextStatic/js/mock.min.js" />
-        <script nonce="qie-player.js" src="/nextStatic/js/player/3.8.3/qie.player.js" />
+        <script nonce="qie-player.js" src="/nextStatic/js/player/3.8.7/qie.player.js" />
         <div
             id="leptos-player"
             class="flex-auto mr-2.5 w-full h-full **:[[class^='auto-play-failed']]:after:left-[70px]! **:[[class^='auto-play-failed']]:after:bottom-[80px]! **:[[class^='video-stats']]:text-left! **:[[class^='speed-range']]:*:[span]:right-0! **:[[class^='speed-range']]:*:nth-[2]:top-0!"
