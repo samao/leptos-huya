@@ -3,6 +3,8 @@ use leptos::{html::Div, prelude::*};
 use leptos_meta::Title;
 use serde::{Deserialize, Serialize};
 
+use crate::clsx;
+
 #[derive(Debug, Deserialize, Serialize)]
 struct Barrage {
     from: User,
@@ -182,13 +184,18 @@ pub fn VideoPage() -> impl IntoView {
         });
     }
 
+    let player_clsx = clsx! {
+        "flex-auto mr-2.5 w-full h-full **:[[class^='auto-play-failed']]:after:left-[70px]!",
+        "**:[[class^='auto-play-failed']]:after:bottom-[80px]! **:[[class^='video-stats']]:text-left!",
+        "**:[[class^='speed-range']]:*:[span]:right-0! **:[[class^='speed-range']]:*:nth-[2]:top-0!"
+    };
     view! {
         <Title text="视频播放" />
         <script nonce="mock.min.js" src="/nextStatic/js/mock.min.js" />
         <script nonce="qie-player.js" src="/nextStatic/js/player/3.8.7/qie.player.js" />
         <div
             id="leptos-player"
-            class="flex-auto mr-2.5 w-full h-full **:[[class^='auto-play-failed']]:after:left-[70px]! **:[[class^='auto-play-failed']]:after:bottom-[80px]! **:[[class^='video-stats']]:text-left! **:[[class^='speed-range']]:*:[span]:right-0! **:[[class^='speed-range']]:*:nth-[2]:top-0!"
+            class=player_clsx
             node_ref=node_ref
         ></div>
     }

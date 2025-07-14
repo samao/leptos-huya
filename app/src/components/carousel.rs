@@ -3,6 +3,8 @@ use leptos::prelude::*;
 use serde::Serialize;
 use std::time::Duration;
 
+use crate::clsx;
+
 #[derive(Debug, Serialize, Clone)]
 pub struct SlideItem {
     pub img_url: String,
@@ -37,6 +39,13 @@ pub fn Carousel(#[prop(default=Vec::new())] items: Vec<SlideItem>) -> impl IntoV
         }
     });
 
+    let item_clsx = clsx! {
+        "hidden overflow-hidden justify-between items-center w-full *:size-[70px] *:bg-black/60",
+        "*:rounded-full *:hover:bg-[#f80] *:after:border-white *:after:block *:after:size-4 *:after:border-r-3",
+        "*:after:border-t-3 *:relative *:after:absolute *:after:top-1/2 *:after:left-3/4 *:after:-translate-1/2",
+        "*:after:rotate-225 *:-translate-x-1/2 group-hover/carousel:flex"
+    };
+
     view! {
         <div
             on:mouseenter=move |_| set_paused.set(true)
@@ -59,7 +68,7 @@ pub fn Carousel(#[prop(default=Vec::new())] items: Vec<SlideItem>) -> impl IntoV
                     </For>
                 </div>
                 <div class="flex absolute top-0 left-0 items-center w-full h-full">
-                    <div class="hidden overflow-hidden justify-between items-center w-full *:size-[70px] *:bg-black/60 *:rounded-full *:hover:bg-[#f80] *:after:border-white *:after:block *:after:size-4 *:after:border-r-3 *:after:border-t-3 *:relative *:after:absolute *:after:top-1/2 *:after:left-3/4 *:after:-translate-1/2 *:after:rotate-225 *:-translate-x-1/2 group-hover/carousel:flex">
+                    <div class=item_clsx>
                         <button on:click=move |_| {
                             set_index
                                 .update(|current| {

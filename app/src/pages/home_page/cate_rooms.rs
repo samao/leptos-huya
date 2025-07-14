@@ -2,6 +2,8 @@ use leptos::either::EitherOf3;
 use leptos::{prelude::*, task::spawn_local};
 use serde::{Deserialize, Serialize};
 
+use crate::clsx;
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 struct Cate<T: ToString> {
     id: u32,
@@ -1110,6 +1112,13 @@ async fn get_recommend_cate_rooms() -> Result<Vec<Cate<&'static str>>, ServerFnE
 #[component]
 pub fn CateRooms() -> impl IntoView {
     let (rooms, set_rooms) = signal(None);
+
+    let rooms_clx = clsx! {
+        "flex gap-x-1.5 leadding-[26px]",
+        "*:duration-300 *:select-none *:px-3 *:rounded-3xl *:border *:border-gray-400 *:text-gray-400",
+        "*:hover:text-[#f80]! *:hover:border-[#f80]"
+    };
+
     Effect::new(move || {
         spawn_local(async move {
             if let Ok(rooms) = get_recommend_cate_rooms().await {
@@ -1131,7 +1140,7 @@ pub fn CateRooms() -> impl IntoView {
                                 <img src=cate.icon_url width=32 height=32 />
                                 {cate.cate_name}
                             </h1>
-                            <ul class="flex gap-x-1.5 leadding-[26px] *:duration-300 *:select-none *:px-3 *:rounded-3xl *:border *:border-gray-400 *:text-gray-400 *:hover:text-[#f80]! *:hover:border-[#f80]">
+                            <ul class=rooms_clx>
                                 {cate
                                     .tags
                                     .into_iter()
@@ -1188,12 +1197,32 @@ pub fn CateRooms() -> impl IntoView {
 fn RoomCard(data: Room<&'static str>) -> impl IntoView {
     let tag = !data.tags.is_empty();
     let tags = data.tags;
+
+    let container_clx = clsx! {
+        "flex overflow-hidden relative flex-col bg-white rounded-md duration-200 flex-1/4 group/room-card",
+        "hover:drop-shadow-md hover:drop-shadow-black/20"
+    };
+    let img_box_clx = clsx! {
+        "overflow-hidden relative",
+        "after:duration-300 after:bg-no-repeat after:bg-transparent after:scale-150 after:opacity-0",
+        "after:absolute after:bg-center after:left-1/2 after:top-1/2 after:-translate-1/2 after:size-full after:bg-[url(/imgs/room-play.png)]",
+        "hover:after:scale-100 hover:after:opacity-100 hover:after:bg-black/40"
+    };
+    let tag_box_clx = clsx! {
+        "flex absolute top-0 left-0 flex-row-reverse gap-x-1 justify-start items-center p-1 w-full text-xs leading-5 text-white",
+        "*:rounded-md *:px-2"
+    };
+    let room_hot_clx = clsx! {
+        "flex gap-x-1.5 bg-no-repeat",
+        "before:inline-block before:w-3 before:h-4 before:bg-cover before:bg-center before: before:bg-[url(/imgs/room-hot.png)]"
+    };
+
     view! {
-        <div class="flex overflow-hidden relative flex-col bg-white rounded-md duration-200 flex-1/4 group/room-card hover:drop-shadow-md hover:drop-shadow-black/20">
-            <div class="overflow-hidden relative after:duration-300 after:bg-no-repeat after:bg-transparent after:scale-150 after:opacity-0 after:absolute after:bg-center after:left-1/2 after:top-1/2 after:-translate-1/2 after:size-full after:bg-[url(/imgs/room-play.png)] hover:after:scale-100 hover:after:opacity-100 hover:after:bg-black/40">
+        <div class=container_clx>
+            <div class=img_box_clx>
                 <img src=data.img_url alt="" loading="lazy" class="aspect-290/163" />
                 <Show when=move || tag>
-                    <div class="flex absolute top-0 left-0 flex-row-reverse gap-x-1 justify-start items-center p-1 w-full text-xs leading-5 text-white *:rounded-md *:px-2">
+                    <div class=tag_box_clx>
                         {tags
                             .iter()
                             .map(|tag| {
@@ -1234,7 +1263,7 @@ fn RoomCard(data: Room<&'static str>) -> impl IntoView {
                     />
                     <span class="inline-block w-3/5 truncate">{data.owner.name}</span>
                     <div class="flex absolute right-0">
-                        <span class="flex gap-x-1.5 bg-no-repeat before:inline-block before:w-3 before:h-4 before:bg-cover before:bg-center before: before:bg-[url(/imgs/room-hot.png)]">
+                        <span class=room_hot_clx>
                             {if data.hot > 10000 {
                                 format!("{:.2}万", (data.hot as f64) / 10000.0)
                             } else {

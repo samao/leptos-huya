@@ -2,6 +2,8 @@ use leptos::prelude::*;
 #[cfg(feature = "hydrate")]
 use leptos_use::use_window_scroll;
 
+use crate::clsx;
+
 #[component]
 pub fn Sider() -> impl IntoView {
     #[allow(unused)]
@@ -16,9 +18,21 @@ pub fn Sider() -> impl IntoView {
         });
     });
 
+    let nav_container_clsx = clsx! {
+        "flex fixed right-5 bottom-10 flex-col gap-y-1 justify-center items-center py-2 text-xs leading-5 text-gray-400 bg-white",
+        "rounded-md w-[50px] drop-shadow-xs min-[1440px]:right-10 *:hover:text-[#f80]"
+    };
+
+    let download_clsx = clsx! {
+        "flex absolute top-0 flex-col gap-y-1 items-center p-3 text-gray-400 whitespace-nowrap bg-white rounded-md opacity-0 duration-500",
+        "pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto w-[106px] drop-shadow-xs left-25 -z-10 after:w-40",
+        "after:bg-amber-300 after:absolute after:left-0 after:h-10 after:opacity-0 before:size-3 before:top-7 before:border-0 before:rotate-45",
+        "before:bg-white before:-translate-1/2 before:left-full before:border-l-0 before:border-b-0 before:absolute group-hover:-left-30"
+    };
+
     view! {
         <Show when=move || active.get()>
-            <nav class="flex fixed right-5 bottom-10 flex-col gap-y-1 justify-center items-center py-2 text-xs leading-5 text-gray-400 bg-white rounded-md w-[50px] drop-shadow-xs min-[1440px]:right-10 *:hover:text-[#f80]">
+            <nav class=nav_container_clsx>
                 <a class="flex flex-col gap-y-1 justify-center items-center group">
                     <div class="overflow-hidden absolute -top-1 -translate-y-full pointer-events-none h-[75px] w-18">
                         <img
@@ -27,7 +41,7 @@ pub fn Sider() -> impl IntoView {
                             alt=""
                         />
                     </div>
-                    <div class="flex absolute top-0 flex-col gap-y-1 items-center p-3 text-gray-400 whitespace-nowrap bg-white rounded-md opacity-0 duration-500 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto w-[106px] drop-shadow-xs left-25 -z-10 after:w-40 after:bg-amber-300 after:absolute after:left-0 after:h-10 after:opacity-0 before:size-3 before:top-7 before:border-0 before:rotate-45 before:bg-white before:-translate-1/2 before:left-full before:border-l-0 before:border-b-0 before:absolute group-hover:-left-30">
+                    <div class=download_clsx>
                         <img class="size-20" src="/imgs/app-qrcode.png" alt="" />
                         <p>虎牙直播App <br />独家赛事随时享</p>
                         <button class="px-2 leading-6 rounded-3xl border border-current hover:text-white text-[#f80] hover:bg-[#f80]">

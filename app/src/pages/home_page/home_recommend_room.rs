@@ -1,6 +1,8 @@
 use leptos::prelude::*;
 use serde::{Deserialize, Serialize};
 
+use crate::clsx;
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CategroyData<T: ToString + Sized + 'static> {
     id: u32,
@@ -153,7 +155,19 @@ async fn get_live_rooms() -> Vec<CategroyData<String>> {
 #[component]
 pub fn LiveRooms() -> impl IntoView {
     let async_data = Resource::new(|| (), move |_| get_live_rooms());
-
+    let room_title_clsx = clsx! {
+        "flex items-center font-bold cursor-default text-[18px]",
+        "before:bg-center before:mr-2 before:bg-contain before:bg-[image:var(--icon-url)] before:size-6.5 hover:text-[#ff8a00]"
+    };
+    let room_container_clsx = clsx! {
+        "overflow-hidden relative rounded-md w-[224px] aspect-156/88 group",
+        "after:absolute after:bottom-0 after:left-0 after:w-full after:h-7 after:bg-linear-to-t",
+        "after:from-0% after:to-100% after:from-black/30 after:to-transparent"
+    };
+    let room_img_play_clsx = clsx! {
+        "flex absolute top-0 left-0 justify-center items-center w-full h-full",
+        "bg-black opacity-0 duration-300 group-hover:opacity-60"
+    };
     view! {
         <Suspense fallback=|| "loading rooms...">
             <div class="grid grid-cols-2 gap-x-3 gap-y-4 mt-10 mb-8 text-xs">
@@ -167,7 +181,7 @@ pub fn LiveRooms() -> impl IntoView {
                         move || format!("url({:?})", room_data.icon.to_string()),
                     )>
                         <div class="flex gap-x-2.5 items-center mb-2 text-[#555]">
-                            <h1 class="flex items-center font-bold cursor-default text-[18px] before:bg-center before:mr-2 before:bg-contain before:bg-[image:var(--icon-url)] before:size-6.5 hover:text-[#ff8a00]">
+                            <h1 class=room_title_clsx>
                                 {room_data.title}
                             </h1>
                             <ul class="flex whitespace-nowrap cursor-default *:hover:text-[#ff8a00]">
@@ -188,9 +202,9 @@ pub fn LiveRooms() -> impl IntoView {
                                 key=|room| room.id
                                 let(room_info)
                             >
-                                <div class="overflow-hidden relative rounded-md w-[224px] aspect-156/88 group after:absolute after:bottom-0 after:left-0 after:w-full after:h-7 after:bg-linear-to-t after:from-0% after:to-100% after:from-black/30 after:to-transparent">
+                                <div class=room_container_clsx>
                                     <img src=room_info.img_url alt="" class="w-full h-full" />
-                                    <div class="flex absolute top-0 left-0 justify-center items-center w-full h-full bg-black opacity-0 duration-300 group-hover:opacity-60">
+                                    <div class=room_img_play_clsx>
                                         <img
                                             width="40"
                                             height="40"

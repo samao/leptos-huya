@@ -1,4 +1,4 @@
-use crate::app::components::{Carousel, SlideItem};
+use crate::components::{Carousel, SlideItem};
 use leptos::ev::click;
 use leptos::logging::log;
 use leptos::prelude::*;
@@ -22,7 +22,6 @@ fn add_dot(el: Element, amount: usize) {
 
 #[component]
 pub fn UserPage() -> impl IntoView {
-
     #[cfg(feature = "hydrate")]
     Effect::new(|| {
         log!("{:?}", serde_json::json!({"name": "aaa"}));

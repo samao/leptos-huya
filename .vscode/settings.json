@@ -1,21 +1,14 @@
 {
-  "emmet.includeLanguages": {
-    "rust": "html",
-    "*.rs": "html"
-  },
-  "tailwindCSS.includeLanguages": {
-    "rust": "html",
-    "*.rs": "html"
-  },
-  "files.associations": {
-    "*.rs": "rust"
-  },
-  "editor.quickSuggestions": {
-    "other": "on",
-    "comments": "on",
-    "strings": true
-  },
-  "css.validate": false,
-  "rust-analyzer.cargo.features": "all",
-  "rust-analyzer.checkOnSave": true
+    "rust-analyzer.cargo.features": "all",
+    "tailwindCSS.includeLanguages": {
+        ".rs": "html",
+        "rust": "html"
+    },
+    "tailwindCSS.classFunctions": [
+        "clsx!"
+    ],
+    "tailwindCSS.experimental.classRegex": [
+        ["clsx!\\s*\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+        ["clsx!\\s*\\{([^}]*)\\}", "[\"'`]([^\"'`]*).*?[\"'`]"]
+    ],
 }

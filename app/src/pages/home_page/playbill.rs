@@ -1,6 +1,8 @@
 use leptos::{either::Either, prelude::*};
 use serde::{Deserialize, Serialize};
 
+use crate::clsx;
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 struct PlayBill<T: ToString> {
     is_live: bool,
@@ -74,7 +76,13 @@ pub fn PlayBill() -> impl IntoView {
     };
 
     let (active, set_active) = signal(0);
-
+    let item_clsx = clsx! {
+        "flex relative items-center mb-2 before:-translate-x-1/2 before:-left-2.5 before:absolute before:size-[9px] before:bg-no-repeat",
+        "before:bg-bottom before:bg-[image:var(--bill-icon)]"
+    };
+    let is_live_base_clsx = clsx! {
+        "flex flex-col flex-auto gap-y-2 justify-center items-center w-[63px]"
+    };
     view! {
         <div class="flex-auto px-3 pr-0 text-left select-none bar-y-hidden">
             {move || {
@@ -108,7 +116,7 @@ pub fn PlayBill() -> impl IntoView {
                                                     }
                                                     open=move || active.get() == index
                                                 >
-                                                    <summary class="flex relative items-center mb-2 before:-translate-x-1/2 before:-left-2.5 before:absolute before:size-[9px] before:bg-no-repeat before:bg-bottom before:bg-[image:var(--bill-icon)]">
+                                                    <summary class=item_clsx>
                                                         {if bill.is_live {
                                                             Either::Right(
                                                                 view! {
@@ -132,7 +140,7 @@ pub fn PlayBill() -> impl IntoView {
                                                         {if bill.is_live {
                                                             Either::Right(
                                                                 view! {
-                                                                    <div class="flex flex-col flex-auto gap-y-2 justify-center items-center bg-[#ff9600] w-[63px]">
+                                                                    <div class=format!("{} bg-[#ff9600]", is_live_base_clsx)>
                                                                         <i class="inline-block size-6 bg-[url(/imgs/bill-live.png)]" />
                                                                         看直播
                                                                     </div>
@@ -141,7 +149,7 @@ pub fn PlayBill() -> impl IntoView {
                                                         } else {
                                                             Either::Left(
                                                                 view! {
-                                                                    <div class="flex flex-col flex-auto gap-y-2 justify-center items-center bg-sky-400 w-[63px]">
+                                                                    <div class=format!("{} bg-sky-400", is_live_base_clsx)>
                                                                         <i class="inline-block size-6 bg-[url(/imgs/bill-subscriber.png)]" />
                                                                         订阅
                                                                     </div>

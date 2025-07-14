@@ -1,4 +1,4 @@
-use crate::app::components::HotMatch;
+use crate::{clsx, components::HotMatch};
 use leptos::{either::Either, prelude::*};
 use serde::{Deserialize, Serialize};
 
@@ -131,15 +131,25 @@ fn LeftAdv() -> impl IntoView {
 #[component]
 pub fn LeftNav() -> impl IntoView {
     let get_data = LocalResource::new(|| get_left_nav());
-
+    let navs_container_clsx = clsx! {
+        "flex flex-col flex-auto gap-y-5 justify-start p-3 py-4 h-full text-xs duration-300",
+        "bar-y-hidden w-12.5 [&>li>h1]:hover:text-[#f80] [&>li>h1>i]:mr-0 [&>li>h1]:gap-y-2",
+        "[&>li>aside]:mt-3 [&>li>h1]:text-xs [&>li>aside]:hidden [&>li>h1>span]:hidden peer-has-checked:[&>li]:last:hidden",
+        "peer-has-checked:[&>li]:data-adv:block peer-has-checked:[&>li>h1>i]:mr-2 peer-has-checked:[&>li>h1]:text-[16px]",
+        "peer-has-checked:[&>li>h1]:flex-row peer-has-checked:w-60 peer-has-checked:[&>li>aside]:grid peer-has-checked:[&>li>h1>span]:inline-block"
+    };
+    let collapse_btn_clsx = clsx! {
+        "inline-block absolute top-1/2 left-full w-3 rounded-full size-5 -translate-1/2 h-[138px] bg-[url(/imgs/left-close.png)]",
+        "peer-checked:bg-[url(/imgs/left-open.png)] peer-checked:hover:bg-[url(/imgs/left-open-hover.png)] hover:bg-[url(/imgs/left-close-hover.png)]"
+    };
     view! {
         <div class="inline-flex relative flex-col h-full text-left whitespace-nowrap text-[#aaaeb9] bg-[#2f3035]">
             <label class="group peer">
                 <input class="hidden opacity-0 peer" type="checkbox" />
-                <i class="inline-block absolute top-1/2 left-full w-3 rounded-full size-5 -translate-1/2 h-[138px] bg-[url(/imgs/left-close.png)] peer-checked:bg-[url(/imgs/left-open.png)] peer-checked:hover:bg-[url(/imgs/left-open-hover.png)] hover:bg-[url(/imgs/left-close-hover.png)]"></i>
+                <i class=collapse_btn_clsx></i>
             </label>
 
-            <ul class="flex flex-col flex-auto gap-y-5 justify-start p-3 py-4 h-full text-xs duration-300 bar-y-hidden w-12.5 [&>li>h1]:hover:text-[#f80] [&>li>h1>i]:mr-0 [&>li>h1]:gap-y-2 [&>li>aside]:mt-3 [&>li>h1]:text-xs [&>li>aside]:hidden [&>li>h1>span]:hidden peer-has-checked:[&>li]:last:hidden peer-has-checked:[&>li]:data-adv:block peer-has-checked:[&>li>h1>i]:mr-2 peer-has-checked:[&>li>h1]:text-[16px] peer-has-checked:[&>li>h1]:flex-row peer-has-checked:w-60 peer-has-checked:[&>li>aside]:grid peer-has-checked:[&>li>h1>span]:inline-block">
+            <ul class=navs_container_clsx>
                 <li>
                     <h1 class="flex flex-col items-center group">
                         <i class="inline-block bg-cover hover:bg-left-bottom size-[21px] bg-[url(/imgs/heart.png)] group-hover:bg-[url(/imgs/heart-hover.png)]" />

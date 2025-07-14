@@ -1,6 +1,8 @@
 use leptos::{either::Either, prelude::*};
 use serde::{Deserialize, Serialize};
 
+use crate::clsx;
+
 #[derive(Debug, Deserialize, Serialize, Clone)]
 struct CateLink<T>
 where
@@ -201,7 +203,22 @@ pub fn HotCate() -> impl IntoView {
             .unwrap_or(Err(ServerFnError::ServerError("loading".to_string())))
     };
 
-    let title_style = "text-[26px]/[33px] text-white font-bold flex items-end gap-x-3 justify-start hover:text-[#f80] *:[img]:size-8 *:[img]:bg-center *:[img]:bg-no-repeat";
+    let title_style = clsx! {
+        "text-[26px]/[33px] text-white font-bold flex items-end gap-x-3 justify-start",
+        "hover:text-[#f80] *:[img]:size-8 *:[img]:bg-center *:[img]:bg-no-repeat"
+    };
+    let game_set_clsx = clsx! {
+        "flex gap-x-1.5 leading-7 *:px-4 *:hover:text-[#f80] *:rounded-2xl",
+        "*:hover:border-current *:bg-[#e2e2e2] *:border-[#e2e2e2]"
+    };
+    let cate_clsx = clsx! {
+        "flex flex-col justify-center items-center bg-white rounded-md group/cate-card w-[125px] h-[147px]",
+        "min-[1440px]:w-[137px] min-[1440px]:h-[167px]"
+    };
+    let live_icon_clsx = clsx! {
+        "inline-block overflow-hidden absolute right-0 bottom-0 rounded-full size-[18px]",
+        "bg-[#f80] animate-living bg-[url(/imgs/live-icon.png)]"
+    };
     move || match get_data() {
         Ok(HotCateData {
             cates,
@@ -216,7 +233,7 @@ pub fn HotCate() -> impl IntoView {
                             <img src="/imgs/hot-cate.png" alt="" />
                             热门分类
                         </h1>
-                        <ul class="flex gap-x-1.5 leading-7 *:px-4 *:hover:text-[#f80] *:rounded-2xl *:hover:border-current *:bg-[#e2e2e2] *:border-[#e2e2e2]">
+                        <ul class=game_set_clsx>
                             {game_set
                                 .into_iter()
                                 .map(|gset| {
@@ -236,7 +253,7 @@ pub fn HotCate() -> impl IntoView {
                             .into_iter()
                             .map(|cate| {
                                 view! {
-                                    <div class="flex flex-col justify-center items-center bg-white rounded-md group/cate-card w-[125px] h-[147px] min-[1440px]:w-[137px] min-[1440px]:h-[167px]">
+                                    <div class=cate_clsx>
                                         <img
                                             class="mb-2 size-19 min-[1440px]:size-22"
                                             src=cate.img_url
@@ -276,7 +293,7 @@ pub fn HotCate() -> impl IntoView {
                                                     alt=""
                                                 />
                                                 <Show when=move || streamer.is_live>
-                                                    <i class="inline-block overflow-hidden absolute right-0 bottom-0 rounded-full size-[18px] bg-[#f80] animate-living bg-[url(/imgs/live-icon.png)]" />
+                                                    <i class=live_icon_clsx />
                                                 </Show>
                                             </div>
                                             <div class="flex flex-col flex-auto justify-start py-1">

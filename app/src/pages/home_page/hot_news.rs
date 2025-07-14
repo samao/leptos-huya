@@ -1,10 +1,28 @@
 use leptos::prelude::*;
 
-use crate::app::components::{Carousel, SlideItem};
-use crate::app::pages::home_page::PlayBill;
+use crate::clsx;
+use crate::components::{Carousel, SlideItem};
+use crate::pages::home_page::PlayBill;
 
 #[component]
 pub fn HotNews() -> impl IntoView {
+    let news_clsx = clsx! {
+        "flex-auto *:[&li>span]:text-xs *:[li]:relative *:[&li>span]:text-[#9f9f9f] *:[&li>span]:absolute",
+        "*:[&li>span]:right-0 *:[li]:justify-start *:[li]:items-center *:[li]:hidden *:nth-[-n+3]:flex",
+        "min-[1440px]:*:[li]:nth-[-n+5]:flex *:[&li>a]:w-[233px] *:[&li>a]:truncate text-[14px]/[32px]",
+        "*:[li]:gap-x-0 *:[li]:before:inline-flex *:[li]:before:mr-2 *:[li]:before:size-1.5 *:[li]:before:rounded-full *:[li]:before:bg-[#f80]"
+    };
+
+    let news_tag_clsx = clsx! {
+        "overflow-hidden mt-2.5 text-xs *:bg-[#f4f5f8] text-[#666] h-[72px]",
+        "*:rounded-3xl leading-6.5 *:inline-block *:float-left *:mr-2.5 *:mb-2.5 *:px-3"
+    };
+
+    let carousel_slide_clsx = clsx! {
+        "hidden overflow-hidden flex-col justify-between ml-2.5 space-y-2.5 w-[145px] min-[1440px]:flex bg-transparent!",
+        "*:hover:opacity-80 *:h-22.5"
+    };
+
     view! {
         <div class="flex overflow-hidden justify-between *:rounded-md *:bg-white gxp-x-5 h-[217px] min-[1440px]:h-[288px]">
             <div class="w-[316px] aspect-316/217 min-[1440px]:w-[384px]">
@@ -35,7 +53,7 @@ pub fn HotNews() -> impl IntoView {
                     },
                 ] />
             </div>
-            <div class="hidden overflow-hidden flex-col justify-between ml-2.5 space-y-2.5 w-[145px] min-[1440px]:flex bg-transparent! *:hover:opacity-80 *:h-22.5">
+            <div class=carousel_slide_clsx>
                 <img src="/imgs/room/pic_1750043870.jpg" alt="" />
                 <img src="/imgs/room/pic_1750328134.jpg" alt="" />
                 <img src="/imgs/room/pic_1750410122.jpg" alt="" />
@@ -44,7 +62,7 @@ pub fn HotNews() -> impl IntoView {
                 <h1 class="font-bold text-center text-[#ff9600] text-xl/7.5">
                     <a>06.16-06.22一周精彩赛事推荐</a>
                 </h1>
-                <ul class="flex-auto *:[&li>span]:text-xs *:[li]:relative *:[&li>span]:text-[#9f9f9f] *:[&li>span]:absolute *:[&li>span]:right-0 *:[li]:justify-start *:[li]:items-center *:[li]:hidden *:nth-[-n+3]:flex min-[1440px]:*:[li]:nth-[-n+5]:flex *:[&li>a]:w-[233px] *:[&li>a]:truncate text-[14px]/[32px] *:[li]:gap-x-0 *:[li]:before:inline-flex *:[li]:before:mr-2 *:[li]:before:size-1.5 *:[li]:before:rounded-full *:[li]:before:bg-[#f80]">
+                <ul class=news_clsx>
                     <li>
                         <a href="">DNFM雷龙来袭</a>
                         <span>06/20</span>
@@ -76,7 +94,7 @@ pub fn HotNews() -> impl IntoView {
                         <span>06/20</span>
                     </li>
                 </ul>
-                <p class="overflow-hidden mt-2.5 text-xs *:bg-[#f4f5f8] text-[#666] h-[72px] *:rounded-3xl leading-6.5 *:inline-block *:float-left *:mr-2.5 *:mb-2.5 *:px-3">
+                <p class=news_tag_clsx>
                     <a>广告治理公告</a>
                     <a>车队和坐骑商城下线</a>
                     <a>短剧自动解锁</a>

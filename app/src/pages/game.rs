@@ -1,4 +1,4 @@
-use crate::app::components::Sider;
+use crate::components::Sider;
 use leptos::prelude::*;
 
 #[component]

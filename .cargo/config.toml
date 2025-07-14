@@ -1,7 +1,2 @@
-[env]
-LEPTOS_TAILWIND_VERSION="v4.1.10"
-LEPTOS_SASS_VERSION="1.89.2"
-
 [build]
-rustflags = ["-C", "linker=clang", "-C", "link-arg=-fuse-ld=lld"]
 jobs = 8

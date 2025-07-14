@@ -9,6 +9,8 @@ use leptos_use::use_window_scroll;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fmt::Display, sync::LazyLock};
 
+use crate::clsx;
+
 static CATEGROY: LazyLock<HashMap<&str, Vec<&str>>> = LazyLock::new(|| {
     HashMap::from([
         (
@@ -202,6 +204,73 @@ pub fn Header() -> impl IntoView {
         }
     });
 
+    let navs_clsx = clsx! {
+        "flex flex-auto gap-x-2 *:[a]:h-8 *:[a]:leading-8 *:hover:bg-[#ff9600] *:hover:text-white",
+        "*:rounded-2xl *:px-4 *:hover:[form]:bg-transparent *:[form]:relative *:[form]:mr-2 *:[form]:flex",
+        "*:[form]:items-center *:[form]:px-0 *:aria-[current]:bg-[#ff9600] *:aria-[current]:text-white",
+        "*:aria-[current]:has-[i]:*:[i]:bg-[image:var(--triangle-hover)] **:[i]:inline-block *:flex",
+        "*:items-center **:[i]:duration-200 *:gap-x-2 *:has-[i]:hover:*:[i]:rotate-180 *:relative",
+        "*:has-[i]:hover:*:data-[active]:flex **:[i]:w-[9px] **:[i]:h-[5px] *:has-[i]:hover:*:[i]:opacity-100",
+        "*:has-[i]:*:[i]:opacity-[var(--triangle-opacity)] *:has-[i]:hover:*:[i]:bg-[image:var(--triangle-hover)]",
+        "*:has-[i]:*:[i]:bg-[image:var(--triangle-icon)]"
+    };
+
+    let cate_pop_clsx = clsx! {
+        "hidden absolute left-1/2 top-full z-10 flex-col gap-y-2 p-4 pb-6 bg-white rounded-md -translate-x-1/2 translate-y-2",
+        "cursor-default before:h-2 before:w-full before:absolute before:-top-2 text-[12px]/[20px] text-[#333] w-[304px]"
+    };
+
+    let search_clsx = clsx! {
+        "pr-10 pl-4 rounded-2xl border border-transparent min-[1440px]:w-[140px] w-[100px] text-xs/[32px] bg-[var(--search-bg)]",
+        "peer placeholder:text-[#555]/70 hover:border-[var(--search-border)] hover:bg-[var(--search-bg-hover)] focus:border-[var(--search-border)]",
+        "focus:bg-[var(--search-bg-hover)] focus:text-[#555] focus-visible:outline-0"
+    };
+
+    let search_icon_clsx = clsx! {
+        "absolute right-2 size-6 fill-[var(--search-icon)] peer-focus:fill-[var(--search-icon-hover)] peer-hover:fill-[var(--search-icon-hover)]"
+    };
+
+    let nav_right_clsx = clsx! {
+        "flex gap-x-6 items-center select-none text-[var(--right-header)] *:[li]:hover:text-[var(--right-header-hover)]",
+        "*:[li]:opacity-60 *:[li]:hover:opacity-100 text-xs/1.5 *:relative *:flex *:flex-col *:justify-center *:before:size-[26px]",
+        "*:gap-1.5 *:before:bg-cover *:before:bg-no-repeat *:bg-center *:[li]:hover:*:[div]:block"
+    };
+
+    let download_item_clsx = clsx! {
+        "flex flex-col gap-y-0 justify-between items-center first:after:bg-[#e5e5e5] first:after:absolute first:after:w-[1px]",
+        "first:after:h-full first:after:-right-4 hover:*:[a]:text-[#f40]"
+    };
+
+    let download_pop_clsx = clsx! {
+        "hidden absolute -left-2.5 top-full z-10 mt-3 bg-white rounded-md -translate-x-1/2 w-[436px] text-[#666]",
+        "before:h-3 before:-top-3 before:left-0 before:w-full before:absolute"
+    };
+
+    let task_pop_clsx = clsx! {
+        "hidden absolute top-full z-10 p-3 mt-3 bg-top bg-no-repeat rounded-md -translate-x-1/2 w-[375px] min-h-[182px] bg-[#f5f6f7] bg-[url(/imgs/bg.png)]",
+        "text-[12px]/[20px] text-[#666] -left-[100px] before:h-3 before:-top-3 before:left-0 before:w-full before:absolute"
+    };
+
+    let task_item_clsx = clsx! {
+        "flex gap-x-1 items-center px-1.5 font-bold rounded-3xl border border-gray-300 text-[12px]/[30px]",
+        "before:size-3.5 before:bg-cover before:bg-center before:bg-[url(/imgs/icon.png)]"
+    };
+
+    let login_pop_clsx = clsx! {
+        "hidden absolute top-full left-full z-10 pt-2 mt-3 bg-white rounded-md -translate-x-full",
+        "text-[#333] px-[25px] pb-[13px] before:h-3 before:-top-3 before:left-0 before:w-[200px] before:absolute"
+    };
+
+    let login_tips_clsx = clsx! {
+        "flex flex-col text-left *:[li]:flex *:[li]:items-center *:[li]:gap-x-2.5 *:[li]:before:size-[18px]",
+        "*:[li]:before:bg-cover *:[li]:before:bg-no-repeat"
+    };
+
+    let register_clsx = clsx! {
+        "flex gap-x-1 justify-center text-xs text-sky-500 [&::before,&::after]:text-gray-400/40",
+        "before:content-['>>'] after:content-['<<']"
+    };
+
     view! {
         <header
             can-sticky=move || stickied.get()
@@ -289,7 +358,7 @@ pub fn Header() -> impl IntoView {
                     href="/"
                     class="inline-block object-contain flex-none mr-5 h-9 bg-center bg-[image:var(--logo-url)] w-30 bg-size-[100%]"
                 />
-                <nav class="flex flex-auto gap-x-2 *:[a]:h-8 *:[a]:leading-8 *:hover:bg-[#ff9600] *:hover:text-white *:rounded-2xl *:px-4 *:hover:[form]:bg-transparent *:[form]:relative *:[form]:mr-2 *:[form]:flex *:[form]:items-center *:[form]:px-0 *:aria-[current]:bg-[#ff9600] *:aria-[current]:text-white *:aria-[current]:has-[i]:*:[i]:bg-[image:var(--triangle-hover)] **:[i]:inline-block *:flex *:items-center **:[i]:duration-200 *:gap-x-2 *:has-[i]:hover:*:[i]:rotate-180 *:relative *:has-[i]:hover:*:data-[active]:flex **:[i]:w-[9px] **:[i]:h-[5px] *:has-[i]:hover:*:[i]:opacity-100 *:has-[i]:*:[i]:opacity-[var(--triangle-opacity)] *:has-[i]:hover:*:[i]:bg-[image:var(--triangle-hover)] *:has-[i]:*:[i]:bg-[image:var(--triangle-icon)]">
+                <nav class=navs_clsx>
                     <A href="">首页</A>
                     <A href="l">直播</A>
                     <A href="g">
@@ -299,7 +368,7 @@ pub fn Header() -> impl IntoView {
                                 ev.prevent_default();
                             }
                             data-active
-                            class="hidden absolute left-1/2 top-full z-10 flex-col gap-y-2 p-4 pb-6 bg-white rounded-md -translate-x-1/2 translate-y-2 cursor-default before:h-2 before:w-full before:absolute before:-top-2 text-[12px]/[20px] text-[#333] w-[304px]"
+                            class=cate_pop_clsx
                         >
                             <For
                                 each=|| CATEGROY.clone().into_iter()
@@ -325,10 +394,6 @@ pub fn Header() -> impl IntoView {
                             <Ad />
                         </div>
                     </A>
-                    // <a
-                    // href="m"
-                    // class="inline-block bg-center bg-no-repeat bg-contain bg-[url(https://diy-assets.msstatic.com/header-match-icon/icon.png)] w-[74px] hover:bg-transparent!"
-                    // ></a>
                     <A href="m">赛事<i /></A>
                     <A href="video">视频<i /></A>
                     <A href="game">游戏<i /></A>
@@ -338,10 +403,10 @@ pub fn Header() -> impl IntoView {
                             type="text"
                             name="hsk"
                             placeholder="寻寻觅觅"
-                            class="pr-10 pl-4 rounded-2xl border border-transparent min-[1440px]:w-[140px] w-[100px] text-xs/[32px] bg-[var(--search-bg)] peer placeholder:text-[#555]/70 hover:border-[var(--search-border)] hover:bg-[var(--search-bg-hover)] focus:border-[var(--search-border)] focus:bg-[var(--search-bg-hover)] focus:text-[#555] focus-visible:outline-0"
+                            class=search_clsx
                         />
                         <svg
-                            class="absolute right-2 size-6 fill-[var(--search-icon)] peer-focus:fill-[var(--search-icon-hover)] peer-hover:fill-[var(--search-icon-hover)]"
+                            class=search_icon_clsx
                             viewBox="0 0 1024 1024"
                             xmlns="http://www.w3.org/2000/svg"
                         >
@@ -354,20 +419,20 @@ pub fn Header() -> impl IntoView {
                         />
                     </Form>
                 </nav>
-                <ul class="flex gap-x-6 items-center select-none text-[var(--right-header)] *:[li]:hover:text-[var(--right-header-hover)] *:[li]:opacity-60 *:[li]:hover:opacity-100 text-xs/1.5 *:relative *:flex *:flex-col *:justify-center *:before:size-[26px] *:gap-1.5 *:before:bg-cover *:before:bg-no-repeat *:bg-center *:[li]:hover:*:[div]:block">
+                <ul class=nav_right_clsx>
                     <li class="before:bg-[image:var(--start-icon)] hover:before:bg-[image:var(--start-hover)]">
                         开播
                     </li>
                     <li class="before:bg-[image:var(--download-icon)] hover:before:bg-[image:var(--download-hover)]">
                         下载
-                        <div class="hidden absolute -left-2.5 top-full z-10 mt-3 bg-white rounded-md -translate-x-1/2 w-[436px] text-[#666] before:h-3 before:-top-3 before:left-0 before:w-full before:absolute">
+                        <div class=download_pop_clsx>
                             <div class="flex justify-between p-5 leading-3.5">
                                 <For
                                     each=move || DOWNLOADS.clone().into_iter()
                                     key=|item| item.title
                                     let(item)
                                 >
-                                    <div class="flex flex-col gap-y-0 justify-between items-center first:after:bg-[#e5e5e5] first:after:absolute first:after:w-[1px] first:after:h-full first:after:-right-4 hover:*:[a]:text-[#f40]">
+                                    <div class=download_item_clsx>
                                         <h1 class="font-bold">{item.title}</h1>
                                         <h2 class="py-1">{item.description}</h2>
                                         <img
@@ -392,7 +457,7 @@ pub fn Header() -> impl IntoView {
                     </li>
                     <li class="before:bg-[url(/imgs/cal-3.png)]">
                         任务
-                        <div class="hidden absolute top-full z-10 p-3 mt-3 bg-top bg-no-repeat rounded-md -translate-x-1/2 w-[375px] min-h-[182px] bg-[#f5f6f7] bg-[url(/imgs/bg.png)] text-[12px]/[20px] text-[#666] -left-[100px] before:h-3 before:-top-3 before:left-0 before:w-full before:absolute">
+                        <div class=task_pop_clsx>
                             <div class="p-4 bg-white rounded-md">
                                 <div class="flex justify-between mb-2.5">
                                     "登录领取积分，兑换超多福利"
@@ -417,7 +482,7 @@ pub fn Header() -> impl IntoView {
                                         <div class="flex flex-col gap-y-2.5 items-center">
                                             <img src=item.img_url class="w-9 h-auto" />
                                             <span>{item.cost_value}</span>
-                                            <div class="flex gap-x-1 items-center px-1.5 font-bold rounded-3xl border border-gray-300 text-[12px]/[30px] before:size-3.5 before:bg-cover before:bg-center before:bg-[url(/imgs/icon.png)]">
+                                            <div class=task_item_clsx>
                                                 {item.value}
                                             </div>
                                         </div>
@@ -426,11 +491,11 @@ pub fn Header() -> impl IntoView {
                             </div>
                         </div>
                     </li>
-                    <li class="rounded-full ring-2 border-white/35 text-[14px]/[34px] size-[34px] before:hidden">
+                    <li class="rounded-full ring-2 border-white/35 text-center text-[14px]/[34px] size-[34px] before:hidden">
                         登录
-                        <div class="hidden absolute top-full left-full z-10 pt-2 mt-3 bg-white rounded-md -translate-x-full text-[#333] px-[25px] pb-[13px] before:h-3 before:-top-3 before:left-0 before:w-[200px] before:absolute">
+                        <div class=login_pop_clsx>
                             <h1 class="font-bold text-left">登陆后可享受:</h1>
-                            <ul class="flex flex-col text-left *:[li]:flex *:[li]:items-center *:[li]:gap-x-2.5 *:[li]:before:size-[18px] *:[li]:before:bg-cover *:[li]:before:bg-no-repeat">
+                            <ul class=login_tips_clsx>
                                 <li class="before:bg-[url(/imgs/a.png)]">蓝光6M高清画质</li>
                                 <li class="before:bg-[url(/imgs/b.png)]">
                                     独家赛事超前关注
@@ -444,7 +509,7 @@ pub fn Header() -> impl IntoView {
                             </div>
                             <a
                                 href=""
-                                class="flex gap-x-1 justify-center text-xs text-sky-500 [&::before,&::after]:text-gray-400/40 before:content-['>>'] after:content-['<<']"
+                                class=register_clsx
                             >
                                 点我注册
                             </a>
