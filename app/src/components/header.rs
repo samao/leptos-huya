@@ -161,7 +161,7 @@ fn Ad() -> impl IntoView {
                 <div class="relative">
                     <img src=result width="274" height="65" />
                     <span
-                        class="absolute top-0 right-0 hover:text-white size-5 bg-gray-300/50 text-black/20"
+                        class="absolute text-center top-0 right-0 hover:text-white size-5 bg-gray-300/50 text-black/20"
                         on:click=move |_| show_ad.set(false)
                     >
                         x
