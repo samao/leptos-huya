@@ -1,8 +1,6 @@
 use leptos::prelude::*;
 use serde::{Deserialize, Serialize};
 
-use crate::clsx;
-
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CategroyData<T: ToString + Sized + 'static> {
     id: u32,
@@ -155,22 +153,11 @@ async fn get_live_rooms() -> Vec<CategroyData<String>> {
 #[component]
 pub fn LiveRooms() -> impl IntoView {
     let async_data = Resource::new(|| (), move |_| get_live_rooms());
-    let room_title_clsx = clsx! {
-        "flex items-center font-bold cursor-default text-[18px]",
-        "before:bg-center before:mr-2 before:bg-contain before:bg-[image:var(--icon-url)] before:size-6.5 hover:text-[#ff8a00]"
-    };
-    let room_container_clsx = clsx! {
-        "overflow-hidden relative rounded-md w-[224px] aspect-156/88 group",
-        "after:absolute after:bottom-0 after:left-0 after:w-full after:h-7 after:bg-linear-to-t",
-        "after:from-0% after:to-100% after:from-black/30 after:to-transparent"
-    };
-    let room_img_play_clsx = clsx! {
-        "flex absolute top-0 left-0 justify-center items-center w-full h-full",
-        "bg-black opacity-0 duration-300 group-hover:opacity-60"
-    };
+    stylance::import_crate_style!(css, "src/pages/home_page/home_recommend_room.module.scss");
+
     view! {
         <Suspense fallback=|| "loading rooms...">
-            <div class="grid grid-cols-2 gap-x-3 gap-y-4 mt-10 mb-8 text-xs">
+            <div class=css::hot_rooms>
                 <For
                     each=move || async_data.get().unwrap().into_iter()
                     key=|item| item.id
@@ -180,42 +167,41 @@ pub fn LiveRooms() -> impl IntoView {
                         "--icon-url",
                         move || format!("url({:?})", room_data.icon.to_string()),
                     )>
-                        <div class="flex gap-x-2.5 items-center mb-2 text-[#555]">
-                            <h1 class=room_title_clsx>
+                        <div class=css::cate>
+                            <h1 class=css::room_title_clsx>
                                 {room_data.title}
                             </h1>
-                            <ul class="flex whitespace-nowrap cursor-default *:hover:text-[#ff8a00]">
+                            <ul class=css::cate_tags>
                                 <For
                                     each=move || room_data.tags.clone().into_iter()
                                     key=|item| item.clone()
                                     let(tag)
                                 >
-                                    <li class="flex items-center before:text-[#555] before:content-['·'] before:px-2 first:before:hidden">
+                                    <li class=css::tag>
                                         {tag}
                                     </li>
                                 </For>
                             </ul>
                         </div>
-                        <div class="flex gap-x-2 text-white">
+                        <div class=css::cate_rooms>
                             <For
                                 each=move || room_data.rooms.clone().into_iter()
                                 key=|room| room.id
                                 let(room_info)
                             >
-                                <div class=room_container_clsx>
-                                    <img src=room_info.img_url alt="" class="w-full h-full" />
-                                    <div class=room_img_play_clsx>
+                                <div class=css::room_container_clsx>
+                                    <img src=room_info.img_url alt="" class=css::cover />
+                                    <div class=css::room_img_play_clsx>
                                         <img
                                             width="40"
                                             height="40"
-                                            class="opacity-0 duration-300 group-hover:opacity-100 group-hover:scale-100 scale-130"
                                             src="/imgs/play.png"
                                         />
                                     </div>
-                                    <span class="hidden absolute top-1 right-2 px-2 leading-5 rounded-md group-hover:block bg-black/50">
+                                    <span class=css::cate_name>
                                         {room_info.cate_name}
                                     </span>
-                                    <span class="inline-block absolute bottom-1 left-2 z-10 w-4/5 text-left truncate">
+                                    <span class=css::room_name>
                                         {room_info.room_name}
                                     </span>
                                 </div>

@@ -372,7 +372,7 @@
         display: flex;
         position: relative;
         column-gap: 0.5rem; // gap-x-2 (Tailwind 0.5rem = 8px)
-        justify-content: space-between; // justify-evenly
+        justify-content: space-evenly; // justify-evenly
         margin-top: 0.5rem; // mt-2 (Tailwind 0.5rem = 8px)
         height: 467px;
 
@@ -475,6 +475,155 @@
     }
   }
 
+.hot_rooms-9cdea05 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 12px;
+    margin-top: 40px;
+    margin-bottom: 32px;
+    font-size: 12px;
+
+    .cate-9cdea05 {
+        display: flex;
+        column-gap: 10px;
+        align-items: center;
+        margin-bottom: 8px;
+        color: #555;
+
+        .room_title_clsx-9cdea05 {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            cursor:default;
+            font-size: 18px;
+            &::before {
+                background-position: center;
+                content: '';
+                margin-right: 8px;
+                background-size: contain;
+                background-image: var(--icon-url);
+                width: 26px;
+                height: 26px;
+            }
+
+            &:hover {
+                color: #ff8a00;
+            }
+        }
+
+        .cate_tags-9cdea05 {
+            display: flex;
+            white-space: nowrap;
+            cursor: default;
+
+            >*:hover {
+                color: #ff8a00;
+            }
+
+            .tag-9cdea05 {
+                display: flex;
+                align-items: center;
+
+                &:first-child::before {
+                    display: none;
+                }
+
+                &::before {
+                    content: "·";
+                    color: #555;
+                    padding-inline: 8px;
+                }
+            }
+        }
+    }
+
+    .cate_rooms-9cdea05 {
+        display: flex;
+        column-gap: 8px;
+        color: #fff;
+
+        .room_container_clsx-9cdea05 {
+            overflow: hidden;
+            position: relative;
+            border-radius: 6px;
+            width: 224px;
+            aspect-ratio: 156/88;
+
+            &::after {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 28px;
+                background-image: linear-gradient(to top, rgba(#000, 0.3), rgba(#000, 0));
+            }
+
+            .cover-9cdea05 {
+                width: 100%;
+                height: 100%;
+            }
+
+            .room_img_play_clsx-9cdea05 {
+                display: flex;
+                position: absolute;
+                top: 0;
+                left: 0;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+                background-color: #000;
+                opacity: 0;
+                transition-duration: 300ms;
+
+                img {
+                    opacity: 0;
+                    transform: scale(1.3);
+                    transition-duration: 300ms;
+                }
+            }
+
+            .cate_name-9cdea05 {
+                display: none;
+                position: absolute;
+                top: 4px;
+                right: 8px;
+                line-height: 20px;
+                border-radius: 6px;
+                background-color: rgba(#000, 0.5);
+            }
+
+            .room_name-9cdea05 {
+                display: inline-block;
+                position: absolute;
+                bottom: 4px;
+                left: 8px;
+                z-index: 10;
+                width: 80%;
+                text-align: left;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            &:hover {
+                .cate_name-9cdea05 {
+                    display: block;
+                }
+
+                .room_img_play_clsx-9cdea05 {
+                    opacity: 0.6;
+                }
+
+                .room_img_play_clsx-9cdea05 img {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}
+
 .hot_match-aa89e6a {
     display: flex;
     flex-direction: column;
@@ -534,6 +683,166 @@
 
         &:hover {
             color: #f80;
+        }
+    }
+}
+
+.hot_news-bba67df {
+    display: flex;
+    overflow: hidden;
+    justify-content: space-between;
+    height: 217px;
+
+    @media (min-width: 1440px) {
+        height: 288px;
+    }
+
+    >* {
+        border-radius: 6px;
+        background-color: #fff;
+    }
+
+    .carouse_box-bba67df {
+        width: 316px;
+        aspect-ratio: 316/217;
+
+        @media (min-width: 1440px) {
+            width: 384px;
+        }
+    }
+
+    .carousel_slide_clsx-bba67df {
+        display: none;
+        overflow: hidden;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-left: 10px;
+        row-gap: 10px;
+        width: 145px;
+        background-color: transparent !important;
+
+        >* {
+            height: 90px;
+        }
+
+        >*:hover {
+            opacity: 0.8;
+        }
+
+        @media (min-width: 1440px) {
+            display: flex;
+        }
+    }
+
+    .news_box-bba67df {
+        position: relative;
+        overflow: hidden;
+        flex: auto;
+        padding: 10px;
+        margin-inline: 20px;
+        text-align: left;
+        width: 342px;
+
+        a:hover {
+            color: #ff9600;
+        }
+
+        .title-bba67df {
+            font-weight: bold;
+            text-align: center;
+            color: #ff9600;
+            font-size: 20px;
+            line-height: 30px;
+        }
+
+        .news_clsx-bba67df {
+            flex: auto;
+            font-size: 14px;
+            line-height: 32px;
+
+            >*:nth-child(-n + 3) {
+                display: flex;
+            }
+
+            @media (min-width: 1440px) {
+                li {
+                    &:nth-child(-n + 5) {
+                        display: flex;
+                    }
+                }
+            }
+
+            li {
+                position: relative;
+                justify-content: flex-start;
+                align-items: center;
+                display: none;
+                column-gap: 0;
+
+                &::before {
+                    content: "";
+                    display:inline-flex;
+                    margin-right: 8px;
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background-color: #f80;
+                }
+
+                span {
+                    position: absolute;
+                    font-size: 12px;
+                    color: #9f9f9f;
+                    right: 0;
+                }
+
+                a {
+                    width: 233px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+        }
+
+        .news_tag_clsx-bba67df {
+            overflow: hidden;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #666;
+            height: 72px;
+
+            >* {
+                background-color: #f4f5f8;
+                border-radius: 24px;
+                line-height: 26px;
+                display: inline-block;
+                // float: left;
+                margin-right: 10px;
+                margin-bottom: 10px;
+                padding-inline: 12px;
+            }
+        }
+
+        .more-bba67df {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+    }
+
+    .bill_board-bba67df {
+        display: flex;
+        flex-direction: column;
+        row-gap: 8px;
+        padding: 10px;
+        padding-right: 0;
+        width: 290px;
+
+        h1 {
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
     }
 }
@@ -655,7 +964,7 @@
         left: 100%;
         width: 12px;
         border-radius: 50%;
-        transform: translate(-50%);
+        transform: translate(-50%, -50%);
         height: 138px;
         background-image: url(/imgs/left-close.png);
 

@@ -23,7 +23,7 @@
         display: flex;
         position: relative;
         column-gap: 0.5rem; // gap-x-2 (Tailwind 0.5rem = 8px)
-        justify-content: space-between; // justify-evenly
+        justify-content: space-evenly; // justify-evenly
         margin-top: 0.5rem; // mt-2 (Tailwind 0.5rem = 8px)
         height: 467px;
 
