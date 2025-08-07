@@ -1,0 +1,115 @@
+.carousel {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background-color: gray;
+    border-radius: 6px;
+
+    .imgs {
+        display: flex;
+        height: 100%;
+        transition-duration: 500ms;
+        transform: translateX(var(--dist-x));
+
+        >* {
+            flex: none;
+            width: 100%;
+            height: 100%;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+
+    .btns {
+        display: flex;
+        position: absolute;
+        top: 0;
+        left: 0;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+
+        // "hidden overflow-hidden justify-between items-center w-full *:size-[70px] *:bg-black/60",
+        // "*:rounded-full *:hover:bg-[#f80] *:after:border-white *:after:block *:after:size-4 *:after:border-r-3",
+        // "*:after:border-t-3 *:relative *:after:absolute *:after:top-1/2 *:after:left-3/4 *:after:-translate-1/2",
+        // "*:after:rotate-225 *:-translate-x-1/2 group-hover/carousel:flex"
+        .bts_group {
+            display: none;
+            overflow: hidden;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+
+            >* {
+                position: relative;
+                width: 70px;
+                height: 70px;
+                background-color: rgba(5, 3, 3, 0.6);
+                border-radius: 50%;
+                transform: translateX(-50%);
+
+                &:hover {
+                    background-color: #f80;
+                }
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    border-color: #fff;
+                    display: block;
+                    width: 16px;
+                    height: 16px;
+                    border-right-width: 3px;
+                    border-top-width: 3px;
+                    top: 50%;
+                    left: 65%;
+                    transform: translateY(-50%) rotate(225deg);
+                }
+            }
+
+            .right {
+                transform: translateX(50%);
+
+                &::after {
+                    left: 10% !important;
+                    transform: translateY(-50%) rotate(45deg) !important;
+                }
+            }
+        }
+    }
+
+    .dots {
+        display: flex;
+        position: absolute;
+        bottom: 10px;
+        right: 12px;
+        column-gap: 4px;
+
+        * {
+            transition-duration: 100ms;
+        }
+
+        .dot {
+            background-color: #fff;
+            width: 8px;
+            height: 8px;
+            border-radius: 8px;
+            transition-duration: 300ms;
+        }
+
+        [aria-current] {
+            width: 32px;
+            background-color: #ff9600;
+        }
+    }
+
+    &:hover {
+        .bts_group {
+            display: flex !important;
+        }
+    }
+}

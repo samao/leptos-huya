@@ -1,0 +1,5 @@
+[tasks.leptos]
+command = ["cargo", "leptos", "watch", "--split"]
+
+[tasks.css]
+command = ["stylance", "app", "-w"]

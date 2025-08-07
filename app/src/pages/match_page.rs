@@ -1,7 +1,6 @@
 use leptos::{either::Either, prelude::*};
 use serde::{Deserialize, Serialize};
-
-use crate::clsx;
+use stylance::import_crate_style;
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 struct Plant {
@@ -10,6 +9,7 @@ struct Plant {
 }
 
 #[server]
+#[lazy]
 async fn get_all_plant() -> Result<Vec<Plant>, ServerFnError> {
     let plants = vec![
         Plant {
@@ -28,9 +28,7 @@ async fn get_all_plant() -> Result<Vec<Plant>, ServerFnError> {
 #[component]
 pub fn MatchPage() -> impl IntoView {
     let get_plants = LocalResource::new(|| get_all_plant());
-
-    let cls = clsx! { "text-center w-3/4 mx-auto", "text-white", "bg-red-700 text-2xl" };
-
+    import_crate_style!(css, "src/pages/match_page.module.scss");
     view! {
         <Suspense fallback=|| {
             "..."
@@ -44,7 +42,7 @@ pub fn MatchPage() -> impl IntoView {
                                 key=|plant| plant.name.clone()
                                 let(plant)
                             >
-                                <p class=format!("{}", cls)>{plant.name}: {plant.weight}</p>
+                                <p class=css::line>{plant.name}: {plant.weight}</p>
                             </For>
                         },
                     )

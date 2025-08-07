@@ -1,1 +1,1 @@
-cargo leptos watch
+concurrently

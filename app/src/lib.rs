@@ -12,6 +12,8 @@ mod pages;
 use pages::{Game, HomePage, InfoPage, MatchPage, NotFound, UserPage, VideoPage};
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
+    stylance::import_crate_style!(css, "src/app.module.scss");
+
     view! {
         <!DOCTYPE html>
         <html lang="en">
@@ -25,7 +27,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 <HydrationScripts options islands=false />
                 <MetaTags />
             </head>
-            <body class="select-none bg-[#f4f5f8] font-leptos!">
+            <body class=css::root>
                 <App />
             </body>
         </html>

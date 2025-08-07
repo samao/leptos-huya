@@ -29,9 +29,11 @@ pub fn UserPage() -> impl IntoView {
         log!("{:?}", crate::json! {"name" => "WWW"});
     });
 
+    stylance::import_crate_style!(css, "src/pages/user.module.scss");
+
     view! {
         <Title text="UserPage" />
-        <div class="flex flex-col justify-center items-center mx-auto h-[710px]">
+        <div class=css::user>
             <p use:add_dot=15 title="UNKNOWN">
                 HAHAHA
             </p>

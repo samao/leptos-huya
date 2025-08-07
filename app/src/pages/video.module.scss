@@ -1,0 +1,32 @@
+.player_clsx {
+    flex: 1 1 auto; // flex-auto
+    margin-right: 0.625rem; // mr-2.5 (2.5 = 0.625rem)
+    width: 100%; // w-full
+    height: 100%; // h-full
+
+    // 复杂选择器处理
+    // 匹配所有以 'auto-play-failed' 开头的类
+    [class^='auto-play-failed'] {
+        &::after {
+            left: 70px !important; // after:left-[70px]!
+            bottom: 80px !important; // after:bottom-[80px]!
+        }
+    }
+
+    // 匹配所有以 'video-stats' 开头的类
+    [class^='video-stats'] {
+        text-align: left !important; // text-left!
+    }
+
+    // 匹配所有以 'speed-range' 开头的类
+    [class^='speed-range'] {
+        // 子元素内的 span 元素
+        span {
+            right: 0 !important; // *:[span]:right-0!
+            
+            &:nth-child(2) {
+                top: 0 !important;
+            }
+        }
+    }
+}

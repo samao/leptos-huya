@@ -185,6 +185,8 @@ pub fn Player(
         });
     }
 
+    stylance::import_crate_style!(css, "src/components/player.module.scss");
+
     view! {
         <script nonce=lib_url src=lib_url></script>
         <video
@@ -195,7 +197,7 @@ pub fn Player(
             disablepictureinpicture
             disableremoteplayback
             controlslist="play volume nofullscreen nodownload noremoteplayback noplaybackrate"
-            class="bg-black shadow-md aspect-video shadow-black/60"
+            class=css::player
             node_ref=el
         ></video>
     }

@@ -1,7 +1,7 @@
 use leptos::{either::Either, prelude::*};
 use serde::{Deserialize, Serialize};
 
-use crate::clsx;
+stylance::import_crate_style!(css, "src/pages/home_page/playbill.module.scss");
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 struct PlayBill<T: ToString> {
@@ -76,21 +76,15 @@ pub fn PlayBill() -> impl IntoView {
     };
 
     let (active, set_active) = signal(0);
-    let item_clsx = clsx! {
-        "flex relative items-center mb-2 before:-translate-x-1/2 before:-left-2.5 before:absolute before:size-[9px] before:bg-no-repeat",
-        "before:bg-bottom before:bg-[image:var(--bill-icon)]"
-    };
-    let is_live_base_clsx = clsx! {
-        "flex flex-col flex-auto gap-y-2 justify-center items-center w-[63px]"
-    };
+
     view! {
-        <div class="flex-auto px-3 pr-0 text-left select-none bar-y-hidden">
+        <div class=css::playbill>
             {move || {
                 match bills() {
                     Ok(bills) => {
                         Either::Right(
                             view! {
-                                <div class="border-l border-gray-300 w-[255px]">
+                                <div class=css::bill_item>
                                     {bills
                                         .into_iter()
                                         .enumerate()
@@ -110,17 +104,17 @@ pub fn PlayBill() -> impl IntoView {
                                                             },
                                                         )
                                                     }
-                                                    class="mx-2.5"
+                                                    class=css::detail
                                                     on:mouseenter=move |_| {
                                                         set_active.set(index);
                                                     }
                                                     open=move || active.get() == index
                                                 >
-                                                    <summary class=item_clsx>
+                                                    <summary class=css::item_clsx>
                                                         {if bill.is_live {
                                                             Either::Right(
                                                                 view! {
-                                                                    <span class="px-1.5 mr-2 rounded-2xl border border-current text-[#f80] text-[12px]/[20px]">
+                                                                    <span class=css::live>
                                                                         正在直播
                                                                     </span>
                                                                 },
@@ -128,20 +122,20 @@ pub fn PlayBill() -> impl IntoView {
                                                         } else {
                                                             Either::Left(
                                                                 view! {
-                                                                    <span class="mr-2 text-sky-400 text-[12px]/[20px]">
+                                                                    <span class=css::descri>
                                                                         {crate::to_time_str(bill.time)}
                                                                     </span>
                                                                 },
                                                             )
-                                                        }} <p class="w-2/3 truncate">{bill.name}</p>
+                                                        }} <p class=css::info>{bill.name}</p>
                                                     </summary>
-                                                    <div class="flex overflow-hidden mb-2 text-xs text-white rounded-md">
-                                                        <img src=bill.cover_url alt="" class="w-[182px]" />
+                                                    <div class=css::details>
+                                                        <img src=bill.cover_url alt="" />
                                                         {if bill.is_live {
                                                             Either::Right(
                                                                 view! {
-                                                                    <div class=format!("{} bg-[#ff9600]", is_live_base_clsx)>
-                                                                        <i class="inline-block size-6 bg-[url(/imgs/bill-live.png)]" />
+                                                                    <div class=format!("{} {}", css::is_live_base_clsx, css::live)>
+                                                                        <i />
                                                                         看直播
                                                                     </div>
                                                                 },
@@ -149,8 +143,8 @@ pub fn PlayBill() -> impl IntoView {
                                                         } else {
                                                             Either::Left(
                                                                 view! {
-                                                                    <div class=format!("{} bg-sky-400", is_live_base_clsx)>
-                                                                        <i class="inline-block size-6 bg-[url(/imgs/bill-subscriber.png)]" />
+                                                                    <div class=format!("{} {}", css::is_live_base_clsx, css::descri)>
+                                                                        <i />
                                                                         订阅
                                                                     </div>
                                                                 },

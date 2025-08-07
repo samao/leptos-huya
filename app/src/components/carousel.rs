@@ -3,8 +3,6 @@ use leptos::prelude::*;
 use serde::Serialize;
 use std::time::Duration;
 
-use crate::clsx;
-
 #[derive(Debug, Serialize, Clone)]
 pub struct SlideItem {
     pub img_url: String,
@@ -39,23 +37,18 @@ pub fn Carousel(#[prop(default=Vec::new())] items: Vec<SlideItem>) -> impl IntoV
         }
     });
 
-    let item_clsx = clsx! {
-        "hidden overflow-hidden justify-between items-center w-full *:size-[70px] *:bg-black/60",
-        "*:rounded-full *:hover:bg-[#f80] *:after:border-white *:after:block *:after:size-4 *:after:border-r-3",
-        "*:after:border-t-3 *:relative *:after:absolute *:after:top-1/2 *:after:left-3/4 *:after:-translate-1/2",
-        "*:after:rotate-225 *:-translate-x-1/2 group-hover/carousel:flex"
-    };
+    stylance::import_crate_style!(css, "src/components/carousel.module.scss");
 
     view! {
         <div
             on:mouseenter=move |_| set_paused.set(true)
             on:mouseleave=move |_| set_paused.set(false)
-            class="overflow-hidden relative w-full h-full bg-gray-300 rounded-md group/carousel"
+            class=css::carousel
         >
             <Show when=|| true>
                 <div
                     style=move || format!("--dist-x: -{}%", index.get() * 100)
-                    class="flex h-full duration-500 translate-x-[var(--dist-x)] *:flex-none *:w-full *:h-full **:[img]:size-[100%]"
+                    class=css::imgs
                 >
                     <For
                         each=move || data.get().into_iter()
@@ -67,8 +60,8 @@ pub fn Carousel(#[prop(default=Vec::new())] items: Vec<SlideItem>) -> impl IntoV
                         </a>
                     </For>
                 </div>
-                <div class="flex absolute top-0 left-0 items-center w-full h-full">
-                    <div class=item_clsx>
+                <div class=css::btns>
+                    <div class=css::bts_group>
                         <button on:click=move |_| {
                             set_index
                                 .update(|current| {
@@ -80,7 +73,7 @@ pub fn Carousel(#[prop(default=Vec::new())] items: Vec<SlideItem>) -> impl IntoV
                                 });
                         } />
                         <button
-                            class="after:left-1/4! translate-x-1/2! after:rotate-45!"
+                            class=css::right
                             on:click=move |_| {
                                 set_index
                                     .update(|current| {
@@ -95,13 +88,13 @@ pub fn Carousel(#[prop(default=Vec::new())] items: Vec<SlideItem>) -> impl IntoV
                         />
                     </div>
                 </div>
-                <ul class="flex absolute bottom-2.5 right-3 space-x-1 *:aria-[current]:w-8 *:aria-[current]:bg-[#ff9600] *:duration-100">
+                <ul class=css::dots>
                     {(0..data.get().len())
                         .map(|id| {
                             view! {
                                 <li
                                     aria_current=if id == index.get() { Some("page") } else { None }
-                                    class="bg-white size-2 rounded-[8px]"
+                                    class=css::dot
                                     on:click=move |_| {
                                         set_index.set(id);
                                     }

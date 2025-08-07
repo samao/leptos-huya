@@ -3,8 +3,10 @@ use leptos::prelude::*;
 
 #[component]
 pub fn Game() -> impl IntoView {
+    stylance::import_crate_style!(css, "src/pages/game.module.scss");
+
     view! {
-        <div class="p-10 h-dvh">
+        <div class=css::game>
             <Sider />
         </div>
     }

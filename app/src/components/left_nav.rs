@@ -1,6 +1,8 @@
-use crate::{clsx, components::HotMatch};
+use crate::components::HotMatch;
 use leptos::{either::Either, prelude::*};
 use serde::{Deserialize, Serialize};
+
+stylance::import_crate_style!(css, "src/components/left_nav.module.scss");
 
 #[server]
 async fn get_left_nav() -> Result<Vec<BigCate<String>>, ServerFnError> {
@@ -107,16 +109,14 @@ fn LeftAdv() -> impl IntoView {
 
     view! {
         <Show when=move || show.get()>
-            <li data-adv class="hidden relative">
+            <li data-adv class=css::adv>
                 <a>
                     <img
                         src="/imgs/huya_1729682040_content.gif"
-                        class="size-full rounded-xs"
                         alt=""
                     />
                 </a>
                 <button
-                    class="absolute top-0 right-0 hover:text-white rounded-tr-xs size-5 bg-black/30 text-white/70"
                     on:click=move |_| {
                         set_show.set(false);
                     }
@@ -131,43 +131,32 @@ fn LeftAdv() -> impl IntoView {
 #[component]
 pub fn LeftNav() -> impl IntoView {
     let get_data = LocalResource::new(|| get_left_nav());
-    let navs_container_clsx = clsx! {
-        "flex flex-col flex-auto gap-y-5 justify-start p-3 py-4 h-full text-xs duration-300",
-        "bar-y-hidden w-12.5 [&>li>h1]:hover:text-[#f80] [&>li>h1>i]:mr-0 [&>li>h1]:gap-y-2",
-        "[&>li>aside]:mt-3 [&>li>h1]:text-xs [&>li>aside]:hidden [&>li>h1>span]:hidden peer-has-checked:[&>li]:last:hidden",
-        "peer-has-checked:[&>li]:data-adv:block peer-has-checked:[&>li>h1>i]:mr-2 peer-has-checked:[&>li>h1]:text-[16px]",
-        "peer-has-checked:[&>li>h1]:flex-row peer-has-checked:w-60 peer-has-checked:[&>li>aside]:grid peer-has-checked:[&>li>h1>span]:inline-block"
-    };
-    let collapse_btn_clsx = clsx! {
-        "inline-block absolute top-1/2 left-full w-3 rounded-full size-5 -translate-1/2 h-[138px] bg-[url(/imgs/left-close.png)]",
-        "peer-checked:bg-[url(/imgs/left-open.png)] peer-checked:hover:bg-[url(/imgs/left-open-hover.png)] hover:bg-[url(/imgs/left-close-hover.png)]"
-    };
     view! {
-        <div class="inline-flex relative flex-col h-full text-left whitespace-nowrap text-[#aaaeb9] bg-[#2f3035]">
-            <label class="group peer">
-                <input class="hidden opacity-0 peer" type="checkbox" />
-                <i class=collapse_btn_clsx></i>
+        <div class=css::left_nav>
+            <label class=format!("{} {}", css::group, css::peer)>
+                <input class=format!("{} {}", css::handle, css::peer) type="checkbox" />
+                <i class=css::collapse_btn_clsx></i>
             </label>
 
-            <ul class=navs_container_clsx>
+            <ul class=css::navs_container_clsx>
                 <li>
-                    <h1 class="flex flex-col items-center group">
-                        <i class="inline-block bg-cover hover:bg-left-bottom size-[21px] bg-[url(/imgs/heart.png)] group-hover:bg-[url(/imgs/heart-hover.png)]" />
+                    <h1 class=format!("{} {}", css::group, css::title)>
+                        <i class=css::icon />
                         <span>我的</span>
                         关注
                         <span>(请登录)</span>
                     </h1>
                 </li>
                 <li>
-                    <h1 class="flex flex-col items-center group">
-                        <i class="inline-block bg-cover hover:bg-left-bottom size-[21px] bg-[url(/imgs/all-live.png)] group-hover:bg-[url(/imgs/all-live-hover.png)]" />
+                    <h1 class=format!("{} {}", css::group, css::title)>
+                        <i class=format!("{} {}", css::icon, css::live) />
                         <span>全部</span>
                         直播
                     </h1>
                 </li>
                 <li>
-                    <h1 class="flex flex-col items-center group">
-                        <i class="inline-block bg-cover hover:bg-left-bottom size-[21px] bg-[url(/imgs/match.png)] group-hover:bg-[url(/imgs/match-hover.png)]" />
+                    <h1 class=format!("{} {}", css::group, css::title)>
+                        <i class=format!("{} {}", css::icon, css::game) />
                         赛事
                         <span>直播</span>
                     </h1>
@@ -188,15 +177,15 @@ pub fn LeftNav() -> impl IntoView {
                                         let(BigCate { icon, title, tags })
                                     >
                                         <li>
-                                            <h1 class="flex flex-col items-center hover:[&>i]:bg-left-bottom">
+                                            <h1 class=css::cate_item>
                                                 <i
                                                     style=format!("--game-icon-url: url({});", icon)
-                                                    class="inline-block bg-cover size-[21px] bg-[image:var(--game-icon-url)]"
+                                                    class=css::icon
                                                 />
                                                 {title.chars().take(2).collect::<String>()}
                                                 <span>{title.chars().skip(2).collect::<String>()}</span>
                                             </h1>
-                                            <aside class="grid grid-cols-3 gap-1 leading-7 text-center *:hover:text-[#f80] *:truncate *:bg-[#38393e] *:rounded-xs *:h-7 *:px-1">
+                                            <aside class=css::item_body>
                                                 <For
                                                     each=move || tags.clone().into_iter()
                                                     key=|tag| tag.clone()
@@ -214,17 +203,17 @@ pub fn LeftNav() -> impl IntoView {
                     }}
                 </Suspense>
                 <LeftAdv />
-                <li class="absolute bottom-10">
-                    <h1 class="flex flex-col items-center group">
-                        <i class="inline-block bg-cover hover:bg-left-bottom size-[21px] bg-[url(/imgs/left-cam.png)] group-hover:bg-[url(/imgs/left-cam-hover.png)]" />
+                <li class=css::start>
+                    <h1 class=format!("{} {}", css::group, css::title)>
+                        <i class=format!("{} {}", css::icon, css::cam) />
                         开播
                     </h1>
                     <aside>list</aside>
                 </li>
             </ul>
 
-            <div class="hidden flex-col flex-none gap-y-3 justify-center items-center pt-5 pb-2 text-xs w-12.5 peer-has-checked:flex peer-has-checked:w-60">
-                <div class="flex gap-3 text-white leading-[30px] [&>button>img]:w-4 [&>button>img]:h-[15px] *:bg-[#f80] *:rounded-3xl *:flex *:gap-x-1 *:items-center *:px-3">
+            <div class=css::tools>
+                <div class=css::tool_inner>
                     <button>
                         <img src="/imgs/left-download.png" alt="" />
                         手机虎牙
@@ -234,7 +223,7 @@ pub fn LeftNav() -> impl IntoView {
                         成为主播
                     </button>
                 </div>
-                <p class="flex gap-x-2">
+                <p class=css::btns>
                     <a href="">问题反馈</a>
                     |
                     <a href="">12318举报</a>

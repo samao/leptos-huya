@@ -26,6 +26,7 @@ impl From<(&str, &str)> for Icon {
     }
 }
 
+#[lazy]
 async fn get_friend_links() -> Vec<FriendLink> {
     vec![
         FriendLink {
@@ -51,6 +52,7 @@ async fn get_friend_links() -> Vec<FriendLink> {
     ]
 }
 
+#[lazy]
 async fn get_anchor_help_links() -> Vec<FriendLink> {
     [
         "新人主播指引",
@@ -68,6 +70,7 @@ async fn get_anchor_help_links() -> Vec<FriendLink> {
     .collect()
 }
 
+#[lazy]
 async fn get_download_links() -> Vec<FriendLink> {
     [
         (
@@ -107,6 +110,7 @@ async fn get_download_links() -> Vec<FriendLink> {
     .collect()
 }
 
+#[lazy]
 async fn get_us_concat() -> Vec<FriendLink> {
     vec![
         FriendLink {
@@ -139,15 +143,17 @@ pub fn Footer() -> impl IntoView {
     let download_link = Resource::new(|| (), move |_| get_download_links());
     let us_links = Resource::new(|| (), move |_| get_us_concat());
 
+    stylance::import_crate_style!(css, "src/components/footer.module.scss");
+
     view! {
-        <footer class="mt-10 w-full text-xs text-center text-gray-400 bg-white **:[a]:hover:text-[#f80] **:[a]:cursor-pointer">
-            <div class="flex justify-between py-10 mx-auto leading-5 text-left w-[980px] min-[1440px]:w-[1220px] **:[h2]:text-sm **:[h2]:font-bold **:[h2]:mb-2.5">
+        <footer class=css::footer>
+            <div class=css::inner>
                 <Suspense fallback=|| "loading...">
                     <div>
                         <h2>友情链接</h2>
-                        <div class="grid grid-cols-1 gap-2 gap-x-8 min-[1440px]:grid-cols-2">
+                        <div class=css::links>
                             <For
-                                each=move || friend_links.get().unwrap().into_iter()
+                                each=move || friend_links.get().unwrap_or(vec![]).into_iter()
                                 key=|link| link.label.clone()
                                 let(link)
                             >
@@ -157,9 +163,9 @@ pub fn Footer() -> impl IntoView {
                     </div>
                     <div>
                         <h2>主播帮助</h2>
-                        <div class="flex flex-col space-y-2">
+                        <div class=css::helps>
                             <For
-                                each=move || help_link.get().unwrap().into_iter()
+                                each=move || help_link.get().unwrap_or(vec![]).into_iter()
                                 key=|link| link.label.clone()
                                 let(link)
                             >
@@ -169,15 +175,13 @@ pub fn Footer() -> impl IntoView {
                     </div>
                     <div>
                         <h2>虎牙产品下载</h2>
-                        <div class="flex gap-x-5">
-                            <img
-                                src="/imgs/footer/HuyaAppQrCode210909.png"
-                                alt=""
-                                class="flex flex-col space-x-2.5 size-32.5 after:content-['扫描下载虎牙APP']"
+                        <div class=css::download>
+                            <div
+                                class=css::app_qrcode
                             />
-                            <div class="grid grid-cols-2 gap-2">
+                            <div class=css::platforms>
                                 <For
-                                    each=move || download_link.get().unwrap().into_iter()
+                                    each=move || download_link.get().unwrap_or(vec![]).into_iter()
                                     key=|link| link.label.clone()
                                     let(link)
                                 >
@@ -195,7 +199,7 @@ pub fn Footer() -> impl IntoView {
                                                 )
                                             }
                                         }
-                                        class="flex items-center before:size-6 before:mr-2 before:bg-[image:var(--icon-url)] hover:before:bg-[image:var(--icon-hover-url)]"
+                                        class=css::item
                                     >
                                         {link.label}
                                     </a>
@@ -205,15 +209,14 @@ pub fn Footer() -> impl IntoView {
                     </div>
                     <div>
                         <h2>关注我们</h2>
-                        <div class="flex gap-x-6">
-                            <img
-                                src="/imgs/footer/huyawxgzh2.png"
-                                class="flex flex-col space-x-2.5 size-24 after:content-['扫描关注微信公众号']"
+                        <div class=css::follows>
+                            <div
+                                class=css::qr_code
                             />
 
-                            <div class="flex flex-col gap-2">
+                            <div class=css::group>
                                 <For
-                                    each=move || us_links.get().unwrap().into_iter()
+                                    each=move || us_links.get().unwrap_or(vec![]).into_iter()
                                     key=|link| link.label.clone()
                                     let(link)
                                 >
@@ -233,10 +236,10 @@ pub fn Footer() -> impl IntoView {
                                         }
                                         class=match link.icon {
                                             Some(_) => {
-                                                "flex items-center before:size-6 before:mr-2 before:bg-[image:var(--icon-url)] hover:before:bg-[image:var(--icon-hover-url)]"
+                                               css::link.to_string()
                                             }
                                             None => {
-                                                "flex items-center before:hidden before:size-6 before:mr-2 before:bg-[image:var(--icon-url)] hover:before:bg-[image:var(--icon-hover-url)]"
+                                                format!("{} {}", css::link, css::hiden)
                                             }
                                         }
                                     >
@@ -248,7 +251,7 @@ pub fn Footer() -> impl IntoView {
                     </div>
                 </Suspense>
             </div>
-            <div class="flex flex-col justify-center items-center pt-10 pb-2.5 leading-5 border-0 border-t-1 *:[p]:mb-2.5 border-[#f3f3f3] **:[a]:not-first:hover:before:text-gray-400">
+            <div class=css::bottom>
                 <p>
                     <For
                         each=|| {
@@ -270,7 +273,7 @@ pub fn Footer() -> impl IntoView {
                         key=|item| item.to_owned()
                         let(label)
                     >
-                        <a class="inline-flex items-center not-first:before:content-['|'] not-first:before:mx-1.5">
+                        <a class=css::link>
                             {label}
                         </a>
                     </For>
@@ -291,24 +294,24 @@ pub fn Footer() -> impl IntoView {
                         key=|item| item.to_owned()
                         let(label)
                     >
-                        <a class="inline-flex items-center not-first:before:content-['|'] not-first:before:mx-1.5">
+                        <a class=css::link>
                             {label}
                         </a>
                     </For>
                 </p>
-                <p class="*:inline-flex *:items-center *:not-first:before:content-['|'] *:not-first:before:mx-1.5">
-                    <a class="pointer-events-none">
+                <p class=css::pargraph>
+                    <a class=css::no_mouse>
                         增值电信业务经营许可证 粤B2-20170312 | B1-20181380
                     </a>
                     <a>粤网文[2023]0339-030号</a>
                     <a>
-                        <img src="/imgs/footer/cnb2.png" class="inline-block size-5" alt="" />
+                        <img src="/imgs/footer/cnb2.png" class=css::icon alt="" />
                         粤公网安备44011302000433
                     </a>
                     <a>网信算备 440113902256602230019号</a>
                     <a>网信算备 440113902256601240017号</a>
                 </p>
-                <p class="*:[a]:px-1.5">
+                <p class=css::tail>
                     <span>
                         "© 2012-现在 huya.com广州虎牙信息科技有限公司 版权所有All Rights Reserved"
                     </span>
@@ -319,7 +322,7 @@ pub fn Footer() -> impl IntoView {
                         "违法和不良信息举报：020-22511620 未成年人关怀热线：020-22511510"
                     </span>
                 </p>
-                <img src="/imgs/footer/huya.png" class="h-10.5" />
+                <img src="/imgs/footer/huya.png" class=css::end_logo />
             </div>
         </footer>
     }
