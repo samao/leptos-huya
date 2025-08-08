@@ -108,11 +108,7 @@ pub fn HotMatch() -> impl IntoView {
                                             <i class=format!(
                                                 "{} {}",
                                                 css::icon,
-                                                if data.is_live {
-                                                    css::live
-                                                } else {
-                                                    ""
-                                                },
+                                                if data.is_live { css::live } else { "" },
                                             ) />
                                             {data.title}
                                         </a>

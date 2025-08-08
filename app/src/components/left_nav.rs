@@ -111,18 +111,11 @@ fn LeftAdv() -> impl IntoView {
         <Show when=move || show.get()>
             <li data-adv class=css::adv>
                 <a>
-                    <img
-                        src="/imgs/huya_1729682040_content.gif"
-                        alt=""
-                    />
+                    <img src="/imgs/huya_1729682040_content.gif" alt="" />
                 </a>
-                <button
-                    on:click=move |_| {
-                        set_show.set(false);
-                    }
-                >
-                    X
-                </button>
+                <button on:click=move |_| {
+                    set_show.set(false);
+                }>X</button>
             </li>
         </Show>
     }

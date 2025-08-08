@@ -18,8 +18,10 @@ pub struct RoomInfo<T: ToString + Sized + 'static> {
     id: u32,
 }
 
-async fn get_live_rooms() -> Vec<CategroyData<String>> {
-    vec![
+#[server]
+#[lazy]
+async fn get_live_rooms() -> Result<Vec<CategroyData<String>>, ServerFnError> {
+    Ok(vec![
         CategroyData {
             id: 0,
             icon: "/imgs/huya_hot_rec_theme_logo_1574217612.png".into(),
@@ -147,19 +149,20 @@ async fn get_live_rooms() -> Vec<CategroyData<String>> {
                 },
             ],
         },
-    ]
+    ])
 }
 
 #[component]
 pub fn LiveRooms() -> impl IntoView {
     let async_data = Resource::new(|| (), move |_| get_live_rooms());
+    // let async_data = move || async_data.get().unwrap(Ok(vec![])).unwrap();
     stylance::import_crate_style!(css, "src/pages/home_page/home_recommend_room.module.scss");
 
     view! {
         <Suspense fallback=|| "loading rooms...">
             <div class=css::hot_rooms>
                 <For
-                    each=move || async_data.get().unwrap().into_iter()
+                    each=move || async_data.get().unwrap_or(Ok(vec![])).unwrap().into_iter()
                     key=|item| item.id
                     let(room_data)
                 >
@@ -168,18 +171,14 @@ pub fn LiveRooms() -> impl IntoView {
                         move || format!("url({:?})", room_data.icon.to_string()),
                     )>
                         <div class=css::cate>
-                            <h1 class=css::room_title_clsx>
-                                {room_data.title}
-                            </h1>
+                            <h1 class=css::room_title_clsx>{room_data.title}</h1>
                             <ul class=css::cate_tags>
                                 <For
                                     each=move || room_data.tags.clone().into_iter()
                                     key=|item| item.clone()
                                     let(tag)
                                 >
-                                    <li class=css::tag>
-                                        {tag}
-                                    </li>
+                                    <li class=css::tag>{tag}</li>
                                 </For>
                             </ul>
                         </div>
@@ -192,18 +191,10 @@ pub fn LiveRooms() -> impl IntoView {
                                 <div class=css::room_container_clsx>
                                     <img src=room_info.img_url alt="" class=css::cover />
                                     <div class=css::room_img_play_clsx>
-                                        <img
-                                            width="40"
-                                            height="40"
-                                            src="/imgs/play.png"
-                                        />
+                                        <img width="40" height="40" src="/imgs/play.png" />
                                     </div>
-                                    <span class=css::cate_name>
-                                        {room_info.cate_name}
-                                    </span>
-                                    <span class=css::room_name>
-                                        {room_info.room_name}
-                                    </span>
+                                    <span class=css::cate_name>{room_info.cate_name}</span>
+                                    <span class=css::room_name>{room_info.room_name}</span>
                                 </div>
                             </For>
                         </div>

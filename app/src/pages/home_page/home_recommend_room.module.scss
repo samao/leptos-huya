@@ -17,8 +17,9 @@
             display: flex;
             align-items: center;
             font-weight: bold;
-            cursor:default;
+            cursor: default;
             font-size: 18px;
+
             &::before {
                 background-position: center;
                 content: '';

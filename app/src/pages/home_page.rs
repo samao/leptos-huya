@@ -44,11 +44,15 @@ pub fn HomePage() -> impl IntoView {
                 ) />
                 <ul class=css::hot_rooms_clsx>
                     <Suspense fallback=|| "Loading...">
-                    <For each=move || cates.get().unwrap_or(vec![]).into_iter() key=|item| item.to_string() let(img_url)>
-                        <li class=css::hot_room_clsx>
-                            <img src=img_url class=css::cover />
-                        </li>
-                    </For>
+                        <For
+                            each=move || cates.get().unwrap_or(vec![]).into_iter()
+                            key=|item| item.to_string()
+                            let(img_url)
+                        >
+                            <li class=css::hot_room_clsx>
+                                <img src=img_url class=css::cover />
+                            </li>
+                        </For>
                     </Suspense>
                 </ul>
             </div>
@@ -56,7 +60,7 @@ pub fn HomePage() -> impl IntoView {
             <HotNews />
         </div>
         <div class=css::cate>
-            <div class=format!("{} {}",css::h_full, css::section)>
+            <div class=format!("{} {}", css::h_full, css::section)>
                 <HotCate />
             </div>
         </div>

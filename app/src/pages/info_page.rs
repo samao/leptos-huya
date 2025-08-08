@@ -93,9 +93,7 @@ pub fn SimpleQueryCounter() -> impl IntoView {
         <div class=css::counter>
             <button on:click=clear>"Clear"</button>
             <button on:click=decrement>"-1"</button>
-            <span class=css::c_value>
-                "Value: " {move || count.get().unwrap_or(0)} "!"
-            </span>
+            <span class=css::c_value>"Value: " {move || count.get().unwrap_or(0)} "!"</span>
             <button on:click=increment>"+1"</button>
         </div>
     }

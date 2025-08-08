@@ -1,2 +1,2 @@
 cargo fmt
-leptosfmt ./src
+leptosfmt */src

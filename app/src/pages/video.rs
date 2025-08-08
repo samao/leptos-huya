@@ -188,10 +188,6 @@ pub fn VideoPage() -> impl IntoView {
         <Title text="视频播放" />
         <script nonce="mock.min.js" src="/nextStatic/js/mock.min.js" />
         <script nonce="qie-player.js" src="/nextStatic/js/player/3.8.7/qie.player.js" />
-        <div
-            id="leptos-player"
-            class=css::player_clsx
-            node_ref=node_ref
-        ></div>
+        <div id="leptos-player" class=css::player_clsx node_ref=node_ref></div>
     }
 }

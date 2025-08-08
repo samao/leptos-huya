@@ -26,229 +26,246 @@ impl From<(&str, &str)> for Icon {
     }
 }
 
-#[lazy]
-async fn get_friend_links() -> Vec<FriendLink> {
-    vec![
-        FriendLink {
-            label: "腾讯游戏频道".into(),
-            ..Default::default()
-        },
-        FriendLink {
-            label: "快看漫画".into(),
-            ..Default::default()
-        },
-        FriendLink {
-            label: "爱拍".into(),
-            ..Default::default()
-        },
-        FriendLink {
-            label: "搜狐56视频".into(),
-            ..Default::default()
-        },
-        FriendLink {
-            label: "开放平台".into(),
-            ..Default::default()
-        },
-    ]
-}
+cfg_block::cfg_block! {
+    #[cfg(feature="ssr")] {
+        async fn get_friend_links() -> Vec<FriendLink> {
+            vec![
+                FriendLink {
+                    label: "腾讯游戏频道".into(),
+                    ..Default::default()
+                },
+                FriendLink {
+                    label: "快看漫画".into(),
+                    ..Default::default()
+                },
+                FriendLink {
+                    label: "爱拍".into(),
+                    ..Default::default()
+                },
+                FriendLink {
+                    label: "搜狐56视频".into(),
+                    ..Default::default()
+                },
+                FriendLink {
+                    label: "开放平台".into(),
+                    ..Default::default()
+                },
+            ]
+        }
 
-#[lazy]
-async fn get_anchor_help_links() -> Vec<FriendLink> {
-    [
-        "新人主播指引",
-        "开播工具下载",
-        "开播教程引导",
-        "虎牙直播学院",
-        "虎牙安全门户",
-        "虎牙监察反舞弊举报",
-    ]
-    .into_iter()
-    .map(|label| FriendLink {
-        label: label.into(),
-        ..Default::default()
-    })
-    .collect()
-}
+        async fn get_anchor_help_links() -> Vec<FriendLink> {
+            [
+                "新人主播指引",
+                "开播工具下载",
+                "开播教程引导",
+                "虎牙直播学院",
+                "虎牙安全门户",
+                "虎牙监察反舞弊举报",
+            ]
+            .into_iter()
+            .map(|label| FriendLink {
+                label: label.into(),
+                ..Default::default()
+            })
+            .collect()
+        }
 
-#[lazy]
-async fn get_download_links() -> Vec<FriendLink> {
-    [
-        (
-            "iPhone版",
-            "/imgs/footer/iphone.png",
-            "/imgs/footer/iphone-hover.png",
-        ),
-        (
-            "Andriod版",
-            "/imgs/footer/andriod.png",
-            "/imgs/footer/andriod-hover.png",
-        ),
-        ("TV版", "/imgs/footer/tv.png", "/imgs/footer/tv-hover.png"),
-        (
-            "Win10版/WP版",
-            "/imgs/footer/win.png",
-            "/imgs/footer/win-hover.png",
-        ),
-        (
-            "iPad版",
-            "/imgs/footer/ipad.png",
-            "/imgs/footer/ipad-hover.png",
-        ),
-        (
-            "Andriod Pad版",
-            "/imgs/footer/apad.png",
-            "/imgs/footer/apad-hover.png",
-        ),
-        ("PC版", "/imgs/footer/pc.png", "/imgs/footer/pc-hover.png"),
-    ]
-    .into_iter()
-    .map(|(label, normal, hover)| FriendLink {
-        label: label.into(),
-        icon: Some((normal, hover).into()),
-        ..Default::default()
-    })
-    .collect()
+        async fn get_download_links() -> Vec<FriendLink> {
+            [
+                (
+                    "iPhone版",
+                    "/imgs/footer/iphone.png",
+                    "/imgs/footer/iphone-hover.png",
+                ),
+                (
+                    "Andriod版",
+                    "/imgs/footer/andriod.png",
+                    "/imgs/footer/andriod-hover.png",
+                ),
+                ("TV版", "/imgs/footer/tv.png", "/imgs/footer/tv-hover.png"),
+                (
+                    "Win10版/WP版",
+                    "/imgs/footer/win.png",
+                    "/imgs/footer/win-hover.png",
+                ),
+                (
+                    "iPad版",
+                    "/imgs/footer/ipad.png",
+                    "/imgs/footer/ipad-hover.png",
+                ),
+                (
+                    "Andriod Pad版",
+                    "/imgs/footer/apad.png",
+                    "/imgs/footer/apad-hover.png",
+                ),
+                ("PC版", "/imgs/footer/pc.png", "/imgs/footer/pc-hover.png"),
+            ]
+            .into_iter()
+            .map(|(label, normal, hover)| FriendLink {
+                label: label.into(),
+                icon: Some((normal, hover).into()),
+                ..Default::default()
+            })
+            .collect()
+        }
+        async fn get_us_concat() -> Vec<FriendLink> {
+            vec![
+                FriendLink {
+                    icon: Some(Icon::Hover(
+                        "/imgs/footer/wb.png".into(),
+                        "/imgs/footer/wb-hover.png".into(),
+                    )),
+                    label: "虎牙官方微博".into(),
+                    ..Default::default()
+                },
+                FriendLink {
+                    icon: Some(Icon::Hover(
+                        "/imgs/footer/tieba.png".into(),
+                        "/imgs/footer/tieba-hover.png".into(),
+                    )),
+                    label: "贴吧交流".into(),
+                    ..Default::default()
+                },
+                FriendLink {
+                    label: "不良信息投诉与举报".into(),
+                    ..Default::default()
+                },
+            ]
+        }
+    }
 }
-
+#[server]
 #[lazy]
-async fn get_us_concat() -> Vec<FriendLink> {
-    vec![
-        FriendLink {
-            icon: Some(Icon::Hover(
-                "/imgs/footer/wb.png".into(),
-                "/imgs/footer/wb-hover.png".into(),
-            )),
-            label: "虎牙官方微博".into(),
-            ..Default::default()
-        },
-        FriendLink {
-            icon: Some(Icon::Hover(
-                "/imgs/footer/tieba.png".into(),
-                "/imgs/footer/tieba-hover.png".into(),
-            )),
-            label: "贴吧交流".into(),
-            ..Default::default()
-        },
-        FriendLink {
-            label: "不良信息投诉与举报".into(),
-            ..Default::default()
-        },
-    ]
+async fn get_all() -> Result<
+    (
+        Vec<FriendLink>,
+        Vec<FriendLink>,
+        Vec<FriendLink>,
+        Vec<FriendLink>,
+    ),
+    ServerFnError,
+> {
+    Ok(tokio::join!(
+        get_friend_links(),
+        get_anchor_help_links(),
+        get_download_links(),
+        get_us_concat(),
+    ))
 }
 
 #[component]
 pub fn Footer() -> impl IntoView {
-    let friend_links = Resource::new(|| (), move |_| get_friend_links());
-    let help_link = Resource::new(|| (), move |_| get_anchor_help_links());
-    let download_link = Resource::new(|| (), move |_| get_download_links());
-    let us_links = Resource::new(|| (), move |_| get_us_concat());
+    let all_data = Resource::new(|| (), move |_| get_all());
 
     stylance::import_crate_style!(css, "src/components/footer.module.scss");
 
     view! {
         <footer class=css::footer>
             <div class=css::inner>
-                <Suspense fallback=|| "loading...">
-                    <div>
-                        <h2>友情链接</h2>
-                        <div class=css::links>
-                            <For
-                                each=move || friend_links.get().unwrap_or(vec![]).into_iter()
-                                key=|link| link.label.clone()
-                                let(link)
-                            >
-                                <a>{link.label}</a>
-                            </For>
-                        </div>
-                    </div>
-                    <div>
-                        <h2>主播帮助</h2>
-                        <div class=css::helps>
-                            <For
-                                each=move || help_link.get().unwrap_or(vec![]).into_iter()
-                                key=|link| link.label.clone()
-                                let(link)
-                            >
-                                <a>{link.label}</a>
-                            </For>
-                        </div>
-                    </div>
-                    <div>
-                        <h2>虎牙产品下载</h2>
-                        <div class=css::download>
-                            <div
-                                class=css::app_qrcode
-                            />
-                            <div class=css::platforms>
-                                <For
-                                    each=move || download_link.get().unwrap_or(vec![]).into_iter()
-                                    key=|link| link.label.clone()
-                                    let(link)
-                                >
-                                    <a
-                                        style=match link.icon {
-                                            None => "".to_string(),
-                                            Some(Icon::Icon(icon_url)) => {
-                                                format!("--icon-url:url({})", icon_url)
-                                            }
-                                            Some(Icon::Hover(icon_url, icon_hover_url)) => {
-                                                format!(
-                                                    "--icon-url:url({}); --icon-hover-url:url({})",
-                                                    icon_url,
-                                                    icon_hover_url,
-                                                )
-                                            }
-                                        }
-                                        class=css::item
-                                    >
-                                        {link.label}
-                                    </a>
-                                </For>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <h2>关注我们</h2>
-                        <div class=css::follows>
-                            <div
-                                class=css::qr_code
-                            />
+                <Suspense fallback=|| {
+                    "loading..."
+                }>
+                    {move || Suspend::new(async move {
+                        let (friend_links, help_link, download_link, us_links) = all_data
+                            .get()
+                            .unwrap_or(Ok((vec![], vec![], vec![], vec![])))
+                            .unwrap();
 
-                            <div class=css::group>
-                                <For
-                                    each=move || us_links.get().unwrap_or(vec![]).into_iter()
-                                    key=|link| link.label.clone()
-                                    let(link)
-                                >
-                                    <a
-                                        style=match link.icon {
-                                            None => "".to_owned(),
-                                            Some(Icon::Icon(icon_url)) => {
-                                                format!("--icon-url:url({})", icon_url)
-                                            }
-                                            Some(Icon::Hover(icon_url, icon_hover_url)) => {
-                                                format!(
-                                                    "--icon-url:url({}); --icon-hover-url:url({})",
-                                                    icon_url,
-                                                    icon_hover_url,
-                                                )
-                                            }
-                                        }
-                                        class=match link.icon {
-                                            Some(_) => {
-                                               css::link.to_string()
-                                            }
-                                            None => {
-                                                format!("{} {}", css::link, css::hiden)
-                                            }
-                                        }
+                        view! {
+                            <div>
+                                <h2>友情链接</h2>
+                                <div class=css::links>
+                                    <For
+                                        each=move || friend_links.clone().into_iter()
+                                        key=|link| link.label.clone()
+                                        let(link)
                                     >
-                                        {link.label}
-                                    </a>
-                                </For>
+                                        <a>{link.label}</a>
+                                    </For>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                            <div>
+                                <h2>主播帮助</h2>
+                                <div class=css::helps>
+                                    <For
+                                        each=move || help_link.clone().into_iter()
+                                        key=|link| link.label.clone()
+                                        let(link)
+                                    >
+                                        <a>{link.label}</a>
+                                    </For>
+                                </div>
+                            </div>
+                            <div>
+                                <h2>虎牙产品下载</h2>
+                                <div class=css::download>
+                                    <div class=css::app_qrcode />
+                                    <div class=css::platforms>
+                                        <For
+                                            each=move || download_link.clone().into_iter()
+                                            key=|link| link.label.clone()
+                                            let(link)
+                                        >
+                                            <a
+                                                style=match link.icon {
+                                                    None => "".to_string(),
+                                                    Some(Icon::Icon(icon_url)) => {
+                                                        format!("--icon-url:url({})", icon_url)
+                                                    }
+                                                    Some(Icon::Hover(icon_url, icon_hover_url)) => {
+                                                        format!(
+                                                            "--icon-url:url({}); --icon-hover-url:url({})",
+                                                            icon_url,
+                                                            icon_hover_url,
+                                                        )
+                                                    }
+                                                }
+                                                class=css::item
+                                            >
+                                                {link.label}
+                                            </a>
+                                        </For>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h2>关注我们</h2>
+                                <div class=css::follows>
+                                    <div class=css::qr_code />
+
+                                    <div class=css::group>
+                                        <For
+                                            each=move || us_links.clone().into_iter()
+                                            key=|link| link.label.clone()
+                                            let(link)
+                                        >
+                                            <a
+                                                style=match link.icon {
+                                                    None => "".to_owned(),
+                                                    Some(Icon::Icon(icon_url)) => {
+                                                        format!("--icon-url:url({})", icon_url)
+                                                    }
+                                                    Some(Icon::Hover(icon_url, icon_hover_url)) => {
+                                                        format!(
+                                                            "--icon-url:url({}); --icon-hover-url:url({})",
+                                                            icon_url,
+                                                            icon_hover_url,
+                                                        )
+                                                    }
+                                                }
+                                                class=match link.icon {
+                                                    Some(_) => css::link.to_string(),
+                                                    None => format!("{} {}", css::link, css::hiden),
+                                                }
+                                            >
+                                                {link.label}
+                                            </a>
+                                        </For>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    })}
                 </Suspense>
             </div>
             <div class=css::bottom>
@@ -273,9 +290,7 @@ pub fn Footer() -> impl IntoView {
                         key=|item| item.to_owned()
                         let(label)
                     >
-                        <a class=css::link>
-                            {label}
-                        </a>
+                        <a class=css::link>{label}</a>
                     </For>
                 </p>
                 <p>
@@ -294,9 +309,7 @@ pub fn Footer() -> impl IntoView {
                         key=|item| item.to_owned()
                         let(label)
                     >
-                        <a class=css::link>
-                            {label}
-                        </a>
+                        <a class=css::link>{label}</a>
                     </For>
                 </p>
                 <p class=css::pargraph>

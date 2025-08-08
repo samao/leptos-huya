@@ -46,17 +46,14 @@ pub fn Carousel(#[prop(default=Vec::new())] items: Vec<SlideItem>) -> impl IntoV
             class=css::carousel
         >
             <Show when=|| true>
-                <div
-                    style=move || format!("--dist-x: -{}%", index.get() * 100)
-                    class=css::imgs
-                >
+                <div style=move || format!("--dist-x: -{}%", index.get() * 100) class=css::imgs>
                     <For
                         each=move || data.get().into_iter()
                         key=|item| item.to_owned().img_url
                         let(SlideItem { img_url, link })
                     >
                         <a href=link>
-                            <img src=img_url alt="" />
+                            <div style=format!("--item-img: url({})", img_url) class=css::img />
                         </a>
                     </For>
                 </div>

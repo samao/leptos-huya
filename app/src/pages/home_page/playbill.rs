@@ -113,11 +113,7 @@ pub fn PlayBill() -> impl IntoView {
                                                     <summary class=css::item_clsx>
                                                         {if bill.is_live {
                                                             Either::Right(
-                                                                view! {
-                                                                    <span class=css::live>
-                                                                        正在直播
-                                                                    </span>
-                                                                },
+                                                                view! { <span class=css::live>正在直播</span> },
                                                             )
                                                         } else {
                                                             Either::Left(
@@ -134,7 +130,11 @@ pub fn PlayBill() -> impl IntoView {
                                                         {if bill.is_live {
                                                             Either::Right(
                                                                 view! {
-                                                                    <div class=format!("{} {}", css::is_live_base_clsx, css::live)>
+                                                                    <div class=format!(
+                                                                        "{} {}",
+                                                                        css::is_live_base_clsx,
+                                                                        css::live,
+                                                                    )>
                                                                         <i />
                                                                         看直播
                                                                     </div>
@@ -143,7 +143,11 @@ pub fn PlayBill() -> impl IntoView {
                                                         } else {
                                                             Either::Left(
                                                                 view! {
-                                                                    <div class=format!("{} {}", css::is_live_base_clsx, css::descri)>
+                                                                    <div class=format!(
+                                                                        "{} {}",
+                                                                        css::is_live_base_clsx,
+                                                                        css::descri,
+                                                                    )>
                                                                         <i />
                                                                         订阅
                                                                     </div>

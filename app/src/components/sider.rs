@@ -23,27 +23,20 @@ pub fn Sider() -> impl IntoView {
             <nav class=css::nav_container_clsx>
                 <a class=format!("{} {} {}", css::group, css::common, css::head)>
                     <div class=css::toy>
-                        <img
-                            src="/imgs/mm2.png"
-                            alt=""
-                        />
+                        <img src="/imgs/mm2.png" alt="" />
                     </div>
                     <div class=css::download_clsx>
                         <img class=css::qrcode src="/imgs/app-qrcode.png" alt="" />
                         <p>虎牙直播App <br />独家赛事随时享</p>
-                        <button class=css::download_btn>
-                            下载APP
-                        </button>
+                        <button class=css::download_btn>下载APP</button>
                         <hr class=css::hr />
                         <img width=74 height=55 src="/imgs/pc.png" alt="" />
                         <p>虎牙PC客户端 <br />畅想蓝光臻画质</p>
-                        <button class=css::pc>
-                            下载PC端
-                        </button>
+                        <button class=css::pc>下载PC端</button>
                     </div>
                     <div class=css::bottom_imgs>
                         <img src="/imgs/down.png" />
-                        <img src="/imgs/down-hover.png"/>
+                        <img src="/imgs/down-hover.png" />
                     </div>
                     下载
                 </a>

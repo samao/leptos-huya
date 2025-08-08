@@ -1,8 +1,8 @@
 use leptos::either::EitherOf3;
-use leptos::{prelude::*, task::spawn_local};
+use leptos::prelude::*;
 use serde::{Deserialize, Serialize};
 
-use crate::clsx;
+stylance::import_crate_style!(css, "src/pages/home_page/cate_room.module.scss");
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 struct Cate<T: ToString> {
@@ -15,12 +15,35 @@ struct Cate<T: ToString> {
     #[serde(default)]
     rooms: Vec<Room<T>>,
 }
+
+impl From<Cate<&str>> for Cate<String> {
+    fn from(value: Cate<&str>) -> Self {
+        Self {
+            id: value.id,
+            icon_url: value.icon_url.to_owned(),
+            cate_name: value.cate_name.to_owned(),
+            tags: value.tags.into_iter().map(|tag| tag.into()).collect(),
+            live_total: value.live_total,
+            rooms: value.rooms.into_iter().map(|room| room.into()).collect(),
+        }
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 struct HotRoom<T: ToString> {
     id: usize,
     name: T,
     #[serde(default)]
     is_live: bool,
+}
+impl From<HotRoom<&str>> for HotRoom<String> {
+    fn from(value: HotRoom<&str>) -> Self {
+        Self {
+            id: value.id,
+            name: value.name.to_owned(),
+            is_live: value.is_live,
+        }
+    }
 }
 #[derive(Debug, Serialize, Deserialize, Clone)]
 struct Room<T: ToString> {
@@ -33,11 +56,36 @@ struct Room<T: ToString> {
     tags: Vec<Tag<T>>,
     is_live: bool,
 }
+
+impl From<Room<&str>> for Room<String> {
+    fn from(value: Room<&str>) -> Self {
+        Self {
+            id: value.id,
+            img_url: value.img_url.to_owned(),
+            name: value.name.to_owned(),
+            hot: value.hot,
+            owner: value.owner.into(),
+            tags: value.tags.into_iter().map(|tag| tag.into()).collect(),
+            is_live: value.is_live,
+        }
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 struct User<T: ToString> {
     id: usize,
     name: T,
     avatar_url: T,
+}
+
+impl From<User<&str>> for User<String> {
+    fn from(value: User<&str>) -> Self {
+        Self {
+            id: value.id,
+            name: value.name.to_owned(),
+            avatar_url: value.avatar_url.to_owned(),
+        }
+    }
 }
 #[derive(Debug, Serialize, Deserialize, Clone)]
 enum Tag<T: ToString> {
@@ -47,7 +95,19 @@ enum Tag<T: ToString> {
     Official(T),
 }
 
-async fn get_recommend_cate_rooms() -> Result<Vec<Cate<&'static str>>, ServerFnError> {
+impl From<Tag<&str>> for Tag<String> {
+    fn from(value: Tag<&str>) -> Self {
+        match value {
+            Tag::Blue(val) => Self::Blue(val.to_owned()),
+            Tag::Play(val) => Self::Play(val.to_owned()),
+            Tag::Official(val) => Self::Official(val.to_owned()),
+        }
+    }
+}
+
+#[server]
+#[lazy]
+async fn get_recommend_cate_rooms() -> Result<Vec<Cate<String>>, ServerFnError> {
     let cates = vec![
         Cate {
             id: 0,
@@ -69,7 +129,7 @@ async fn get_recommend_cate_rooms() -> Result<Vec<Cate<&'static str>>, ServerFnE
             .map(|(id, name)| HotRoom {
                 name,
                 id,
-                is_live: id == 0,
+                is_live: id % 3 == 0,
             })
             .collect::<Vec<HotRoom<&'static str>>>(),
             live_total: 987,
@@ -1106,83 +1166,75 @@ async fn get_recommend_cate_rooms() -> Result<Vec<Cate<&'static str>>, ServerFnE
             .collect::<Vec<Room<&'static str>>>(),
         },
     ];
-    Ok(cates)
+    Ok(cates.into_iter().map(|cate| cate.into()).collect())
 }
 
 #[component]
 pub fn CateRooms() -> impl IntoView {
-    let (rooms, set_rooms) = signal(None);
+    let get_data = Resource::new(|| (), |_| get_recommend_cate_rooms());
 
-    let rooms_clx = clsx! {
-        "flex gap-x-1.5 leadding-[26px]",
-        "*:duration-300 *:select-none *:px-3 *:rounded-3xl *:border *:border-gray-400 *:text-gray-400",
-        "*:hover:text-[#f80]! *:hover:border-[#f80]"
-    };
-
-    Effect::new(move || {
-        spawn_local(async move {
-            if let Ok(rooms) = get_recommend_cate_rooms().await {
-                set_rooms.set(Some(rooms));
-            }
-        });
-    });
     view! {
-        <figure class="flex flex-col gap-y-10 mt-10">
-            <Show when=move || rooms.get().is_some()>
-                <For
-                    each=move || rooms.get().unwrap_or(vec![]).into_iter()
-                    key=|cate| cate.id
-                    let(cate)
-                >
-                    <div>
-                        <div class="flex relative justify-start items-end mb-4 text-[14px]">
-                            <h1 class="flex gap-x-2.5 items-center mr-4 duration-300 text-[26px] leading-[33px] hover:text-[#f80]">
-                                <img src=cate.icon_url width=32 height=32 />
-                                {cate.cate_name}
-                            </h1>
-                            <ul class=rooms_clx>
-                                {cate
-                                    .tags
-                                    .into_iter()
-                                    .map(|tag| {
-                                        view! {
-                                            <li class=if tag.is_live {
-                                                Some("text-[#3a3a3a]! ")
-                                            } else {
-                                                None
-                                            }>{tag.name}</li>
-                                        }
-                                    })
-                                    .collect_view()}
-                            </ul>
-                            <p class="absolute right-0">
-                                <span class="mr-1 text-[#f80]">548</span>
-                                个主播正在直播
-                                <a class="ml-1 duration-300 hover:text-[#f80]">"更多 >"</a>
-                            </p>
-                        </div>
-                        <div class="flex gap-x-5 justify-between">
-                            {cate
-                                .rooms
-                                .into_iter()
-                                .map(|room| {
-                                    view! { <RoomCard data=room /> }
-                                })
-                                .collect_view()}
-                        </div>
-                    </div>
-                </For>
-            </Show>
+        <figure class=css::cate_rooms_list>
+            <Suspense fallback=|| {
+                "loading..."
+            }>
+                {move || Suspend::new(async move {
+                    let rooms = get_data.get().unwrap_or(Ok(vec![])).unwrap();
+
+                    view! {
+                        <For each=move || rooms.clone().into_iter() key=|cate| cate.id let(cate)>
+                            <div>
+                                <div class=css::head>
+                                    <h1 class=css::title>
+                                        <img src=cate.icon_url width=32 height=32 />
+                                        {cate.cate_name}
+                                    </h1>
+                                    <ul class=css::rooms_clx>
+                                        {cate
+                                            .tags
+                                            .into_iter()
+                                            .map(|tag| {
+                                                view! {
+                                                    <li class=if tag.is_live {
+                                                        Some(css::live)
+                                                    } else {
+                                                        None
+                                                    }>{tag.name}</li>
+                                                }
+                                            })
+                                            .collect_view()}
+                                    </ul>
+                                    <p class=css::status>
+                                        <span>548</span>
+                                        个主播正在直播
+                                        <a>"更多 >"</a>
+                                    </p>
+                                </div>
+                                <div class=css::rooms>
+                                    {cate
+                                        .rooms
+                                        .into_iter()
+                                        .map(|room| {
+                                            view! { <RoomCard data=room /> }
+                                        })
+                                        .collect_view()}
+                                </div>
+                            </div>
+                        </For>
+                    }
+                })}
+            </Suspense>
+
             <div>
-                <div class="flex relative justify-start items-end mb-4 text-[14px]">
-                    <h1 class="flex gap-x-2.5 items-center mr-4 duration-300 text-[26px] leading-[33px] hover:text-[#f80]">
+                <div class=css::activity>
+                    <h1 class=css::head>
                         <img src="/imgs/activity.png" width=32 height=32 />
                         官方活动
 
                     </h1>
-                    <span class="absolute right-0 hover:text-[#f80]">更多 ></span>
+                    <span class=css::more>更多 ></span>
                 </div>
-                <div class="flex gap-x-5 justify-between *:rounded-md *:flex-auto *:w-30">
+                <div class=css::imgs>
                     <img src="/imgs/php24FYzp1749607412.jpg" loading="lazy" alt="" />
                     <img src="/imgs/phpqWP2m31750146373.jpg" loading="lazy" alt="" />
                     <img src="/imgs/php90jNV31750045683.jpg" loading="lazy" alt="" />
@@ -1194,54 +1246,33 @@ pub fn CateRooms() -> impl IntoView {
 }
 
 #[component]
-fn RoomCard(data: Room<&'static str>) -> impl IntoView {
+fn RoomCard(data: Room<String>) -> impl IntoView {
     let tag = !data.tags.is_empty();
     let tags = data.tags;
 
-    let container_clx = clsx! {
-        "flex overflow-hidden relative flex-col bg-white rounded-md duration-200 flex-1/4 group/room-card",
-        "hover:drop-shadow-md hover:drop-shadow-black/20"
-    };
-    let img_box_clx = clsx! {
-        "overflow-hidden relative",
-        "after:duration-300 after:bg-no-repeat after:bg-transparent after:scale-150 after:opacity-0",
-        "after:absolute after:bg-center after:left-1/2 after:top-1/2 after:-translate-1/2 after:size-full after:bg-[url(/imgs/room-play.png)]",
-        "hover:after:scale-100 hover:after:opacity-100 hover:after:bg-black/40"
-    };
-    let tag_box_clx = clsx! {
-        "flex absolute top-0 left-0 flex-row-reverse gap-x-1 justify-start items-center p-1 w-full text-xs leading-5 text-white",
-        "*:rounded-md *:px-2"
-    };
-    let room_hot_clx = clsx! {
-        "flex gap-x-1.5 bg-no-repeat",
-        "before:inline-block before:w-3 before:h-4 before:bg-cover before:bg-center before: before:bg-[url(/imgs/room-hot.png)]"
-    };
-
     view! {
-        <div class=container_clx>
-            <div class=img_box_clx>
-                <img src=data.img_url alt="" loading="lazy" class="aspect-290/163" />
+        <div class=css::container_clx>
+            <div class=css::img_box_clx>
+                <img src=data.img_url alt="" loading="lazy" class=css::room_img />
                 <Show when=move || tag>
-                    <div class=tag_box_clx>
+                    <div class=css::tag_box_clx>
                         {tags
                             .iter()
                             .map(|tag| {
                                 match tag {
                                     Tag::Blue(title) => {
                                         EitherOf3::A(
-                                            view! { <span class="bg-sky-500">{*title}</span> },
+                                            view! { <span class=css::blue>{title.clone()}</span> },
                                         )
                                     }
                                     Tag::Play(title) => {
                                         EitherOf3::B(
-                                            view! { <span class="text-right">{*title}</span> },
+                                            view! { <span class=css::play>{title.clone()}</span> },
                                         )
                                     }
                                     Tag::Official(title) => {
                                         EitherOf3::C(
-                                            view! {
-                                                <span class="absolute left-1 bg-black/50">{*title}</span>
-                                            },
+                                            view! { <span class=css::official>{title.clone()}</span> },
                                         )
                                     }
                                 }
@@ -1250,20 +1281,13 @@ fn RoomCard(data: Room<&'static str>) -> impl IntoView {
                     </div>
                 </Show>
             </div>
-            <div class="flex flex-col gap-y-1.5 p-2.5 text-left">
-                <p class="w-4/5 truncate group-hover/room-card:text-[#f80]">{data.name}</p>
-                <div class="flex relative gap-x-1 justify-start items-center text-xs text-gray-400">
-                    <img
-                        src=data.owner.avatar_url
-                        class="rounded-full"
-                        alt=""
-                        width=24
-                        height=24
-                        loading="lazy"
-                    />
-                    <span class="inline-block w-3/5 truncate">{data.owner.name}</span>
-                    <div class="flex absolute right-0">
-                        <span class=room_hot_clx>
+            <div class=css::anchor_info>
+                <p class=css::room_name>{data.name}</p>
+                <div class=css::info_container>
+                    <img src=data.owner.avatar_url alt="" width=24 height=24 loading="lazy" />
+                    <span class=css::user_name>{data.owner.name}</span>
+                    <div class=css::hot>
+                        <span class=css::room_hot_clx>
                             {if data.hot > 10000 {
                                 format!("{:.2}万", (data.hot as f64) / 10000.0)
                             } else {
