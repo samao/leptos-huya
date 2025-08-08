@@ -321,6 +321,7 @@ pub fn Header() -> impl IntoView {
                         <input
                             type="text"
                             name="hsk"
+                            required
                             placeholder="寻寻觅觅"
                             class=css::search_clsx
                         />
