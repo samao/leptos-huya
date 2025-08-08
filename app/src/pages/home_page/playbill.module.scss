@@ -1,0 +1,119 @@
+%bar-y-hidden {
+    scrollbar-width: none;
+    overflow: hidden auto;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.playbill {
+    flex: auto;
+    padding-inline: 12px;
+    padding-right: 0;
+    text-align: left;
+    @extend %bar-y-hidden;
+
+    %font-size {
+        font-size: 12px;
+        line-height: 20px;
+    }
+
+    .bill_item {
+        border-left: 1px solid lightgray;
+        width: 255px;
+
+        .detail {
+            margin-inline: 10px;
+
+            .item_clsx {
+                display: flex;
+                position: relative;
+                align-items: center;
+                margin-bottom: 8px;
+
+                &::before {
+                    content: "";
+                    transform: translateX(-50%);
+                    left: -10px;
+                    position: absolute;
+                    width: 9px;
+                    height: 9px;
+                    background-repeat: no-repeat;
+                    background-position: bottom;
+                    background-image: var(--bill-icon);
+                }
+
+                .live {
+                    padding-inline: 6px;
+                    margin-right: 8px;
+                    border-radius: 16px;
+                    border: 1px solid currentColor;
+                    color: #f80;
+                    @extend %font-size;
+                }
+
+                .descri {
+                    margin-right: 8px;
+                    color: blueviolet;
+                    @extend %font-size;
+                }
+
+                .info {
+                    width: calc(2/3 * 100%);
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    font-size: 14px;
+                }
+            }
+
+            .details {
+                display: flex;
+                overflow: hidden;
+                margin-bottom: 8px;
+                font-size: 12px;
+                color: #fff;
+                border-radius: 6px;
+
+                >img {
+                    width: 182px;
+                }
+
+                .is_live_base_clsx {
+                    display: flex;
+                    flex-direction: column;
+                    flex: auto;
+                    row-gap: 8px;
+                    justify-content: center;
+                    align-items: center;
+                    width: 63px;
+
+                    %icon {
+                        display: inline-block;
+                        width: 24px;
+                        height: 24px;
+                    }
+
+                    &.live {
+                        background-color: #ff9600;
+
+                        i {
+                            @extend %icon;
+                            background-image: url(/imgs/bill-live.png);
+                        }
+                    }
+
+                    &.descri {
+                        background-color: blueviolet;
+
+                        i {
+                            @extend %icon;
+                            background-image: url(/imgs/bill-subscriber.png);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

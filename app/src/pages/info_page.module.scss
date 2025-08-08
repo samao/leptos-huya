@@ -1,0 +1,69 @@
+.info_page {
+    position: relative;
+    margin-inline: auto;
+    width: calc(3/4 * 100%);
+
+    .inner {
+        font-size: 20px;
+        line-height: 2;
+    }
+
+    %line {
+        padding-inline: 8px;
+        border-radius: 6px;
+    }
+
+    .input {
+        @extend %line;
+        border: 1px solid gray;
+    }
+
+    .submit {
+       @extend %line;
+        margin-left: 8px;
+        color: #fff;
+        background-color: #f40;
+    }
+
+    .loading {
+        color: #fff;
+        background-color: #000;
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: spin 1s linear infinite;
+    }
+
+    .result {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotateZ(360deg);
+        }
+    }
+
+    .counter {
+        display: flex;
+        justify-content: center;
+        column-gap: 8px;
+        color: #fff;
+
+        .c_value {
+            margin-inline: 12px;
+            color: red;
+            font-weight: bold;
+        }
+
+        button {
+            border-radius: 6px;
+            padding-inline: 12px;
+            background-color: oklch(55.5% .163 48.998);
+        }
+    }
+}

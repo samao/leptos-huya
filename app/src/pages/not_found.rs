@@ -1,5 +1,6 @@
 use leptos::prelude::*;
 use leptos_meta::Title;
+use stylance::import_crate_style;
 
 #[component]
 pub fn NotFound() -> impl IntoView {
@@ -10,11 +11,13 @@ pub fn NotFound() -> impl IntoView {
         resp.set_status(axum::http::StatusCode::NOT_FOUND);
     }
 
+    import_crate_style!(css, "src/pages/not_found.module.scss");
+
     view! {
         <Title text="404" />
-        <div class="flex flex-col justify-center items-center mx-auto h-[710px]">
+        <div class=css::found_body>
             <img
-                class="size-50"
+                class=css::img
                 src="/imgs/error.2c65e354350f47124a3c7d2e4f20a9cf.png"
                 alt="error"
             />

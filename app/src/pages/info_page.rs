@@ -2,6 +2,9 @@ use cfg_block::cfg_block;
 use leptos::{html::Input, prelude::*};
 use leptos_meta::Title;
 use leptos_router::hooks::query_signal;
+use stylance::import_crate_style;
+
+import_crate_style!(css, "src/pages/info_page.module.scss");
 
 cfg_block! {
     #[cfg(feature="ssr")] {
@@ -14,6 +17,7 @@ cfg_block! {
 }
 
 #[server]
+#[lazy]
 async fn get_rows() -> Result<usize, ServerFnError> {
     let req_parts = use_context::<Parts>();
     if let Some(req_parts) = req_parts {
@@ -45,18 +49,19 @@ pub fn InfoPage() -> impl IntoView {
             val.map_or("I HoHo".to_string(), |val| format!("i got {}", val))
         })
     };
+
     view! {
         <Title text="信息工程" />
-        <div class="relative mx-auto w-3/4">
-            GOD INFO PAGE <div class="text-xs/loose">
+        <div class=css::info_page>
+            GOD INFO PAGE <div class=css::inner>
                 <input
-                    class="px-2 rounded-md border border-gray-400"
+                    class=css::input
                     type="text"
                     node_ref=input_ref
                     placeholder="type something here"
                 />
                 <button
-                    class="px-2 ml-2 text-white rounded-md bg-[#f40]"
+                    class=css::submit
                     on:click=move |_| {
                         let text = input_ref.get().unwrap().value();
                         action.dispatch(text.into());
@@ -65,12 +70,12 @@ pub fn InfoPage() -> impl IntoView {
                     submit
                 </button>
                 <Show when=move || action.pending().get()>
-                    <div class="text-white bg-black rounded-full animate-spin size-20">8</div>
+                    <div class=css::loading>8</div>
                 </Show>
                 <p>You submitted: {move || format!("{:?}", action.input().get())}</p>
                 <p>You submitted: {move || format!("{:?}", action.value().get())}</p>
                 <Transition fallback=|| "">
-                    <p class="text-2xl font-bold">Total rows: {size}</p>
+                    <p class=css::result>Total rows: {size}</p>
                 </Transition>
             </div> <SimpleQueryCounter />
         </div>
@@ -85,12 +90,10 @@ pub fn SimpleQueryCounter() -> impl IntoView {
     let increment = move |_| set_count.set(Some(count.get().unwrap_or(0) + 1));
 
     view! {
-        <div class="flex justify-center space-x-2 text-white *:[button]:rounded-md *:[button]:px-3 *:[button]:bg-amber-700">
+        <div class=css::counter>
             <button on:click=clear>"Clear"</button>
             <button on:click=decrement>"-1"</button>
-            <span class="mx-3 font-bold text-red-600">
-                "Value: " {move || count.get().unwrap_or(0)} "!"
-            </span>
+            <span class=css::c_value>"Value: " {move || count.get().unwrap_or(0)} "!"</span>
             <button on:click=increment>"+1"</button>
         </div>
     }

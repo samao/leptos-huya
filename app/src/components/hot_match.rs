@@ -88,9 +88,9 @@ async fn get_top_matchs() -> Result<Vec<MatchData<String>>, ServerFnError> {
 #[component]
 pub fn HotMatch() -> impl IntoView {
     let get_matchs = LocalResource::new(|| get_top_matchs());
-
+    stylance::import_crate_style!(css, "src/components/hot_match.module.scss");
     view! {
-        <div class="flex flex-col gap-y-5 p-3 bg-[#38393e] rounded-xs">
+        <div class=css::hot_match>
             <Suspense fallback=|| {
                 "..."
             }>
@@ -104,18 +104,15 @@ pub fn HotMatch() -> impl IntoView {
                                     let(data)
                                 >
                                     <div>
-                                        <a class="flex gap-x-1 items-center mb-2 text-[14px] hover:text-[#f80]">
+                                        <a class=css::link>
                                             <i class=format!(
-                                                "inline-block bg-left size-[18px] bg-no-repeat bg-cover {}",
-                                                if data.is_live {
-                                                    "animate-living bg-[url(/imgs/live-yellow.png)]"
-                                                } else {
-                                                    "bg-[url(/imgs/replay.png)]"
-                                                },
+                                                "{} {}",
+                                                css::icon,
+                                                if data.is_live { css::live } else { "" },
                                             ) />
                                             {data.title}
                                         </a>
-                                        <p class="text-gray-500 [&>b]:mx-1 [&>b]:font-bold indent-[22px]">
+                                        <p class=css::des>
                                             {if data.is_live {
                                                 Either::Right(
                                                     view! {
@@ -145,7 +142,7 @@ pub fn HotMatch() -> impl IntoView {
                     _ => Either::Left("###"),
                 }}
             </Suspense>
-            <a class="text-center hover:text-[#f80]">"更多精彩赛事>"</a>
+            <a class=css::more>"更多精彩赛事>"</a>
         </div>
     }
 }

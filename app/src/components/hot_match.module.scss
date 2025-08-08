@@ -1,0 +1,62 @@
+.hot_match {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    padding: 12px;
+    background-color: #38393e;
+    border-radius: 2px;
+
+    @keyframes is_living {
+        0% {
+            background-position: 0 0;
+        }
+        100% {
+            background-position: -108px 0;
+        }
+    } 
+
+    .link {
+        display: flex;
+        column-gap: 4px;
+        align-items: center;
+        margin-bottom: 8px;
+        font-size: 14px;
+
+        &:hover {
+            color: #f80;
+        }
+
+        .icon {
+            display: inline-block;
+            background-position: left;
+            width: 18px;
+            height: 18px;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-image: url(/imgs/replay.png);
+
+            &.live {
+                animation: is_living .6s steps(6) infinite;
+                background-image: url(/imgs/live-yellow.png);
+            }
+        }
+    }
+
+    .des {
+        color: gray;
+        text-indent: 22px;
+
+        >b {
+            margin-inline: 4px;
+            font-weight: bold;
+        }
+    }
+
+    .more {
+        text-align: center;
+
+        &:hover {
+            color: #f80;
+        }
+    }
+}

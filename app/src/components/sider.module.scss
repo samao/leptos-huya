@@ -1,0 +1,247 @@
+.nav_container_clsx {
+    display: flex;
+    position: fixed;
+    right: 20px;
+    bottom: 40px;
+    flex-direction: column;
+    row-gap: 4px;
+    justify-content: center;
+    align-items: center;
+    padding-block: 8px;
+    font-size: 12px;
+    line-height: 20px;
+    color: gray;
+    background-color: #fff;
+    border-radius: 6px;
+    width: 50px;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.10));
+    z-index: 10;
+
+    *:hover {
+        color: #f80;
+    }
+
+    @media (min-width:1440px) {
+        right: 40px;
+    }
+
+    .group {
+        %item {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        &.head {
+            row-gap: 4px;
+
+            .toy {
+                position: absolute;
+                overflow: hidden;
+                top: 0;
+                transform: translate(-40%, -100%);
+                pointer-events: none;
+                height: 75px;
+                width: 72px;
+
+                img {
+                    bottom: 0;
+                    transition-duration: 300ms;
+                    transform: translateY(0);
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+
+            .download_clsx {
+                position: absolute;
+                display: flex;
+                top: 0;
+                flex-direction: column;
+                row-gap: 4px;
+                align-items: center;
+                padding: 12px;
+                color: gray;
+                white-space: nowrap;
+                background-color: #fff;
+                border-radius: 6px;
+                opacity: 0;
+                transition-duration: 500ms;
+                pointer-events: none;
+                width: 106px;
+                filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.10));
+                left: 100px;
+                text-align: center;
+
+                &::after {
+                    content: "";
+                    width: 160px;
+                    position: absolute;
+                    left: 0;
+                    height: 40px;
+                    opacity: 0;
+                }
+
+                &::before {
+                    content: "";
+                    top: 28px;
+                    width: 12px;
+                    height: 12px;
+                    border: 0 solid gray;
+                    transform: rotate(45deg) translate(-60%);
+                    background-color: #fff;
+                    left: 100%;
+                    border-left: 0;
+                    border-bottom: 0;
+                    position: absolute;
+                }
+
+                .qrcode {
+                    width: 80px;
+                    height: 80px;
+                }
+
+                .download_btn {
+                    padding-inline: 8px;
+                    line-height: 24px;
+                    border-radius: 24px;
+                    border: 1px solid currentColor;
+                    color: #f80;
+
+                    &:hover {
+                        background-color: #f80;
+                        color: #fff;
+                    }
+                }
+
+                .hr {
+                    margin-block: 4px;
+                    margin-top: 8px;
+                    width: 100%;
+                    color: gray;
+                }
+
+                .pc {
+                    padding-inline: 8px;
+                    line-height: 24px;
+                    border-radius: 24px;
+                    border: 1px solid currentColor;
+                    color: blueviolet;
+
+                    &:hover {
+                        color: #fff;
+                        background-color: blueviolet;
+                    }
+                
+                }
+            }
+
+            .bottom_imgs {
+                position: relative;
+                width: 26px;
+                height: 26px;
+
+                * {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                }
+
+                img {
+                    display: block;
+
+                    &:last-child {
+                        display: none;
+                    }
+                }
+            }
+
+            &:hover .bottom_imgs img {
+                display: none;
+
+                &:last-child {
+                    display: block;
+                }
+            }
+
+            &:hover .toy img {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+
+            &:hover .download_clsx {
+                opacity: 1;
+                pointer-events: auto;
+                left: -120px;
+            }
+        }
+
+        &.to_top {
+            position: relative;
+           
+            .to_top_box {
+                position: relative;
+                width: 26px;
+                height: 26px;
+            }
+
+            * {
+                position: absolute;
+                height: 100%;
+                width: 100%;
+            }
+
+            img {
+                display: block;
+
+                &:last-child {
+                    display: none;
+                }
+            }
+
+            &:hover .to_top_box img {
+                display: none;
+
+                &:last-child {
+                    display: block;
+                }
+            }
+        }
+
+        .common {
+            @extend %item;
+        }
+
+        &.common_item {
+
+            .common_box {
+                position: relative;
+                width: 26px;
+                height: 26px;
+    
+                * {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                }
+    
+                img {
+                    display: block;
+
+                    &:last-child {
+                        display: none;
+                    }
+                }
+            }
+
+            &:hover .common_box img {
+                display: none;
+
+                &:last-child {
+                    display: block;
+                }
+            }
+        }
+    }
+}

@@ -11,6 +11,8 @@ use components::{Footer, Header, LeftNav};
 mod pages;
 use pages::{Game, HomePage, InfoPage, MatchPage, NotFound, UserPage, VideoPage};
 
+stylance::import_crate_style!(css, "src/app.module.scss");
+
 pub fn shell(options: LeptosOptions) -> impl IntoView {
     view! {
         <!DOCTYPE html>
@@ -23,9 +25,10 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 />
                 <AutoReload options=options.clone() />
                 <HydrationScripts options islands=false />
+                <link rel="stylesheet" href="/css/normalize.css" />
                 <MetaTags />
             </head>
-            <body class="select-none bg-[#f4f5f8] font-leptos!">
+            <body class=css::root>
                 <App />
             </body>
         </html>
@@ -67,7 +70,7 @@ pub fn App() -> impl IntoView {
                         path=StaticSegment("/")
                         view=|| {
                             view! {
-                                <div class="flex relative gap-x-3 h-[calc(100vh-60px)]">
+                                <div class=css::left_layout>
                                     <LeftNav />
                                     <Outlet />
                                 </div>

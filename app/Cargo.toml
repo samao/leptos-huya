@@ -21,6 +21,7 @@ wasm-bindgen =  { workspace = true, optional = true }
 http.workspace = true
 cfg-if.workspace = true
 thiserror.workspace = true
+stylance.workspace = true
 
 gloo-timers = { version = "0.3.0", features = ["futures"], optional = true }
 js-sys = { version = "0.3.77", optional=true }
@@ -38,3 +39,6 @@ hydrate = [
 ]
 ssr = ["leptos/ssr", "leptos_meta/ssr", "leptos_router/ssr", "dep:leptos_axum", "dep:axum", "dep:tokio"]
 
+[package.metadata.stylance]
+output_file = "../style/main.scss"
+output_dir = "../style/"

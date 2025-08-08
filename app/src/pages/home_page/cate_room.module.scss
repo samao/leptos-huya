@@ -1,0 +1,276 @@
+$primaryColor: #f80;
+
+.cate_rooms_list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 40px;
+    margin-top: 40px;
+
+    .head {
+        position: relative;
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-end;
+        margin-bottom: 16px;
+        font-size: 14px;
+
+        .title {
+            display: flex;
+            column-gap: 10px;
+            align-items: center;
+            margin-right: 16px;
+            transition-duration: 300ms;
+            font: 26px/33px bold;
+
+            &:hover {
+                color: $primaryColor;
+            }
+        }
+
+        .rooms_clx {
+            display: flex;
+            column-gap: 6px;
+            line-height: 26px;
+
+            li {
+                transition-duration: 300ms;
+                padding-inline: 12px;
+                border-radius: 24px;
+                border: 1px solid lightgray;
+                color: gray;
+                background-color: #fff;
+
+                &:hover {
+                    color: $primaryColor;
+                    border-color: $primaryColor;
+                }
+            }
+
+            .live {
+                color: #3a3a3a;
+            }
+        }
+
+        .status {
+            position: absolute;
+            right: 0;
+            color: #666;
+
+            span {
+                margin-right: 4px;
+                color: $primaryColor;
+            }
+
+            a {
+                margin-left: 4px;
+                transition-duration: 300ms;
+
+                &:hover {
+                    color: $primaryColor;
+                }
+            }
+        }
+
+    }
+
+    .rooms {
+        display: flex;
+        column-gap: 20px;
+        justify-content: space-between;
+
+        &:hover.container_clx.anchor_info.room_name {
+            color: $primaryColor;
+        }
+
+        .container_clx {
+            display: flex;
+            overflow: hidden;
+            position: relative;
+            flex-direction: column;
+            background-color: #fff;
+            border-radius: 6px;
+            transition-duration: 200ms;
+            flex: 25%;
+
+            &:hover {
+                filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.20));
+            }
+
+            .img_box_clx {
+                overflow: hidden;
+                position: relative;
+
+                &::after {
+                    content: "";
+                    transition-duration: 300ms;
+                    background-repeat: no-repeat;
+                    background-color: transparent;
+                    transform: translate(-50%, -50%) scale(1.5);
+                    opacity: 0;
+                    position: absolute;
+                    background-position: center;
+                    left: 50%;
+                    top: 50%;
+                    width: 100%;
+                    height: 100%;
+                    background-image: url(/imgs/room-play.png);
+                }
+
+                &:hover::after {
+                    transform: translate(-50%, -50%) scale(1);
+                    opacity: 1;
+                    background-color: rgba(black, 0.4);
+                }
+
+                .room_img {
+                    aspect-ratio: 290/163;
+                }
+
+                .tag_box_clx {
+                    display: flex;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    flex-direction: row-reverse;
+                    column-gap: 4px;
+                    justify-content: flex-start;
+                    align-items: center;
+                    padding: 4px;
+                    width: 100%;
+                    font: 12px/20px normal;
+                    color: #fff;
+
+                    >* {
+                        border-radius: 6px;
+                        padding-inline: 8px;
+                    }
+
+                    span {
+
+                        &.blue {
+                            background-color: blueviolet;
+                        }
+
+                        &.play {
+                            text-align: right;
+                        }
+
+                        &.official {
+                            position: absolute;
+                            left: 4px;
+                            background-color: rgba(black, 0.5);
+                        }
+                    }
+                }
+            }
+
+            .anchor_info {
+                display: flex;
+                flex-direction: column;
+                column-gap: 6px;
+                padding: 10px;
+                text-align: left;
+
+                .room_name {
+                    white-space: nowrap;
+                    width: 80%;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    font: 14px/20px normal;
+                    margin-bottom: 6px;
+                }
+
+                .info_container {
+                    position: relative;
+                    display: flex;
+                    column-gap: 4px;
+                    justify-content: flex-start;
+                    align-items: center;
+                    font-size: 12px;
+                    color: gray;
+
+                    img {
+                        border-radius: 50%;
+                    }
+
+                    .user_name {
+                        display: inline-block;
+                        width: 50%;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .hot {
+                        display: flex;
+                        position: absolute;
+                        right: 0;
+
+                        .room_hot_clx {
+                            display: flex;
+                            column-gap: 6px;
+
+                            &::before {
+                                content: "";
+                                display: inline-block;
+                                width: 12px;
+                                height: 16px;
+                                background-size: cover;
+                                background-position: center;
+                                background-repeat: no-repeat;
+                                background-image: url(/imgs/room-hot.png);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .activity {
+        display: flex;
+        position: relative;
+        justify-content: flex-start;
+        align-items: flex-end;
+        margin-bottom: 16px;
+        font-size: 14px;
+
+        .head {
+            display: flex;
+            column-gap: 10px;
+            align-items: center;
+            margin-right: 16px;
+            margin-bottom: 0;
+            transition-duration: 300ms;
+            font: 26px/33px bold;
+
+
+
+            &:hover {
+                color: $primaryColor;
+            }
+        }
+
+        .more {
+            position: absolute;
+            right: 0;
+
+            &:hover {
+                color: $primaryColor;
+            }
+        }
+
+        +.imgs {
+            display: flex;
+            column-gap: 20px;
+            justify-content: space-between;
+
+            >* {
+                border-radius: 6px;
+                flex: auto;
+                width: 120px;
+            }
+        }
+
+    }
+}

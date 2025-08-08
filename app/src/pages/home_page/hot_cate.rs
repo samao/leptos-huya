@@ -1,8 +1,6 @@
 use leptos::{either::Either, prelude::*};
 use serde::{Deserialize, Serialize};
 
-use crate::clsx;
-
 #[derive(Debug, Deserialize, Serialize, Clone)]
 struct CateLink<T>
 where
@@ -203,22 +201,8 @@ pub fn HotCate() -> impl IntoView {
             .unwrap_or(Err(ServerFnError::ServerError("loading".to_string())))
     };
 
-    let title_style = clsx! {
-        "text-[26px]/[33px] text-white font-bold flex items-end gap-x-3 justify-start",
-        "hover:text-[#f80] *:[img]:size-8 *:[img]:bg-center *:[img]:bg-no-repeat"
-    };
-    let game_set_clsx = clsx! {
-        "flex gap-x-1.5 leading-7 *:px-4 *:hover:text-[#f80] *:rounded-2xl",
-        "*:hover:border-current *:bg-[#e2e2e2] *:border-[#e2e2e2]"
-    };
-    let cate_clsx = clsx! {
-        "flex flex-col justify-center items-center bg-white rounded-md group/cate-card w-[125px] h-[147px]",
-        "min-[1440px]:w-[137px] min-[1440px]:h-[167px]"
-    };
-    let live_icon_clsx = clsx! {
-        "inline-block overflow-hidden absolute right-0 bottom-0 rounded-full size-[18px]",
-        "bg-[#f80] animate-living bg-[url(/imgs/live-icon.png)]"
-    };
+    stylance::import_crate_style!(css, "src/pages/home_page/hot_cate.module.scss");
+
     move || match get_data() {
         Ok(HotCateData {
             cates,
@@ -226,14 +210,14 @@ pub fn HotCate() -> impl IntoView {
             game_set,
             live_count,
         }) => Either::Right(view! {
-            <div class="flex gap-x-5 text-[14px] size-full **:[a]:hover:text-[#f80] **:[a]:duration-300">
-                <div class="flex flex-col justify-between text-[#333]">
-                    <div class="flex relative gap-x-2 justify-start items-center font-[14px]">
-                        <h1 class=title_style>
+            <div class=css::hot_cate>
+                <div class=css::cates>
+                    <div class=css::head>
+                        <h1 class=css::title_style>
                             <img src="/imgs/hot-cate.png" alt="" />
                             热门分类
                         </h1>
-                        <ul class=game_set_clsx>
+                        <ul class=css::game_set_clsx>
                             {game_set
                                 .into_iter()
                                 .map(|gset| {
@@ -241,66 +225,52 @@ pub fn HotCate() -> impl IntoView {
                                 })
                                 .collect_view()}
                         </ul>
-                        <p class="absolute right-0 text-white max-[1440px]:*:not-[a]:hidden">
+                        <p class=css::cate_status>
                             <span>当前共有</span>
-                            <em class="px-1.5 text-[#f80]">{live_count}</em>
+                            <em>{live_count}</em>
                             <span>款游戏直播</span>
-                            <a class="pl-2.5">"更多 >"</a>
+                            <a>"更多 >"</a>
                         </p>
                     </div>
-                    <div class="grid grid-cols-5 gap-4 min-[1440px]:grid-cols-6 max-[1440px]:*:nth-[n+11]:hidden">
+                    <div class=css::cate_list>
                         {cates
                             .into_iter()
                             .map(|cate| {
                                 view! {
-                                    <div class=cate_clsx>
-                                        <img
-                                            class="mb-2 size-19 min-[1440px]:size-22"
-                                            src=cate.img_url
-                                            alt=""
-                                        />
-                                        <span class="group-hover/cate-card:text-[#f80]">
-                                            {cate.name}
-                                        </span>
-                                        <span class="text-gray-400">
-                                            {cate.room_conut}场直播
-                                        </span>
+                                    <div class=css::cate_clsx>
+                                        <img class=css::cate_img src=cate.img_url alt="" />
+                                        <span class=css::cate_name>{cate.name}</span>
+                                        <span class=css::total>{cate.room_conut}场直播</span>
                                     </div>
                                 }
                             })
                             .collect_view()}
                     </div>
                 </div>
-                <div class="flex flex-col justify-between w-[290px]">
-                    <div class="flex gap-x-2 justify-between items-center text-white text-[14px]">
-                        <h1 class=title_style>
+                <div class=css::anchors>
+                    <div class=css::head>
+                        <h1 class=css::title_style>
                             <img src="/imgs/hot-star.png" alt="" />
                             明星大神
                         </h1>
                         <a>"成为主播 >"</a>
                     </div>
-                    <div class="px-3 text-left bg-white rounded-md bar-y-hidden h-[310px] min-[1440px]:h-[350px]">
-                        <ul class="*:not-first:mt-2 *:rounded-md *:hover:bg-gray-200">
+                    <div class=css::anchors>
+                        <ul class=css::inner_list>
                             {streamers
                                 .into_iter()
                                 .map(|streamer| {
                                     view! {
-                                        <li class="flex relative gap-x-2 p-1">
-                                            <div class="relative flex-none size-16">
-                                                <img
-                                                    class="rounded-full size-full"
-                                                    src=streamer.avator
-                                                    alt=""
-                                                />
+                                        <li class=css::item>
+                                            <div class=css::avator>
+                                                <img src=streamer.avator alt="" />
                                                 <Show when=move || streamer.is_live>
-                                                    <i class=live_icon_clsx />
+                                                    <i class=css::live_icon_clsx />
                                                 </Show>
                                             </div>
-                                            <div class="flex flex-col flex-auto justify-start py-1">
-                                                <h1 class="font-bold">{streamer.name}</h1>
-                                                <p class="text-xs text-gray-400 line-clamp-2">
-                                                    {streamer.description}
-                                                </p>
+                                            <div class=css::info>
+                                                <h1>{streamer.name}</h1>
+                                                <p>{streamer.description}</p>
                                             </div>
                                         </li>
                                     }

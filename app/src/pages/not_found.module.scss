@@ -1,0 +1,14 @@
+.found_body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-inline: auto;
+    height: 710px;
+    color: #333;
+
+    .img {
+        width: 200px;
+        height: 200px;
+    }
+}
