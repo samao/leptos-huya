@@ -26,3 +26,20 @@ pub fn create_post(conn: &mut SqliteConnection, title: &str, body: &str) -> Post
         .get_result(conn)
         .expect("Error saving new post")
 }
+
+pub fn get_post(pid: i32) -> Option<Post> {
+    use schema::posts::dsl::*;
+    let conn = &mut establish_connection();
+
+    let post = posts
+        .find(pid)
+        .select(Post::as_select())
+        .first(conn)
+        .optional();
+
+    match post {
+        Ok(Some(post)) => Some(post),
+        Ok(None) => None,
+        Err(_) => None,
+    }
+}

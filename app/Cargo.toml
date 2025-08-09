@@ -17,6 +17,7 @@ chrono.workspace = true
 axum = {workspace = true, optional = true}
 tokio = {workspace = true, optional = true}
 wasm-bindgen =  { workspace = true, optional = true }
+web_db = {workspace=true, optional = true}
 
 http.workspace = true
 cfg-if.workspace = true
@@ -37,7 +38,7 @@ hydrate = [
     "dep:gloo-timers",
     "dep:js-sys",
 ]
-ssr = ["leptos/ssr", "leptos_meta/ssr", "leptos_router/ssr", "dep:leptos_axum", "dep:axum", "dep:tokio"]
+ssr = ["leptos/ssr", "leptos_meta/ssr", "leptos_router/ssr", "dep:leptos_axum", "dep:axum", "dep:tokio", "dep:web_db"]
 
 [package.metadata.stylance]
 output_file = "../style/main.scss"

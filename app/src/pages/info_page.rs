@@ -1,5 +1,5 @@
 use cfg_block::cfg_block;
-use leptos::{html::Input, prelude::*};
+use leptos::{html::Input, logging::log, prelude::*};
 use leptos_meta::Title;
 use leptos_router::hooks::query_signal;
 use stylance::import_crate_style;
@@ -53,7 +53,13 @@ pub fn InfoPage() -> impl IntoView {
     view! {
         <Title text="信息工程" />
         <div class=css::info_page>
-            GOD INFO PAGE <div class=css::inner>
+            <button
+                on:click:target=|evt| {
+                    log!("{}", evt.target().node_name());
+            }>
+                "GOD INFO PAGE"
+            </button>
+            <div class=css::inner>
                 <input
                     class=css::input
                     type="text"

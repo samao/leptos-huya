@@ -97,6 +97,7 @@ dependencies = [
  "tokio",
  "wasm-bindgen",
  "web-sys",
+ "web_db",
 ]
 
 [[package]]

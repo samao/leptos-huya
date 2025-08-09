@@ -1,7 +1,8 @@
-use diesel::prelude::*;
 use crate::schema::posts;
+use diesel::prelude::*;
+use serde::{Deserialize, Serialize};
 
-#[derive(Queryable, Selectable)]
+#[derive(Queryable, Selectable, Debug, Serialize, Deserialize, Clone)]
 #[diesel(table_name = posts)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct Post {
