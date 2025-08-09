@@ -45,19 +45,17 @@ pub fn Game() -> impl IntoView {
                 {move || Suspend::new(async move {
                     match all_data.get() {
                         Some(Ok(post)) => {
-                            Either::Right(view! {
-                                <p>
-                                    <b>{post.title} -- {post.published}</b>
-                                    <br />
-                                    {post.body}
-                                </p>
-                            })
-                        },
-                        _ => {
-                            Either::Left(view! {
-                                <p>发生了什么OOPS</p>
-                            })
+                            Either::Right(
+                                view! {
+                                    <p>
+                                        <b>{post.title}-- {post.published}</b>
+                                        <br />
+                                        {post.body}
+                                    </p>
+                                },
+                            )
                         }
+                        _ => Either::Left(view! { <p>发生了什么OOPS</p> }),
                     }
                 })}
             </Suspense>

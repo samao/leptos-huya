@@ -53,12 +53,9 @@ pub fn InfoPage() -> impl IntoView {
     view! {
         <Title text="信息工程" />
         <div class=css::info_page>
-            <button
-                on:click:target=|evt| {
-                    log!("{}", evt.target().node_name());
-            }>
-                "GOD INFO PAGE"
-            </button>
+            <button on:click:target=|evt| {
+                log!("{}", evt.target().node_name());
+            }>"GOD INFO PAGE"</button>
             <div class=css::inner>
                 <input
                     class=css::input
