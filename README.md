@@ -105,6 +105,21 @@ LEPTOS_RELOAD_PORT="3001"
 ```
 Finally, run the server binary.
 
+## Sqlite Diesel
+
+### 1. setup diesel
+```diesel setup```
+
+### 2. migrations
+
+```diesel migration generate create_{table}``` create sql
+
+```diesel migration run``` run sql
+
+```diesel migration redo -n {latest_num}``` redo latest
+
+> database orm https://diesel.rs/
+
 ## Licensing
 
 This template itself is released under the Unlicense. You should replace the LICENSE for your own application with an appropriate license if you plan to release it publicly.
