@@ -2,9 +2,8 @@
 # see https://diesel.rs/guides/configuring-diesel-cli
 
 [print_schema]
-file = "database/src/schema.rs"
+file = "web_db/src/schema.rs"
 custom_type_derives = ["diesel::query_builder::QueryId", "Clone"]
 
 [migrations_directory]
-dir = "/git/rust/rust-web/huya-web/database/migrations"
-
+dir = "/git/rust/rust-web/huya-web/web_db/migrations"

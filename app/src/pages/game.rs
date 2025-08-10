@@ -40,7 +40,7 @@ async fn query_post(id: i32) -> Result<Post, ServerFnError> {
 pub fn Game() -> impl IntoView {
     stylance::import_crate_style!(css, "src/pages/game.module.scss");
 
-    let all_data = Resource::new(|| (), move |_| query_post(1));
+    let all_data = Resource::new(|| (), move |_| query_post(4));
 
     let post_action = ServerAction::<QueryPost>::new();
 
@@ -61,10 +61,10 @@ pub fn Game() -> impl IntoView {
                         Some(Ok(post)) => {
                             Either::Right(
                                 view! {
-                                    <p>
-                                        <b>{post.title}-- {post.published}</b>
+                                    <div>
+                                        <h2>{post.title}-- {post.published}</h2>
                                         {post.body}
-                                    </p>
+                                    </div>
                                 },
                             )
                         }

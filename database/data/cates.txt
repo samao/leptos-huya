@@ -1,0 +1,13 @@
+cargo run --bin huya_cate add -i "/imgs/game/game_15735501549253_logo.png" -n 英雄联盟 -t 9845
+cargo run --bin huya_cate add -i  "/imgs/game/game_15735501961519_logo.png" -n 王者荣耀 -t 9845
+cargo run --bin huya_cate add -i  "/imgs/game/game_15735501794392_logo.png" -n 星秀 -t 9845
+cargo run --bin huya_cate add -i  "/imgs/game/game_15735502223924_logo.png" -n 和平精英 -t 98
+cargo run --bin huya_cate add -i  "/imgs/game/game_15735502034733_logo.png" -n 天天吃鸡 -t 98
+cargo run --bin huya_cate add -i  "/imgs/game/game_15735502126348_logo.png" -n 吃喝玩乐 -t 98
+cargo run --bin huya_cate add -i  "/imgs/game/game_15735501875101_logo.png" -n 穿越火线 -t 98
+cargo run --bin huya_cate add -i  "/imgs/game/game_15735502396542_logo.png" -n 主机游戏 -t 98
+cargo run --bin huya_cate add -i  "/imgs/game/game_17228323681551_logo.png" -n 二次元 -t 98
+cargo run --bin huya_cate add -i  "/imgs/game/game_15735502635279_logo.png" -n 交友 -t 98
+cargo run --bin huya_cate add -i  "/imgs/game/game_15735502715195_logo.png" -n 暴雪专区 -t 98
+cargo run --bin huya_cate add -i "/imgs/game/game_15735502786566_logo.png" -n 棋牌桌游 -t 98
+cargo run --bin huya_cate add -i "/imgs/game/icon_match.png" -n 电竞赛事 -t 98
