@@ -143,7 +143,12 @@ pub fn get_rooms(conn: &mut SqliteConnection, rids: Vec<i32>) -> anyhow::Result<
 }
 
 /// 处理热度转移
-pub fn dilevery_hot(conn: &mut SqliteConnection, from: i32, to: i32, amount: u8) -> anyhow::Result<()> {
+pub fn dilevery_hot(
+    conn: &mut SqliteConnection,
+    from: i32,
+    to: i32,
+    amount: u8,
+) -> anyhow::Result<()> {
     use crate::schema::rooms::dsl::*;
 
     conn.transaction(|conn| {

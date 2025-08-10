@@ -53,7 +53,7 @@ pub fn Game() -> impl IntoView {
     view! {
         <div class=css::game>
             <h1>Auto resource</h1>
-             <Suspense fallback=|| {
+            <Suspense fallback=|| {
                 "loading..."
             }>
                 {move || Suspend::new(async move {
@@ -94,30 +94,21 @@ pub fn Game() -> impl IntoView {
                 </div>
             </ActionForm>
             <hr />
-            <Transition
-                set_pending
-                fallback= || view! { <p>post is loading!</p> }
-            >
+            <Transition set_pending fallback=|| view! { <p>post is loading!</p> }>
                 {move || {
                     match result.get() {
                         Some(Ok(post)) => {
-                            EitherOf3::A(view! {
-                                <div>
-                                    <p>{post.title}: published: {post.published}</p>
-                                    <p>{post.body}</p>
-                                </div>
-                            })
-                        },
-                        Some(Err(er)) => {
-                            EitherOf3::B(view! {
-                                <p>{er.to_string()}</p>
-                            })
-                        },
-                        None  => {
-                            EitherOf3::C(view! {
-                                <p>waiting for action dispatch</p>
-                            })
-                        },
+                            EitherOf3::A(
+                                view! {
+                                    <div>
+                                        <p>{post.title}: published: {post.published}</p>
+                                        <p>{post.body}</p>
+                                    </div>
+                                },
+                            )
+                        }
+                        Some(Err(er)) => EitherOf3::B(view! { <p>{er.to_string()}</p> }),
+                        None => EitherOf3::C(view! { <p>waiting for action dispatch</p> }),
                     }
                 }}
             </Transition>
