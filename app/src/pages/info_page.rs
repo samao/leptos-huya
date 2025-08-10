@@ -1,5 +1,5 @@
 use cfg_block::cfg_block;
-use leptos::{html::Input, prelude::*};
+use leptos::{html::Input, logging::log, prelude::*};
 use leptos_meta::Title;
 use leptos_router::hooks::query_signal;
 use stylance::import_crate_style;
@@ -8,11 +8,11 @@ import_crate_style!(css, "src/pages/info_page.module.scss");
 
 cfg_block! {
     #[cfg(feature="ssr")] {
-        use leptos::logging::log;
+        //use leptos::logging::log;
         use std::time::Duration;
         use tokio::time::sleep;
         use axum::http::request::Parts;
-        use axum::http::header::CONTENT_TYPE;
+        //use axum::http::header::CONTENT_TYPE;
     }
 }
 
@@ -20,8 +20,8 @@ cfg_block! {
 #[lazy]
 async fn get_rows() -> Result<usize, ServerFnError> {
     let req_parts = use_context::<Parts>();
-    if let Some(req_parts) = req_parts {
-        log!("GET ROW: {:?}", req_parts.headers.get(CONTENT_TYPE));
+    if let Some(_req_parts) = req_parts {
+        // log!("GET ROW: {:?}", req_parts.headers.get(CONTENT_TYPE));
     }
     sleep(Duration::from_secs(2)).await;
     Ok(888)
@@ -29,7 +29,7 @@ async fn get_rows() -> Result<usize, ServerFnError> {
 
 #[server]
 async fn add_row(text: String) -> Result<usize, ServerFnError> {
-    log!("ADD ROW -> {}", text);
+    // log!("ADD ROW -> {}", text);
     sleep(Duration::from_secs(2)).await;
 
     if text == *"Error" {
@@ -53,7 +53,10 @@ pub fn InfoPage() -> impl IntoView {
     view! {
         <Title text="信息工程" />
         <div class=css::info_page>
-            GOD INFO PAGE <div class=css::inner>
+            <button on:click:target=|evt| {
+                log!("{}", evt.target().node_name());
+            }>"GOD INFO PAGE"</button>
+            <div class=css::inner>
                 <input
                     class=css::input
                     type="text"
@@ -77,7 +80,8 @@ pub fn InfoPage() -> impl IntoView {
                 <Transition fallback=|| "">
                     <p class=css::result>Total rows: {size}</p>
                 </Transition>
-            </div> <SimpleQueryCounter />
+            </div>
+            <SimpleQueryCounter />
         </div>
     }
 }

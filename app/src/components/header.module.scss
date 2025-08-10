@@ -128,6 +128,8 @@
                 }
             }
 
+            $offset: 16px;
+            
             .cate_pop_clsx {
                 display: none;
                 position: absolute;
@@ -140,7 +142,7 @@
                 padding-bottom: 24px;
                 background-color: #fff;
                 border-radius: 6px;
-                transform: translate(-50%, 8px);
+                transform: translate(-50%, $offset);
                 cursor: default;
                 font: 12px/20px normal;
                 color: #333;
@@ -150,9 +152,9 @@
                 &::before {
                     content: "";
                     width: 100%;
-                    height: 8px;
+                    height: $offset;
                     position: absolute;
-                    top: -8px;
+                    top: -$offset;
                 }
 
                 h1 {
@@ -552,13 +554,13 @@
                         display: none;
                         position: absolute;
                         top: 100%;
-                        left: 100%;
+                        left: 95%;
                         z-index: 10;
                         padding-top: 8px;
                         margin-top: 12px;
                         background-color: #fff;
                         border-radius: 6px;
-                        transform: translateX(-100%);
+                        transform: translate(-100%, 2px);
                         color: #333;
                         font-size: 14px;
                         padding-inline: 20px;
@@ -568,8 +570,8 @@
                         &::before {
                             content: "";
                             position: absolute;
-                            height: 12px;
-                            top: -12px;
+                            height: 16px;
+                            top: -16px;
                             left: 0;
                             width: 200px;
                         }

@@ -1,4 +1,46 @@
 .game {
-    padding-inline: 40px;
-    height: 100dvh;
+  padding-inline: 40px;
+  height: 100dvh;
+
+  input {
+    line-height: 30px;
+    margin-block: 10px;
+
+    &:first-child {
+      margin-top: 0px;
+    }
+  }
+
+  b {
+    font-weight: normal;
+    color: red;
+    margin-right: 20px;
+  }
+
+  hr {
+    display: none;
+    margin-top: 20px;
+  }
+
+  h1 {
+    font-weight: bold;
+  }
+
+  button {
+    background: #f80;
+    color: #fff;
+    border-radius: 8px;
+    padding-inline: 20px;
+  }
+
+  input[type="number"],
+  input[type="text"] {
+    border: 1px solid blue;
+    margin-right: 20px;
+    padding-left: 10px;
+  }
+
+  p {
+    text-indent: 20px;
+  }
 }

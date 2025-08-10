@@ -27,7 +27,6 @@ html, body {
     overflow: hidden;
     width: 100%;
     height: 100%;
-    background-color: gray;
     border-radius: 6px;
 
     .imgs-e485984 {
@@ -141,6 +140,7 @@ html, body {
         }
     }
 }
+
 
 $primaryColor: #f80;
 
@@ -642,8 +642,50 @@ $primaryColor: #f80;
 }
 
 .game-7381e31 {
-    padding-inline: 40px;
-    height: 100dvh;
+  padding-inline: 40px;
+  height: 100dvh;
+
+  input {
+    line-height: 30px;
+    margin-block: 10px;
+
+    &:first-child {
+      margin-top: 0px;
+    }
+  }
+
+  b {
+    font-weight: normal;
+    color: red;
+    margin-right: 20px;
+  }
+
+  hr {
+    display: none;
+    margin-top: 20px;
+  }
+
+  h1 {
+    font-weight: bold;
+  }
+
+  button {
+    background: #f80;
+    color: #fff;
+    border-radius: 8px;
+    padding-inline: 20px;
+  }
+
+  input[type="number"],
+  input[type="text"] {
+    border: 1px solid blue;
+    margin-right: 20px;
+    padding-left: 10px;
+  }
+
+  p {
+    text-indent: 20px;
+  }
 }
 
 %shadow {
@@ -776,6 +818,8 @@ $primaryColor: #f80;
                 }
             }
 
+            $offset: 16px;
+            
             .cate_pop_clsx-9a30164 {
                 display: none;
                 position: absolute;
@@ -788,7 +832,7 @@ $primaryColor: #f80;
                 padding-bottom: 24px;
                 background-color: #fff;
                 border-radius: 6px;
-                transform: translate(-50%, 8px);
+                transform: translate(-50%, $offset);
                 cursor: default;
                 font: 12px/20px normal;
                 color: #333;
@@ -798,9 +842,9 @@ $primaryColor: #f80;
                 &::before {
                     content: "";
                     width: 100%;
-                    height: 8px;
+                    height: $offset;
                     position: absolute;
-                    top: -8px;
+                    top: -$offset;
                 }
 
                 h1 {
@@ -1200,13 +1244,13 @@ $primaryColor: #f80;
                         display: none;
                         position: absolute;
                         top: 100%;
-                        left: 100%;
+                        left: 95%;
                         z-index: 10;
                         padding-top: 8px;
                         margin-top: 12px;
                         background-color: #fff;
                         border-radius: 6px;
-                        transform: translateX(-100%);
+                        transform: translate(-100%, 2px);
                         color: #333;
                         font-size: 14px;
                         padding-inline: 20px;
@@ -1216,8 +1260,8 @@ $primaryColor: #f80;
                         &::before {
                             content: "";
                             position: absolute;
-                            height: 12px;
-                            top: -12px;
+                            height: 16px;
+                            top: -16px;
                             left: 0;
                             width: 200px;
                         }
@@ -1303,6 +1347,7 @@ $primaryColor: #f80;
         }
     }
 }
+
 
 .section-3a2e981 {
     margin-inline: auto;
