@@ -1,3 +1,4 @@
+//use leptos::portal::Portal;
 use leptos::prelude::*;
 use leptos_meta::{provide_meta_context, MetaTags, Stylesheet, Title};
 use leptos_router::{
@@ -6,7 +7,7 @@ use leptos_router::{
 };
 
 mod components;
-use components::{Footer, Header, LeftNav};
+use components::{Footer, Header, LeftNav, Login};
 
 mod pages;
 use pages::{Game, HomePage, InfoPage, MatchPage, NotFound, UserPage, VideoPage};
@@ -35,10 +36,19 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
     }
 }
 
+#[derive(Clone, Debug, Default, reactive_stores::Store)]
+pub struct GlobalState {
+    logined: bool,
+}
+
 #[component]
 pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
+
+    let store = reactive_stores::Store::new(GlobalState::default());
+
+    provide_context(store);
 
     view! {
         // injects a stylesheet into the document <head>
@@ -84,6 +94,9 @@ pub fn App() -> impl IntoView {
                 </Routes>
             </main>
         </Router>
+        <Show when=move || store.logined().get()>
+            <Login />
+        </Show>
     }
 }
 

@@ -1,5 +1,9 @@
 use leptos::prelude::*;
+use reactive_stores::Store;
 use serde::{Deserialize, Serialize};
+use web_sys::MouseEvent;
+
+use crate::{GlobalState, GlobalStateStoreFields};
 
 #[derive(Debug, Deserialize, Serialize)]
 struct ThirdPart {
@@ -9,9 +13,22 @@ struct ThirdPart {
 
 #[component]
 pub fn Login() -> impl IntoView {
+    stylance::import_crate_style!(css, "src/components/login.module.scss");
+    let store = use_context::<Store<GlobalState>>();
     view! {
-        <div>
-            <div>
+        <div
+            class=css::global_login_pop
+            on:click=move |_| {
+                let logined = store.unwrap().logined();
+                logined.set(false);
+            }
+        >
+            <div
+                class=css::inner
+                on:click=|e: MouseEvent| {
+                    e.stop_propagation();
+                }
+            >
                 <div>
                     <p>"打开「虎牙直播APP-我的」扫码登录"</p>
                     <div>

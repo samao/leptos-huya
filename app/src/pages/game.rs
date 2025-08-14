@@ -3,36 +3,29 @@ use leptos::{
     html::Input,
     prelude::*,
 };
-use serde::{Deserialize, Serialize};
-
-cfg_block::cfg_block! {
-    #[cfg(feature="ssr")] {
-        async fn get_post(id: i32) -> Result<web_db::models::Post, String> {
-            use web_db::get_post;
-            match get_post(id) {
-                Some(post) => Ok(post),
-                _ => Err("查找错误".to_string()),
-            }
-        }
-    }
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-struct Post {
-    title: String,
-    body: String,
-    published: bool,
-}
+use models::Post;
 
 #[server]
 async fn query_post(id: i32) -> Result<Post, ServerFnError> {
-    match get_post(id).await {
-        Ok(post) => Ok(Post {
+    match web_db::get_post(id) {
+        Ok(Some(post)) => Ok(Post {
+            id: post.id,
             title: post.title,
             body: post.body,
             published: post.published,
         }),
-        Err(msg) => Err(ServerFnError::new(msg)),
+        Ok(None) => {
+            #[cfg(feature = "ssr")]
+            {
+                use http::StatusCode;
+                use leptos_axum::ResponseOptions;
+
+                let response = expect_context::<ResponseOptions>();
+                response.set_status(StatusCode::NOT_FOUND);
+            }
+            Err(ServerFnError::new("未找到".to_string()))
+        }
+        Err(er) => Err(ServerFnError::new(er.to_string())),
     }
 }
 

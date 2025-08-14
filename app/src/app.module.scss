@@ -1,23 +1,28 @@
 .root {
-    position: relative;
-    user-select: none;
-    background-color: #f4f5f8;
-    font-family: -apple-system,BlinkMacSystemFont,Microsoft Yahei,Segoe UI,Helvetica Neue,Helvetica,Tahoma,Arial,Hiragino Sans GB,Heiti SC,WenQuanYi Micro Hei,sans-serif;
+  position: relative;
+  user-select: none;
+  background-color: #f4f5f8;
+  font-family: -apple-system, BlinkMacSystemFont, Microsoft Yahei, Segoe UI, Helvetica Neue, Helvetica, Tahoma, Arial, Hiragino Sans GB, Heiti SC, WenQuanYi Micro Hei, sans-serif;
 
-    main {
-        min-width: 980px;
-        width: 100%;
+  &:has([class^="global_login_pop"]) {
+    //overflow-y: hidden;
+  }
 
-        .left_layout {
-            display: flex;
-            position: relative;
-            column-gap: 12px;
-            height: calc(100vh - 60px);
-        }
-    }
-}
-
-html, body {
+  main {
     min-width: 980px;
     width: 100%;
+
+    .left_layout {
+      display: flex;
+      position: relative;
+      column-gap: 12px;
+      height: calc(100vh - 60px);
+    }
+  }
+}
+
+html,
+body {
+  min-width: 980px;
+  width: 100%;
 }

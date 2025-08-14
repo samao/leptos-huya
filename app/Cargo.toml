@@ -19,6 +19,8 @@ tokio = {workspace = true, optional = true}
 wasm-bindgen =  { workspace = true, optional = true }
 web_db = {workspace=true, optional = true}
 
+reactive_stores.workspace = true
+models.workspace = true
 http.workspace = true
 cfg-if.workspace = true
 thiserror.workspace = true

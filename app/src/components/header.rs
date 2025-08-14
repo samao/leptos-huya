@@ -6,8 +6,11 @@ use leptos_router::{
 #[cfg(feature = "hydrate")]
 use leptos_use::use_window_scroll;
 
+use reactive_stores::Store;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fmt::Display, sync::LazyLock};
+
+use crate::{GlobalState, GlobalStateStoreFields};
 
 stylance::import_crate_style!(css, "src/components/header.module.scss");
 
@@ -198,6 +201,8 @@ pub fn Header() -> impl IntoView {
             });
         }
     });
+
+    let store = use_context::<Store<GlobalState>>();
 
     view! {
         <header
@@ -397,8 +402,18 @@ pub fn Header() -> impl IntoView {
                             </div>
                         </div>
                     </li>
-                    <li class=css::login>
-                        登录 <div class=css::login_pop_clsx>
+                    <li
+                        class=css::login
+                        on:click=move |_| {
+                            let store = store.unwrap().logined();
+                            store
+                                .update(|logined| {
+                                    *logined = !*logined;
+                                });
+                        }
+                    >
+                        登录
+                        <div class=css::login_pop_clsx>
                             <h1>登陆后可享受:</h1>
                             <ul class=css::login_tips_clsx>
                                 <li>蓝光6M高清画质</li>
