@@ -1,1 +1,1 @@
-cargo leptos build --release --split
+cargo leptos build -p app --release --split

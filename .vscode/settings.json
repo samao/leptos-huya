@@ -1,15 +1,21 @@
 {
-    "rust-analyzer.cargo.features": "all",
-    "tailwindCSS.includeLanguages": {
-        ".rs": "html",
-        "rust": "html"
-    },
-    "tailwindCSS.classFunctions": [
-        "clsx!"
+  "rust-analyzer.cargo.features": "all",
+  "tailwindCSS.includeLanguages": {
+    ".rs": "html",
+    "rust": "html"
+  },
+  "tailwindCSS.classFunctions": [
+    "clsx!"
+  ],
+  "tailwindCSS.experimental.classRegex": [
+    [
+      "clsx!\\s*\\(([^)]*)\\)",
+      "[\"'`]([^\"'`]*).*?[\"'`]"
     ],
-    "tailwindCSS.experimental.classRegex": [
-        ["clsx!\\s*\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
-        ["clsx!\\s*\\{([^}]*)\\}", "[\"'`]([^\"'`]*).*?[\"'`]"]
-    ],
-    "rust-analyzer.checkOnSave": true,
+    [
+      "clsx!\\s*\\{([^}]*)\\}",
+      "[\"'`]([^\"'`]*).*?[\"'`]"
+    ]
+  ],
+  "rust-analyzer.checkOnSave": true,
 }

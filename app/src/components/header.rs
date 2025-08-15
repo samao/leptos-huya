@@ -10,7 +10,7 @@ use reactive_stores::Store;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fmt::Display, sync::LazyLock};
 
-use crate::{GlobalState, GlobalStateStoreFields};
+use crate::app::{GlobalState, GlobalStateStoreFields};
 
 stylance::import_crate_style!(css, "src/components/header.module.scss");
 

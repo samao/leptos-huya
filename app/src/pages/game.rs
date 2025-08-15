@@ -17,7 +17,7 @@ async fn query_post(id: i32) -> Result<Post, ServerFnError> {
         Ok(None) => {
             #[cfg(feature = "ssr")]
             {
-                use http::StatusCode;
+                use axum::http::StatusCode;
                 use leptos_axum::ResponseOptions;
 
                 let response = expect_context::<ResponseOptions>();

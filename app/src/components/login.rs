@@ -3,7 +3,7 @@ use reactive_stores::Store;
 use serde::{Deserialize, Serialize};
 use web_sys::MouseEvent;
 
-use crate::{GlobalState, GlobalStateStoreFields};
+use crate::app::{GlobalState, GlobalStateStoreFields};
 
 #[derive(Debug, Deserialize, Serialize)]
 struct ThirdPart {

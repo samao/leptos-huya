@@ -33,7 +33,7 @@ else
     echo "😄 package.json ok"
 fi
 npm i -s
-npx @tailwindcss/cli -i style/tailwind.css -o public/css/normalize.css -m
+npx @tailwindcss/cli -i app/style/tailwind.css -o app/public/css/normalize.css -m
 echo "😗 clear temp file"
 rm -rf package*.json node_modules
 echo "😄 css has created!"
