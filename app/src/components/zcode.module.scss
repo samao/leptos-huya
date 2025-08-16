@@ -1,0 +1,65 @@
+.zcode {
+  display: inline-block;
+  position: relative;
+  width: 45px;
+  height: 30px;
+  line-height: 30px;
+  padding-right: 15px;
+
+  .head {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+
+    input {
+      display: none;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-right: 2px solid;
+      border-top: 2px solid;
+      transform: translate(-50%, -50%) rotate(135deg);
+      top: 50%;
+      right: 0;
+      margin-left: 10px;
+      transition: all 300ms;
+    }
+
+    &:has(>:checked) {
+      &::after {
+        transform: translate(-50%, -50%) rotate(-45deg);
+      }
+
+      +.pop {
+        display: flex;
+      }
+    }
+  }
+
+  .pop {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    max-height: 230px;
+    width: 340px;
+    background-color: #fff;
+    overflow: hidden auto;
+    z-index: 10;
+    border-radius: 4px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, .2);
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      padding-inline: 20px;
+
+      &:hover {
+        background-color: #e5e5e5;
+      }
+    }
+  }
+}

@@ -1,9 +1,12 @@
+use std::time::Duration;
+
 use leptos::prelude::*;
 use reactive_stores::Store;
 use serde::{Deserialize, Serialize};
 use web_sys::MouseEvent;
 
 use crate::app::{GlobalState, GlobalStateStoreFields};
+use crate::components::Zcode;
 
 #[derive(Debug, Deserialize, Serialize)]
 struct ThirdPart {
@@ -15,6 +18,31 @@ struct ThirdPart {
 pub fn Login() -> impl IntoView {
     stylance::import_crate_style!(css, "src/components/login.module.scss");
     let store = use_context::<Store<GlobalState>>();
+    let mode = RwSignal::new(false);
+    let (expired, set_expired) = signal(false);
+    let change_mode = move |val: bool| *mode.write() = val;
+    let (zcode, set_zcode) = signal(("+86".to_string(), "中国".to_string()));
+
+    Effect::new(move || {
+        leptos::logging::log!("Zcode is: {:?}", zcode.get());
+    });
+
+    Effect::new(move || {
+        if expired.get() {
+            return;
+        }
+        if let Ok(handle) = set_timeout_with_handle(
+            move || {
+                set_expired.set(true);
+            },
+            Duration::from_secs(10),
+        ) {
+            on_cleanup(move || {
+                handle.clear();
+            });
+        }
+    });
+
     view! {
         <div
             class=css::global_login_pop
@@ -29,25 +57,49 @@ pub fn Login() -> impl IntoView {
                     e.stop_propagation();
                 }
             >
-                <div>
+                <div class=css::left>
                     <p>"打开「虎牙直播APP-我的」扫码登录"</p>
-                    <div>
-                        <img src="https://udblgn.huya.com/qrLgn/getQrImg?k=DuYMYTiKpGpDdfSjRGG&appId=5002" />
+                    <div class=move || {
+                        format!(
+                            "{} {}",
+                            css::qrcode_box,
+                            if expired.get() { css::is_expired } else { "" },
+                        )
+                    }>
+                        <img src="/imgs/login/getQrImg.png" />
                         // hover tips
-                        <div />
+                        <div class=css::hover_tips />
 
-                        <div>二维码已过期 <button>点击刷新</button></div>
+                        <div class=css::expired>
+                            二维码已过期
+                            <button
+                                on:click=move |_| {
+                                    set_expired.set(false);
+                                }
+                                class=css::refresh
+                            >
+                                点击刷新
+                            </button>
+                        </div>
                     </div>
-                    <div>
+                    <div class=css::divide>
                         <hr />
                         <span>其他登录方式</span>
                     </div>
-                    <ul>
+                    <ul class=css::partner>
                         <For
                             each=|| {
                                 vec![
                                     ThirdPart {
-                                        icon: "".to_string(),
+                                        icon: "/imgs/login/wechat-icon_de04bfb.png".to_string(),
+                                        url: "".to_string(),
+                                    },
+                                    ThirdPart {
+                                        icon: "/imgs/login/qq-icon_ccdb939.png".to_string(),
+                                        url: "".to_string(),
+                                    },
+                                    ThirdPart {
+                                        icon: "/imgs/login/weibo-icon_623b022.png".to_string(),
                                         url: "".to_string(),
                                     },
                                 ]
@@ -64,54 +116,47 @@ pub fn Login() -> impl IntoView {
                         </For>
                     </ul>
                 </div>
-                <div>
-                    <div>
-                        <input type="checkbox" />
-                        <form>
-                            <ul>
-                                <li>
-                                    密码登录 <div>
-                                        <input type="text" placeholder="手机号/虎牙号" />
-                                        <input type="text" placeholder="密码" />
-                                        <span>忘记密码?</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    短信登录 <div>
-                                        <div>
-                                            <select name="pcode">
-                                                <For
-                                                    each=|| vec!["+86", "+13"].into_iter()
-                                                    key=|item| item.to_string()
-                                                    let(code)
-                                                >
-                                                    <option value=code>{code}</option>
-                                                </For>
-                                            </select>
-                                            <input type="text" placeholder="请输入手机号" />
-                                        </div>
-                                        <div>
-                                            <input type="text" placeholder="请输入验证码" />
-                                            <span>获取验证码</span>
-                                        </div>
-                                        <span>收不到验证码?</span>
-                                    </div>
-                                </li>
-                            </ul>
-                            <button type="submit">登录</button>
-                            <div>
-                                <input type="checkbox" />
-                                已阅读并同意
-                                <a>"《用户服务协议》"</a>
-                                和
-                                <a>"《隐私政策》"</a>
+                <div class=css::right>
+                    <input type="checkbox" bind:checked=mode class=css::mode_type />
+                    <form class=css::login_form>
+                        <ul>
+                            <li on:click=move |_| change_mode(false)>密码登录</li>
+                            <li on:click=move |_| change_mode(true)>短信登录</li>
+                        </ul>
+                        <div class=css::views>
+                            <div class=css::pwd_view>
+                                <input type="text" placeholder="手机号/虎牙号" />
+                                <input type="password" placeholder="密码" />
+                                <span>忘记密码?</span>
                             </div>
-                        </form>
-                    </div>
+                            <div class=css::sms_view>
+                                <div>
+                                    <Zcode set_active=set_zcode />
+                                    <input type="text" placeholder="请输入手机号" />
+                                </div>
+                                <div>
+                                    <input type="text" placeholder="请输入验证码" />
+                                    <span>获取验证码</span>
+                                </div>
+                                <span>收不到验证码?</span>
+                            </div>
+                        </div>
+                        <button type="submit" class=css::login_btn>
+                            登录
+                        </button>
+                        <div class=css::privcy>
+                            <label>
+                                <input type="checkbox" />
+                            </label>
+                            已阅读并同意
+                            <a>"《用户服务协议》"</a>
+                            和
+                            <a>"《隐私政策》"</a>
+                        </div>
+                    </form>
                 </div>
                 <a>快速注册</a>
             </div>
-
         </div>
     }
 }
