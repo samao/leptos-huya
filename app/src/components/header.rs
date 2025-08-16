@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 use leptos_router::{
-    components::{Form, A},
+    components::{A, Form},
     hooks::use_url,
 };
 #[cfg(feature = "hydrate")]

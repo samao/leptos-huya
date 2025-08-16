@@ -52,13 +52,19 @@
     border-radius: 4px;
     box-shadow: 0 0 15px rgba(0, 0, 0, .2);
 
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
     .item {
       display: flex;
       justify-content: space-between;
       padding-inline: 20px;
+      transition: all 500ms;
 
       &:hover {
-        background-color: #e5e5e5;
+        color: #333;
+        background-color: rgba(#e5e5e5, 0.4);
       }
     }
   }

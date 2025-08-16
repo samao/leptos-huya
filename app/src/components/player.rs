@@ -28,8 +28,8 @@ pub fn Player(
         use leptos::{logging::log, task::spawn_local};
         use std::sync::{Arc, Mutex};
         use wasm_bindgen::{
-            prelude::{wasm_bindgen, Closure},
             JsValue,
+            prelude::{Closure, wasm_bindgen},
         };
 
         enum Player {

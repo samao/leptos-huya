@@ -1,9 +1,11 @@
-//use leptos::portal::Portal;
+use std::time::Duration;
+
 use leptos::prelude::*;
-use leptos_meta::{provide_meta_context, MetaTags, Stylesheet, Title};
+use leptos_meta::{MetaTags, Stylesheet, Title, provide_meta_context};
 use leptos_router::{
+    StaticSegment,
     components::{Outlet, ParentRoute, Route, Router, Routes},
-    path, StaticSegment,
+    path,
 };
 
 use crate::components::{Footer, Header, LeftNav, Login};
@@ -36,6 +38,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
 #[derive(Clone, Debug, Default, reactive_stores::Store)]
 pub struct GlobalState {
     logined: bool,
+    toast: String,
 }
 
 #[component]
@@ -46,6 +49,21 @@ pub fn App() -> impl IntoView {
     let store = reactive_stores::Store::new(GlobalState::default());
 
     provide_context(store);
+
+    Effect::new(move || {
+        if store.toast().get().len() > 0
+            && let Ok(handle) = set_timeout_with_handle(
+                move || {
+                    store.toast().set("".to_string());
+                },
+                Duration::from_secs(3),
+            )
+        {
+            on_cleanup(move || {
+                handle.clear();
+            });
+        }
+    });
 
     view! {
         // injects a stylesheet into the document <head>
@@ -93,6 +111,9 @@ pub fn App() -> impl IntoView {
         </Router>
         <Show when=move || store.logined().get()>
             <Login />
+        </Show>
+        <Show when=move || store.toast().get().len().ne(&0)>
+            <span class=css::toast>{store.toast().get_untracked()}</span>
         </Show>
     }
 }

@@ -22,6 +22,12 @@ pub fn Login() -> impl IntoView {
     let (expired, set_expired) = signal(false);
     let change_mode = move |val: bool| *mode.write() = val;
     let (zcode, set_zcode) = signal(("+86".to_string(), "中国".to_string()));
+    let phone_or_huya = RwSignal::new("".to_string());
+    let password = RwSignal::new("".to_string());
+
+    let phone = RwSignal::new("".to_string());
+    let sms_code = RwSignal::new("".to_string());
+    let agree = RwSignal::new(false);
 
     Effect::new(move || {
         leptos::logging::log!("Zcode is: {:?}", zcode.get());
@@ -118,24 +124,52 @@ pub fn Login() -> impl IntoView {
                 </div>
                 <div class=css::right>
                     <input type="checkbox" bind:checked=mode class=css::mode_type />
-                    <form class=css::login_form>
+                    <form
+                        class=css::login_form
+                        on:submit=move |e| {
+                            e.prevent_default();
+                            if agree.get() {
+                                leptos::logging::log!(
+                                    "{}", if mode.get() { format!("phone: {}{}, sms: {}", zcode.get().0, phone.get(), sms_code.get()) } else { format!("phone:{}, password: {}", phone_or_huya.get(), password.get())}
+                                );
+                            } else {
+                                leptos::logging::log!("The checkbox must be checked!");
+                                store
+                                    .unwrap()
+                                    .toast()
+                                    .update(|msg| *msg = "请阅读并同意协议".to_string());
+                            }
+                        }
+                    >
                         <ul>
                             <li on:click=move |_| change_mode(false)>密码登录</li>
                             <li on:click=move |_| change_mode(true)>短信登录</li>
                         </ul>
                         <div class=css::views>
                             <div class=css::pwd_view>
-                                <input type="text" placeholder="手机号/虎牙号" />
-                                <input type="password" placeholder="密码" />
+                                <input
+                                    type="text"
+                                    placeholder="手机号/虎牙号"
+                                    bind:value=phone_or_huya
+                                />
+                                <input type="password" placeholder="密码" bind:value=password />
                                 <span>忘记密码?</span>
                             </div>
                             <div class=css::sms_view>
                                 <div>
                                     <Zcode set_active=set_zcode />
-                                    <input type="text" placeholder="请输入手机号" />
+                                    <input
+                                        type="text"
+                                        placeholder="请输入手机号"
+                                        bind:value=phone
+                                    />
                                 </div>
                                 <div>
-                                    <input type="text" placeholder="请输入验证码" />
+                                    <input
+                                        type="text"
+                                        placeholder="请输入验证码"
+                                        bind:value=sms_code
+                                    />
                                     <span>获取验证码</span>
                                 </div>
                                 <span>收不到验证码?</span>
@@ -146,7 +180,7 @@ pub fn Login() -> impl IntoView {
                         </button>
                         <div class=css::privcy>
                             <label>
-                                <input type="checkbox" />
+                                <input type="checkbox" bind:checked=agree />
                             </label>
                             已阅读并同意
                             <a>"《用户服务协议》"</a>
