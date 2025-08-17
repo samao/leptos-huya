@@ -168,6 +168,39 @@
           color: #000;
         }
 
+        &.register {
+          display: block;
+
+          >ul {
+            li:not(.register_title) {
+              display: none;
+            }
+
+            li.register_title {
+              display: block;
+              font-weight: bold !important;
+              color: #000 !important;
+            }
+
+            &::after {
+              display: none;
+            }
+          }
+
+          .views {
+
+            .sms_view {
+              .register_pwd {
+                display: flex;
+
+                +span {
+                  display: none;
+                }
+              }
+            }
+          }
+        }
+
         >ul {
           position: relative;
           display: flex;
@@ -193,6 +226,10 @@
 
             &:first-child {
               @extend %current;
+            }
+
+            &.register_title {
+              display: none;
             }
           }
         }
@@ -230,6 +267,35 @@
             border-bottom: 1px solid #e5e5e5;
           }
 
+          .password_box {
+            display: contents;
+
+            span {
+              position: absolute;
+              width: 20px;
+              height: 20px;
+              background: red;
+              right: 0;
+              background: url(/imgs/login/pages_module_z_f8d64ce.png) no-repeat;
+            }
+
+            input[type="password"]+span {
+              background-position: 0 0;
+
+              &:hover {
+                background-position: -25px 0;
+              }
+            }
+
+            input[type="text"]+span {
+              background-position: 0 -25px;
+
+              &:hover {
+                background-position: -25px -25px;
+              }
+            }
+          }
+
           .pwd_view {
             display: flex;
 
@@ -237,6 +303,11 @@
             input[type="password"] {
               @extend %border;
               width: 323px;
+            }
+
+            >div.password_box {
+              display: flex;
+              position: relative;
             }
           }
 
@@ -246,6 +317,8 @@
             >div {
               position: relative;
               @extend %border;
+              display: flex;
+              align-items: center;
 
               &:nth-child(1) input[type="text"] {
                 width: 280px;
@@ -254,6 +327,15 @@
               &:nth-child(2)>span {
                 position: absolute;
                 right: 0;
+                color: blueviolet;
+
+                &:hover {
+                  color: rgba(blueviolet, 0.7);
+                }
+              }
+
+              &.register_pwd {
+                display: none;
               }
             }
           }
@@ -265,7 +347,9 @@
           background: linear-gradient(221.03deg, #ffe44d, #ffd736);
           color: #222;
           border-radius: 88px;
-          font: 14px/44px bold;
+          font-size: 14px;
+          line-height: 44px;
+          font-weight: bold;
           text-align: center;
           height: 44px;
           margin-block: 25px;

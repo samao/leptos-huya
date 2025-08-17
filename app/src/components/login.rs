@@ -8,6 +8,8 @@ use web_sys::MouseEvent;
 use crate::app::{GlobalState, GlobalStateStoreFields};
 use crate::components::Zcode;
 
+stylance::import_crate_style!(css, "src/components/login.module.scss");
+
 #[derive(Debug, Deserialize, Serialize)]
 struct ThirdPart {
     icon: String,
@@ -15,20 +17,38 @@ struct ThirdPart {
 }
 
 #[component]
+pub fn Password(placeholder: String, set_signal: RwSignal<String>) -> impl IntoView {
+    let (show_pwd, set_show_pwd) = signal(false);
+    view! {
+        <div class=css::password_box>
+            <input
+                placeholder=placeholder
+                bind:value=set_signal
+                type=move || if show_pwd.get() { "text" } else { "password" }
+            />
+            <span on:click=move |_| {
+                set_show_pwd.update(|data| *data = !*data);
+            } />
+        </div>
+    }
+}
+
+#[component]
 pub fn Login() -> impl IntoView {
-    stylance::import_crate_style!(css, "src/components/login.module.scss");
     let store = use_context::<Store<GlobalState>>();
     let mode = RwSignal::new(false);
     let (expired, set_expired) = signal(false);
     let change_mode = move |val: bool| *mode.write() = val;
+    let (register, set_register) = signal(false);
     let (zcode, set_zcode) = signal(("+86".to_string(), "中国".to_string()));
     let phone_or_huya = RwSignal::new("".to_string());
     let password = RwSignal::new("".to_string());
 
     let phone = RwSignal::new("".to_string());
     let sms_code = RwSignal::new("".to_string());
-    let agree = RwSignal::new(false);
+    let agreed = RwSignal::new(false);
 
+    let register_pwd = RwSignal::new("".to_string());
     Effect::new(move || {
         leptos::logging::log!("Zcode is: {:?}", zcode.get());
     });
@@ -125,10 +145,22 @@ pub fn Login() -> impl IntoView {
                 <div class=css::right>
                     <input type="checkbox" bind:checked=mode class=css::mode_type />
                     <form
-                        class=css::login_form
+                        class=move || {
+                            format!(
+                                "{} {}",
+                                css::login_form,
+                                if register.get() { css::register } else { "" },
+                            )
+                        }
                         on:submit=move |e| {
                             e.prevent_default();
-                            if agree.get() {
+                            if agreed.get() {
+                                if register.get() {
+                                    leptos::logging::log!(
+                                        "register: phone = {}{}, sms = {}, pwd = {}", zcode.get().0, phone.get(), sms_code.get(), register_pwd.get()
+                                    );
+                                    return;
+                                }
                                 leptos::logging::log!(
                                     "{}", if mode.get() { format!("phone: {}{}, sms: {}", zcode.get().0, phone.get(), sms_code.get()) } else { format!("phone:{}, password: {}", phone_or_huya.get(), password.get())}
                                 );
@@ -144,6 +176,7 @@ pub fn Login() -> impl IntoView {
                         <ul>
                             <li on:click=move |_| change_mode(false)>密码登录</li>
                             <li on:click=move |_| change_mode(true)>短信登录</li>
+                            <li class=css::register_title>快速注册</li>
                         </ul>
                         <div class=css::views>
                             <div class=css::pwd_view>
@@ -152,7 +185,8 @@ pub fn Login() -> impl IntoView {
                                     placeholder="手机号/虎牙号"
                                     bind:value=phone_or_huya
                                 />
-                                <input type="password" placeholder="密码" bind:value=password />
+                                // <input type="password" placeholder="密码" bind:value=password />
+                                <Password placeholder="密码".to_string() set_signal=password />
                                 <span>忘记密码?</span>
                             </div>
                             <div class=css::sms_view>
@@ -172,15 +206,23 @@ pub fn Login() -> impl IntoView {
                                     />
                                     <span>获取验证码</span>
                                 </div>
+                                <div class=css::register_pwd>
+                                    // <input bind:value=register_pwd type="password" placeholder="请设置6-20位至少两种字符组合密码"/>
+                                    <Password
+                                        placeholder="请设置6-20位至少两种字符组合密码"
+                                            .to_string()
+                                        set_signal=register_pwd
+                                    />
+                                </div>
                                 <span>收不到验证码?</span>
                             </div>
                         </div>
                         <button type="submit" class=css::login_btn>
-                            登录
+                            {move || if register.get() { "立即注册" } else { "登录" }}
                         </button>
                         <div class=css::privcy>
                             <label>
-                                <input type="checkbox" bind:checked=agree />
+                                <input type="checkbox" bind:checked=agreed />
                             </label>
                             已阅读并同意
                             <a>"《用户服务协议》"</a>
@@ -189,7 +231,13 @@ pub fn Login() -> impl IntoView {
                         </div>
                     </form>
                 </div>
-                <a>快速注册</a>
+                <a on:click=move |_| {
+                    set_register
+                        .update(|data| {
+                            *data = !*data;
+                            *mode.write() = *data;
+                        });
+                }>{move || if register.get() { "账号/短信登录" } else { "快速注册" }}</a>
             </div>
         </div>
     }
