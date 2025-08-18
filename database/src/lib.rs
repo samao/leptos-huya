@@ -21,7 +21,8 @@ pub fn establish_connection() -> SqliteConnection {
         .finish();
     set_global_default(subscriber).ok();
 
-    let database_url = env::var("DATABASE_TEST_URL").expect("DATABASE_URL muse be set");
+    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL muse be set");
+    info!("database url: {}", database_url);
     if !Path::new(&database_url).exists() {
         if database_url.starts_with("sqlite:") {
             warn!("\n1.can not create db file start with \"sqlite:\"\n2.directly use local path");

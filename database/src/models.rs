@@ -1,8 +1,10 @@
+use std::time::SystemTime;
+
 use diesel::prelude::*;
 use serde::Serialize;
 
 // ------------------
-use crate::schema::{cates, rooms, rooms_tags, tags, users};
+use crate::schema::{cates, rooms, rooms_tags, tags, tokens, users};
 
 #[derive(Queryable, Identifiable, Selectable, Debug, PartialEq, Serialize, Clone)]
 #[diesel(table_name = tags)]
@@ -17,6 +19,8 @@ pub struct User {
     pub id: i32,
     pub user_name: String,
     pub avatar: String,
+    pub phone: String,
+    pub password: String,
 }
 
 #[derive(Queryable, Identifiable, Selectable, Debug, PartialEq, Serialize, Clone, Hash, Eq)]
@@ -65,4 +69,13 @@ pub struct RoomTags {
     pub tag_id: i32,
 }
 
+#[derive(Identifiable, Queryable, Debug, PartialEq, Eq, Clone)]
+#[diesel(belongs_to(User))]
+#[diesel(table_name = tokens)]
+pub struct Token {
+    pub id: i32,
+    pub user_id: i32,
+    pub token: String,
+    pub create_at: SystemTime,
+}
 // ---------------

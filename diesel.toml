@@ -6,5 +6,5 @@ file = "database/src/schema.rs"
 custom_type_derives = ["diesel::query_builder::QueryId", "Clone"]
 
 [migrations_directory]
-dir = "/git/rust/rust-web/huya-web/database/migrations"
+dir = "/git/rust/rust-web/leptos-huya/database/migrations"
 

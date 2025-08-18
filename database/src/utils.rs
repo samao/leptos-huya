@@ -10,6 +10,7 @@ pub mod categories;
 pub mod rooms;
 pub mod rooms_tags;
 pub mod tags;
+pub mod tokens;
 pub mod users;
 
 pub fn get_all_hot_by_cate_id(conn: &mut SqliteConnection, id: i32) -> anyhow::Result<i64> {

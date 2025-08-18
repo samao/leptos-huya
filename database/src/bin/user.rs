@@ -14,6 +14,10 @@ enum Command {
         name: String,
         #[arg(short = 'a', long, help = "头像的URL")]
         head: Option<String>,
+        #[arg(short = 'p', long, help = "用户手机号")]
+        phone: String,
+        #[arg(short = 'd', long, help = "用户密码")]
+        password: Option<String>,
     },
     R {
         #[arg(short, long, help = "用户id/全部")]
@@ -26,6 +30,10 @@ enum Command {
         name: Option<String>,
         #[arg(short = 'a', long, help = "头像的URL")]
         head: Option<String>,
+        #[arg(short = 'p', long, help = "用户手机号")]
+        phone: Option<String>,
+        #[arg(short = 'd', long, help = "用户密码")]
+        password: Option<String>,
     },
     D {
         #[arg(short, long, help = "用户id")]
@@ -43,15 +51,26 @@ async fn main() -> anyhow::Result<()> {
         Some(Command::C {
             name: input_name,
             head: input_head,
+            phone: input_phone,
+            password: input_password,
         }) => {
-            create(conn, input_name, input_head)?;
+            create(conn, input_name, input_head, input_phone, input_password)?;
         }
         Some(Command::U {
             id: input_id,
             name: input_name,
             head: input_head,
+            phone: input_phone,
+            password: input_password,
         }) => {
-            update(conn, input_id, input_name, input_head)?;
+            update(
+                conn,
+                input_id,
+                input_name,
+                input_head,
+                input_phone,
+                input_password,
+            )?;
         }
         Some(Command::R { id: input_id }) => {
             read(conn, input_id)?;

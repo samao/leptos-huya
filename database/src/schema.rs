@@ -40,11 +40,23 @@ diesel::table! {
 }
 
 diesel::table! {
+    tokens (id) {
+        id -> Integer,
+        user_id -> Integer,
+        token -> Text,
+        create_at -> Timestamp,
+        expired_at -> Timestamp,
+    }
+}
+
+diesel::table! {
     users (id) {
         id -> Integer,
         user_name -> Text,
         avatar -> Text,
         created_at -> Timestamp,
+        phone -> Text,
+        password -> Text,
     }
 }
 
@@ -52,5 +64,6 @@ diesel::joinable!(rooms -> cates (cate_id));
 diesel::joinable!(rooms -> users (user_id));
 diesel::joinable!(rooms_tags -> rooms (room_id));
 diesel::joinable!(rooms_tags -> tags (tag_id));
+diesel::joinable!(tokens -> users (user_id));
 
-diesel::allow_tables_to_appear_in_same_query!(cates, rooms, rooms_tags, tags, users,);
+diesel::allow_tables_to_appear_in_same_query!(cates, rooms, rooms_tags, tags, tokens, users,);
