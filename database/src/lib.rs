@@ -1,9 +1,11 @@
-use diesel::prelude::*;
+use diesel::{prelude::*, r2d2::ConnectionManager};
 use dotenvy::dotenv;
+use r2d2::{Pool, PooledConnection};
 use std::{
     env,
     fs::{File, create_dir_all},
     path::Path,
+    sync::LazyLock,
 };
 use tracing::{info, level_filters::LevelFilter, subscriber::set_global_default, warn};
 use tracing_subscriber::FmtSubscriber;
@@ -14,13 +16,7 @@ pub mod schema;
 mod utils;
 pub use utils::*;
 
-pub fn establish_connection() -> SqliteConnection {
-    dotenv().ok();
-    let subscriber = FmtSubscriber::builder()
-        .with_max_level(LevelFilter::DEBUG)
-        .finish();
-    set_global_default(subscriber).ok();
-
+static DB_POOL: LazyLock<Pool<ConnectionManager<SqliteConnection>>> = LazyLock::new(|| {
     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL muse be set");
     info!("database url: {}", database_url);
     if !Path::new(&database_url).exists() {
@@ -41,7 +37,22 @@ pub fn establish_connection() -> SqliteConnection {
             }
         }
     }
+    let manager = ConnectionManager::<SqliteConnection>::new(database_url);
+    let pool = r2d2::Pool::builder()
+        .max_size(15)
+        .build(manager)
+        .expect("Could not build connection pool!");
+    pool
+});
 
-    SqliteConnection::establish(&database_url)
-        .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
+pub fn establish_connection() -> PooledConnection<ConnectionManager<SqliteConnection>> {
+    dotenv().ok();
+    let subscriber = FmtSubscriber::builder()
+        .with_max_level(LevelFilter::DEBUG)
+        .finish();
+    set_global_default(subscriber).ok();
+
+    DB_POOL
+        .get()
+        .unwrap_or_else(|_| panic!("Error occur when get a connection from pool"))
 }

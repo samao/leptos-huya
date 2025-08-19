@@ -1,12 +1,13 @@
 [package]
-name = "huya_database"
+name = "database"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
 anyhow = "1.0.98"
 clap = { version = "4.5.41", features = ["derive"] }
-diesel = { version = "2.2.12", features = ["sqlite", "returning_clauses_for_sqlite_3_35", "serde_json", "chrono"] }
+diesel = { version = "2.2.12", features = ["sqlite", "returning_clauses_for_sqlite_3_35", "serde_json", "chrono", "r2d2"] }
+r2d2 = "0.8.10"
 chrono.workspace = true
 dotenvy = "0.15.7"
 serde.workspace = true

@@ -1,5 +1,5 @@
 use clap::{ArgAction::SetTrue, Parser, Subcommand, arg};
-use huya_database::{
+use database::{
     establish_connection,
     rooms::{create, delete, read, update},
 };

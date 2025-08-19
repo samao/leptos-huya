@@ -28,6 +28,7 @@ leptos-use = {version = "0.16.2", optional = true}
 
 web_db = {workspace=true, optional = true}
 models.workspace = true
+database = { workspace=true, optional = true}
 
 [features]
 hydrate = [
@@ -45,7 +46,8 @@ ssr = [
     "leptos/ssr",
     "leptos_meta/ssr",
     "leptos_router/ssr",
-    "dep:web_db"
+    "dep:web_db",
+    "dep:database"
 ]
 
 [package.metadata.leptos]

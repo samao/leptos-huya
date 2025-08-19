@@ -11,7 +11,7 @@ pub fn create(
     input_head: Option<String>,
     input_phone: String,
     input_passowrd: Option<String>,
-) -> anyhow::Result<()> {
+) -> anyhow::Result<User> {
     info!("run create user");
     let user = diesel::insert_into(users)
         .values((
@@ -23,7 +23,7 @@ pub fn create(
         .returning(User::as_returning())
         .get_result(conn)?;
     info!("insert a User: {:?}", user);
-    Ok(())
+    Ok(user)
 }
 
 pub fn update(
@@ -67,4 +67,44 @@ pub fn delete(conn: &mut SqliteConnection, input_id: i32) -> anyhow::Result<()> 
     }
     info!("deleted {} User(s)", count);
     Ok(())
+}
+
+pub fn register(
+    conn: &mut SqliteConnection,
+    input_phone: String,
+    input_passowrd: Option<String>,
+) -> Result<User, String> {
+    create(
+        conn,
+        "王老二".to_string(),
+        None,
+        input_phone,
+        input_passowrd,
+    )
+    .map_err(|_| format!("register failed"))
+}
+
+pub fn login(conn: &mut SqliteConnection, input_id: String, pwd: String) -> Result<User, String> {
+    let input_id = input_id
+        .parse::<i32>()
+        .map_err(|_| format!("输入的id参数有误"))?;
+    users
+        .into_boxed()
+        .filter(id.eq(input_id))
+        .filter(password.eq(pwd.encode_hex::<String>()))
+        .select(User::as_returning())
+        .first(conn)
+        .map_err(|_| format!("login error maybe pwd wrong!"))
+}
+pub fn phone_login(
+    conn: &mut SqliteConnection,
+    input_phone: String,
+    _sms: String,
+) -> Result<User, String> {
+    users
+        .into_boxed()
+        .filter(phone.eq(input_phone))
+        .select(User::as_returning())
+        .first(conn)
+        .map_err(|_| format!("mobile login failed!"))
 }

@@ -1,3 +1,4 @@
+use chrono::Local;
 use hex::ToHex;
 use serde::{Deserialize, Serialize};
 use sha2::Digest;
@@ -29,6 +30,11 @@ impl User {
         let json_str = hasher.finalize();
         let token = json_str.encode_hex::<String>();
         Ok(token)
+    }
+
+    pub fn compute_token_with_now(u: &User) -> Result<String, serde_json::Error> {
+        let time = Local::now();
+        User::compute_token(u, time.timestamp())
     }
 }
 

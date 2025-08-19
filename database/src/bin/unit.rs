@@ -1,6 +1,6 @@
 use anyhow::Ok;
 use clap::{Parser, Subcommand, arg};
-use huya_database::{dilevery_hot, get_all_hot_by_cate_id, get_cates, get_rooms};
+use database::{dilevery_hot, get_all_hot_by_cate_id, get_cates, get_rooms};
 use tracing::info;
 
 #[derive(Parser)]
@@ -34,7 +34,7 @@ enum Command {
 }
 
 fn main() -> anyhow::Result<()> {
-    use huya_database::establish_connection;
+    use database::establish_connection;
     let conn = &mut establish_connection();
     match Args::parse().cmd {
         Some(Command::Room { ids }) => {

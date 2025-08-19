@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand, arg};
-use huya_database::tags::{create, delete, read, update};
+use database::tags::{create, delete, read, update};
 
 #[derive(Parser)]
 struct Args {
@@ -31,7 +31,7 @@ enum Command {
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    use huya_database::establish_connection;
+    use database::establish_connection;
     let args = Args::parse();
     let conn = &mut establish_connection();
     match args.cmd {

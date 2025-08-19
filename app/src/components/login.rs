@@ -1,6 +1,7 @@
 use std::time::Duration;
 
 use leptos::prelude::*;
+use models::User;
 use reactive_stores::Store;
 use serde::{Deserialize, Serialize};
 use web_sys::MouseEvent;
@@ -33,6 +34,77 @@ pub fn Password(placeholder: String, set_signal: RwSignal<String>) -> impl IntoV
     }
 }
 
+#[derive(Debug, Deserialize, Serialize, Clone)]
+enum LoginOptions {
+    //手机号登录
+    MOBILE { phone: String, sms: String },
+    //密码登录
+    USER { id: String, password: String },
+}
+
+#[server]
+async fn login_query(data: LoginOptions) -> Result<(), ServerFnError> {
+    use database::{
+        establish_connection,
+        users::{login, phone_login},
+    };
+    use leptos::logging::log;
+    log!("用户登录：{:?}", data);
+    let conn = &mut establish_connection();
+    match data {
+        LoginOptions::MOBILE { phone, sms } => phone_login(conn, phone, sms),
+        LoginOptions::USER { id, password } => login(conn, id, password),
+    }
+    .map(|user| {
+        let user = User {
+            id: user.id,
+            user_name: user.user_name,
+            avatar: user.avatar,
+            phone: user.phone,
+            password: user.password,
+        };
+        log!("用户登录成功: {:?}", User::compute_token_with_now(&user))
+    })
+    .map_err(|e| ServerFnError::new(format!("login error: {}", e)))
+}
+
+#[server]
+#[allow(dead_code)]
+async fn register_user(
+    phone: String,
+    password: String,
+    zcode: String,
+    sms: String,
+) -> Result<User, ServerFnError> {
+    let conn = &mut database::establish_connection();
+    match database::users::register(conn, phone, Some(password)) {
+        Ok(user) => {
+            use chrono::DateTime;
+            use leptos::logging::log;
+            let user = User {
+                id: user.id,
+                user_name: user.user_name,
+                avatar: user.avatar,
+                phone: user.phone,
+                password: user.password,
+            };
+            let time = DateTime::parse_from_str(
+                "1983 Apr 13 12:09:14.274 +0000",
+                "%Y %b %d %H:%M:%S%.3f %z",
+            )
+            .unwrap();
+            log!(
+                "user code: <{}>, sms:<{}> token: {:?}",
+                zcode,
+                sms,
+                User::compute_token(&user, time.timestamp())
+            );
+            Ok(user)
+        }
+        Err(er) => Err(ServerFnError::new(format!("注册失败: {}", er))),
+    }
+}
+
 #[component]
 pub fn Login() -> impl IntoView {
     let store = use_context::<Store<GlobalState>>();
@@ -49,6 +121,10 @@ pub fn Login() -> impl IntoView {
     let agreed = RwSignal::new(false);
 
     let register_pwd = RwSignal::new("".to_string());
+
+    let register_action = ServerAction::<RegisterUser>::new();
+    let login_action = ServerAction::<LoginQuery>::new();
+
     Effect::new(move || {
         leptos::logging::log!("Zcode is: {:?}", zcode.get());
     });
@@ -156,14 +232,33 @@ pub fn Login() -> impl IntoView {
                             e.prevent_default();
                             if agreed.get() {
                                 if register.get() {
-                                    leptos::logging::log!(
-                                        "register: phone = {}{}, sms = {}, pwd = {}", zcode.get().0, phone.get(), sms_code.get(), register_pwd.get()
-                                    );
+                                    register_action
+                                        .dispatch(RegisterUser {
+                                            phone: phone.get(),
+                                            sms: sms_code.get(),
+                                            password: register_pwd.get(),
+                                            zcode: zcode.get().0,
+                                        });
                                     return;
                                 }
-                                leptos::logging::log!(
-                                    "{}", if mode.get() { format!("phone: {}{}, sms: {}", zcode.get().0, phone.get(), sms_code.get()) } else { format!("phone:{}, password: {}", phone_or_huya.get(), password.get())}
-                                );
+                                login_action
+                                    .dispatch(
+                                        if mode.get() {
+                                            LoginQuery {
+                                                data: LoginOptions::MOBILE {
+                                                    phone: phone.get(),
+                                                    sms: sms_code.get(),
+                                                },
+                                            }
+                                        } else {
+                                            LoginQuery {
+                                                data: LoginOptions::USER {
+                                                    id: phone_or_huya.get(),
+                                                    password: password.get(),
+                                                },
+                                            }
+                                        },
+                                    );
                             } else {
                                 leptos::logging::log!("The checkbox must be checked!");
                                 store
