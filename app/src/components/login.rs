@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use leptos::prelude::*;
-use models::User;
+use models::{TokenUser, User};
 use reactive_stores::Store;
 use serde::{Deserialize, Serialize};
 use web_sys::MouseEvent;
@@ -43,19 +43,25 @@ enum LoginOptions {
 }
 
 #[server]
-async fn login_query(data: LoginOptions) -> Result<(), ServerFnError> {
+async fn login_query(data: LoginOptions) -> Result<TokenUser, ServerFnError> {
     use database::{
         establish_connection,
-        users::{login, phone_login},
+        users::{login, phone_login, phone_login_tk},
     };
     use leptos::logging::log;
     log!("用户登录：{:?}", data);
     let conn = &mut establish_connection();
-    match data {
-        LoginOptions::MOBILE { phone, sms } => phone_login(conn, phone, sms),
+    if let Ok(user) = match data {
+        LoginOptions::MOBILE { phone, sms } => {
+            if let Ok(utk) = phone_login_tk(conn, phone.clone(), sms.clone()) {
+                log!("直接返回tokenUser: {:?}", utk);
+                return Ok(utk);
+            }
+
+            phone_login(conn, phone, sms)
+        }
         LoginOptions::USER { id, password } => login(conn, id, password),
-    }
-    .map(|user| {
+    } {
         let user = User {
             id: user.id,
             user_name: user.user_name,
@@ -63,9 +69,12 @@ async fn login_query(data: LoginOptions) -> Result<(), ServerFnError> {
             phone: user.phone,
             password: user.password,
         };
-        log!("用户登录成功: {:?}", User::compute_token_with_now(&user))
-    })
-    .map_err(|e| ServerFnError::new(format!("login error: {}", e)))
+        if let Ok(token) = User::compute_token_with_now(&user) {
+            log!("用户登录成功: {:?}", token);
+            return Ok(TokenUser { user, token });
+        }
+    }
+    Err(ServerFnError::new("登录失败".to_string()))
 }
 
 #[server]

@@ -108,3 +108,33 @@ pub fn phone_login(
         .first(conn)
         .map_err(|_| format!("mobile login failed!"))
 }
+
+pub fn phone_login_tk(
+    conn: &mut SqliteConnection,
+    input_phone: String,
+    _sms: String,
+) -> Result<models::TokenUser, String> {
+    let user = users
+        .into_boxed()
+        .filter(phone.eq(input_phone))
+        .select(User::as_returning())
+        .first(conn)
+        .map_err(|_| format!("mobile login failed!"))?;
+    user.try_into()
+}
+
+impl TryFrom<User> for models::TokenUser {
+    type Error = String;
+    fn try_from(value: User) -> Result<Self, Self::Error> {
+        let usr = models::User {
+            id: value.id,
+            user_name: value.user_name,
+            avatar: value.avatar,
+            phone: value.phone,
+            password: value.password,
+        };
+        let token =
+            models::User::compute_token_with_now(&usr).map_err(|_| format!("生成token失败"))?;
+        Ok(models::TokenUser { user: usr, token })
+    }
+}

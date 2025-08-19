@@ -38,6 +38,13 @@ impl User {
     }
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TokenUser {
+    #[serde(flatten)]
+    pub user: User,
+    pub token: String,
+}
+
 #[cfg(test)]
 mod tests {
     use super::User;
