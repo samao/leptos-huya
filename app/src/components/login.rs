@@ -1,9 +1,8 @@
-use std::time::Duration;
-
 use leptos::prelude::*;
-use models::{TokenUser, User};
+use models::User as ModelUser;
 use reactive_stores::Store;
 use serde::{Deserialize, Serialize};
+use std::time::Duration;
 use web_sys::MouseEvent;
 
 use crate::app::{GlobalState, GlobalStateStoreFields};
@@ -43,38 +42,47 @@ enum LoginOptions {
 }
 
 #[server]
-async fn login_query(data: LoginOptions) -> Result<TokenUser, ServerFnError> {
+async fn login_query(data: LoginOptions) -> Result<ModelUser, ServerFnError> {
+    use axum::http::header::{HeaderValue, SET_COOKIE};
+    use axum_extra::extract::cookie::{Cookie, Expiration, SameSite};
     use database::{
         establish_connection,
-        users::{login, phone_login, phone_login_tk},
+        users::{login, phone_login},
     };
     use leptos::logging::log;
+    use leptos_axum::ResponseOptions;
+    use time::{Duration, OffsetDateTime};
+
     log!("用户登录：{:?}", data);
     let conn = &mut establish_connection();
-    if let Ok(user) = match data {
-        LoginOptions::MOBILE { phone, sms } => {
-            if let Ok(utk) = phone_login_tk(conn, phone.clone(), sms.clone()) {
-                log!("直接返回tokenUser: {:?}", utk);
-                return Ok(utk);
-            }
-
-            phone_login(conn, phone, sms)
-        }
+    let user = match data {
+        LoginOptions::MOBILE { phone, sms } => phone_login(conn, phone, sms),
         LoginOptions::USER { id, password } => login(conn, id, password),
-    } {
-        let user = User {
-            id: user.id,
-            user_name: user.user_name,
-            avatar: user.avatar,
-            phone: user.phone,
-            password: user.password,
-        };
-        if let Ok(token) = User::compute_token_with_now(&user) {
-            log!("用户登录成功: {:?}", token);
-            return Ok(TokenUser { user, token });
+    };
+    let response = expect_context::<ResponseOptions>();
+    match user {
+        Ok(user) => {
+            log!("用户登录成功: {:?}", user.token);
+            let cookie = Cookie::build(("token", user.token.clone()))
+                .path("/")
+                .http_only(true)
+                .same_site(SameSite::Lax)
+                .expires(Expiration::DateTime(
+                    OffsetDateTime::now_utc() + Duration::minutes(1),
+                ));
+
+            response.insert_header(
+                SET_COOKIE,
+                HeaderValue::from_str(&cookie.to_string())
+                    .map_err(|er| ServerFnError::new(er.to_string()))?,
+            );
+            Ok(user)
+        }
+        Err(er) => {
+            log!("登录失败: {:?}", er);
+            Err(ServerFnError::new("登录失败".to_string()))
         }
     }
-    Err(ServerFnError::new("登录失败".to_string()))
 }
 
 #[server]
@@ -84,29 +92,16 @@ async fn register_user(
     password: String,
     zcode: String,
     sms: String,
-) -> Result<User, ServerFnError> {
+) -> Result<ModelUser, ServerFnError> {
     let conn = &mut database::establish_connection();
     match database::users::register(conn, phone, Some(password)) {
         Ok(user) => {
-            use chrono::DateTime;
             use leptos::logging::log;
-            let user = User {
-                id: user.id,
-                user_name: user.user_name,
-                avatar: user.avatar,
-                phone: user.phone,
-                password: user.password,
-            };
-            let time = DateTime::parse_from_str(
-                "1983 Apr 13 12:09:14.274 +0000",
-                "%Y %b %d %H:%M:%S%.3f %z",
-            )
-            .unwrap();
             log!(
                 "user code: <{}>, sms:<{}> token: {:?}",
                 zcode,
                 sms,
-                User::compute_token(&user, time.timestamp())
+                user.token,
             );
             Ok(user)
         }

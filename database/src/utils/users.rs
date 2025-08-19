@@ -1,8 +1,9 @@
-use crate::models::User;
+use crate::models::User as DbUser;
 use crate::schema::users::dsl::*;
 use anyhow::anyhow;
 use diesel::prelude::*;
 use hex::ToHex;
+use models::User as ModelUser;
 use tracing::info;
 
 pub fn create(
@@ -11,7 +12,7 @@ pub fn create(
     input_head: Option<String>,
     input_phone: String,
     input_passowrd: Option<String>,
-) -> anyhow::Result<User> {
+) -> anyhow::Result<DbUser> {
     info!("run create user");
     let user = diesel::insert_into(users)
         .values((
@@ -20,7 +21,7 @@ pub fn create(
             phone.eq(input_phone),
             input_passowrd.map(|e| password.eq(e.encode_hex::<String>())),
         ))
-        .returning(User::as_returning())
+        .returning(DbUser::as_returning())
         .get_result(conn)?;
     info!("insert a User: {:?}", user);
     Ok(user)
@@ -41,7 +42,7 @@ pub fn update(
             input_phone.map(|ph| phone.eq(ph)),
             input_password.map(|e| password.eq(e.encode_hex::<String>())),
         ))
-        .returning(User::as_returning())
+        .returning(DbUser::as_returning())
         .get_result(conn)?;
     info!("update a User: {:?}", user);
     Ok(())
@@ -53,7 +54,7 @@ pub fn read(conn: &mut SqliteConnection, input_id: Option<i32>) -> anyhow::Resul
         query = query.filter(id.eq(input_id));
     }
     let user = query
-        .select(User::as_select())
+        .select(DbUser::as_select())
         .order_by(id.asc())
         .get_results(conn)?;
     info!("read User(s): {:?}", user);
@@ -73,68 +74,49 @@ pub fn register(
     conn: &mut SqliteConnection,
     input_phone: String,
     input_passowrd: Option<String>,
-) -> Result<User, String> {
-    create(
+) -> Result<models::User, String> {
+    let user = create(
         conn,
         "王老二".to_string(),
         None,
         input_phone,
         input_passowrd,
     )
-    .map_err(|_| format!("register failed"))
+    .map_err(|_| format!("register failed"))?;
+    user.try_into()
 }
 
-pub fn login(conn: &mut SqliteConnection, input_id: String, pwd: String) -> Result<User, String> {
+pub fn login(
+    conn: &mut SqliteConnection,
+    input_id: String,
+    pwd: String,
+) -> Result<ModelUser, String> {
     let input_id = input_id
         .parse::<i32>()
         .map_err(|_| format!("输入的id参数有误"))?;
-    users
+    let user = users
         .into_boxed()
         .filter(id.eq(input_id))
-        .filter(password.eq(pwd.encode_hex::<String>()))
-        .select(User::as_returning())
+        //.filter(password.eq(pwd.encode_hex::<String>()))
+        .select(DbUser::as_returning())
         .first(conn)
-        .map_err(|_| format!("login error maybe pwd wrong!"))
+        .map_err(|_| format!("login error no user found!"))?;
+    if user.password != pwd.encode_hex::<String>() {
+        return Err(format!("密码错误"));
+    }
+    user.try_into()
 }
+
 pub fn phone_login(
     conn: &mut SqliteConnection,
     input_phone: String,
     _sms: String,
-) -> Result<User, String> {
-    users
-        .into_boxed()
-        .filter(phone.eq(input_phone))
-        .select(User::as_returning())
-        .first(conn)
-        .map_err(|_| format!("mobile login failed!"))
-}
-
-pub fn phone_login_tk(
-    conn: &mut SqliteConnection,
-    input_phone: String,
-    _sms: String,
-) -> Result<models::TokenUser, String> {
+) -> Result<ModelUser, String> {
     let user = users
         .into_boxed()
         .filter(phone.eq(input_phone))
-        .select(User::as_returning())
+        .select(DbUser::as_returning())
         .first(conn)
         .map_err(|_| format!("mobile login failed!"))?;
     user.try_into()
-}
-
-impl TryFrom<User> for models::TokenUser {
-    type Error = String;
-    fn try_from(value: User) -> Result<Self, Self::Error> {
-        let usr = models::User {
-            id: value.id,
-            user_name: value.user_name,
-            avatar: value.avatar,
-            phone: value.phone,
-            password: value.password,
-        };
-        let token =
-            models::User::compute_token_with_now(&usr).map_err(|_| format!("生成token失败"))?;
-        Ok(models::TokenUser { user: usr, token })
-    }
 }

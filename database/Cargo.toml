@@ -14,6 +14,7 @@ serde.workspace = true
 serde_json.workspace = true
 tokio.workspace = true
 hex.workspace = true
+sha2 = "0.10.9"
 models.workspace = true
 libsqlite3-sys = { version = "0.30", features = ["bundled"] }
 tracing = "0.1.40"
