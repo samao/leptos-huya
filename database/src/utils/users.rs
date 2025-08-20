@@ -1,5 +1,6 @@
 use crate::models::User as DbUser;
 use crate::schema::users::dsl::*;
+use crate::utils::tokens;
 use anyhow::anyhow;
 use diesel::prelude::*;
 use hex::ToHex;
@@ -104,7 +105,10 @@ pub fn login(
     if user.password != pwd.encode_hex::<String>() {
         return Err(format!("密码错误"));
     }
-    user.try_into()
+    let user: ModelUser = user.try_into()?;
+    tokens::create(conn, user.id, user.token.clone())
+        .map_err(|e| format!("{:?}", e.to_string()))?;
+    Ok(user)
 }
 
 pub fn phone_login(
@@ -118,5 +122,8 @@ pub fn phone_login(
         .select(DbUser::as_returning())
         .first(conn)
         .map_err(|_| format!("mobile login failed!"))?;
-    user.try_into()
+    let user: ModelUser = user.try_into()?;
+    tokens::create(conn, user.id, user.token.clone())
+        .map_err(|e| format!("{:?}", e.to_string()))?;
+    Ok(user)
 }

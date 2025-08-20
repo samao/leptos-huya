@@ -8,6 +8,8 @@ use leptos_router::{
     path,
 };
 
+use models::User as ModelUser;
+
 use crate::components::{Footer, Header, LeftNav, Login};
 use crate::pages::{Game, HomePage, InfoPage, MatchPage, NotFound, UserPage, VideoPage};
 
@@ -37,8 +39,10 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
 
 #[derive(Clone, Debug, Default, reactive_stores::Store)]
 pub struct GlobalState {
-    logined: bool,
+    show_login: bool,
     toast: String,
+    user: Option<ModelUser>,
+    user_data_loaded: bool,
 }
 
 #[component]
@@ -109,7 +113,7 @@ pub fn App() -> impl IntoView {
                 </Routes>
             </main>
         </Router>
-        <Show when=move || store.logined().get()>
+        <Show when=move || store.show_login().get()>
             <Login />
         </Show>
         <Show when=move || store.toast().get().len().ne(&0)>

@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand, arg};
-use database::tokens::{create, delete, read, update};
+use database::tokens::{clear_user, create, delete, get_user, read};
 
 #[derive(Parser)]
 struct Args {
@@ -10,22 +10,23 @@ struct Args {
 #[derive(Subcommand)]
 enum Command {
     C {
-        #[arg(short, long, help = "Tag的标题")]
-        title: String,
+        #[arg(short, long, help = "用户id")]
+        id: i32,
+        #[arg(short, long, help = "登录token")]
+        token: String,
     },
     R {
-        #[arg(short, long, help = "数据id")]
+        #[arg(short, long, help = "用户id")]
         id: Option<i32>,
-    },
-    U {
-        #[arg(short, long, help = "数据id")]
-        id: i32,
-        #[arg(short, long, help = "Tag的标题")]
-        title: String,
+        #[arg(short, long, help = "登录token")]
+        token: Option<String>,
     },
     D {
-        #[arg(short, long, help = "数据id")]
-        id: i32,
+        #[arg(short, long, help = "登录token")]
+        token: Option<String>,
+
+        #[arg(short, long, help = "登录token 的uid")]
+        id: Option<i32>,
     },
 }
 
@@ -35,17 +36,24 @@ async fn main() -> anyhow::Result<()> {
     let args = Args::parse();
     let conn = &mut establish_connection();
     match args.cmd {
-        Some(Command::C { title }) => {
-            create()?;
+        Some(Command::C { id, token }) => {
+            create(conn, id, token)?;
         }
-        Some(Command::U { id, title }) => {
-            update()?;
+        Some(Command::R { id, token }) => {
+            if id.is_some() {
+                read(conn, id)?;
+            } else if let Some(token) = token {
+                get_user(conn, token)?;
+            }
         }
-        Some(Command::R { id }) => {
-            read()?;
-        }
-        Some(Command::D { id }) => {
-            delete()?;
+        Some(Command::D { token, id }) => {
+            if let Some(token) = token {
+                delete(conn, token)?;
+            }
+
+            if let Some(id) = id {
+                clear_user(conn, id)?;
+            }
         }
         _ => panic!("Invalid command"),
     }

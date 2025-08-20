@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{either::Either, prelude::*, task::spawn_local};
 use leptos_router::{
     components::{A, Form},
     hooks::use_url,
@@ -6,11 +6,11 @@ use leptos_router::{
 #[cfg(feature = "hydrate")]
 use leptos_use::use_window_scroll;
 
+use crate::app::{GlobalState, GlobalStateStoreFields};
+use models::User as ModelUser;
 use reactive_stores::Store;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fmt::Display, sync::LazyLock};
-
-use crate::app::{GlobalState, GlobalStateStoreFields};
 
 stylance::import_crate_style!(css, "src/components/header.module.scss");
 
@@ -185,6 +185,57 @@ impl<'a> Display for HeaderIco<'a> {
         )
     }
 }
+
+#[server]
+async fn logout_query() -> Result<(), ServerFnError> {
+    use axum::http::header::{HeaderValue, SET_COOKIE};
+    use axum_extra::extract::{
+        CookieJar,
+        cookie::{Cookie, Expiration, SameSite},
+    };
+    use database::{establish_connection, tokens};
+    use leptos_axum::{ResponseOptions, extract};
+    use time::{Duration, OffsetDateTime};
+
+    let jar = extract::<CookieJar>().await?;
+    if let Some(original_cookie) = jar.get("token") {
+        let conn = &mut establish_connection();
+        tokens::delete(conn, original_cookie.value().to_string())
+            .map_err(|er| ServerFnError::new(er.to_string()))?;
+    }
+
+    let response = expect_context::<ResponseOptions>();
+    let cookie = Cookie::build(("token", "".to_string()))
+        .path("/")
+        .http_only(true)
+        .same_site(SameSite::Lax)
+        .expires(Expiration::DateTime(
+            OffsetDateTime::now_utc() - Duration::days(1),
+        ));
+    response.insert_header(
+        SET_COOKIE,
+        HeaderValue::from_str(&cookie.to_string())
+            .map_err(|er| ServerFnError::new(er.to_string()))?,
+    );
+    Ok(())
+}
+
+#[server]
+async fn get_user() -> Result<ModelUser, ServerFnError> {
+    use axum_extra::extract::CookieJar;
+    use database::{establish_connection, tokens};
+    use leptos_axum::extract;
+
+    let jar = extract::<CookieJar>().await?;
+
+    if let Some(token) = jar.get("token") {
+        let conn = &mut establish_connection();
+        return tokens::get_user(conn, token.value().to_string())
+            .map_err(|_| ServerFnError::new("获取用户信息失败".to_string()));
+    }
+    Err(ServerFnError::new("未登录".to_string()))
+}
+
 #[component]
 pub fn Header() -> impl IntoView {
     let matched = use_url();
@@ -203,6 +254,27 @@ pub fn Header() -> impl IntoView {
     });
 
     let store = use_context::<Store<GlobalState>>();
+    let is_logined = move || match store {
+        Some(store) => store.user().get().is_some(),
+        _ => false,
+    };
+    let user_me = move || match store {
+        Some(store) => store.user().get(),
+        _ => None,
+    };
+    Effect::new(move || {
+        spawn_local(async move {
+            if let Some(store) = store {
+                match get_user().await {
+                    Ok(u) => {
+                        store.user().set(Some(u));
+                    }
+                    _ => {}
+                }
+                store.user_data_loaded().set(true);
+            }
+        });
+    });
 
     view! {
         <header
@@ -402,30 +474,118 @@ pub fn Header() -> impl IntoView {
                             </div>
                         </div>
                     </li>
-                    <li
-                        class=css::login
-                        on:click=move |_| {
-                            let store = store.unwrap().logined();
-                            store
-                                .update(|logined| {
-                                    *logined = !*logined;
-                                });
-                        }
-                    >
-                        登录
-                        <div class=css::login_pop_clsx>
-                            <h1>登陆后可享受:</h1>
-                            <ul class=css::login_tips_clsx>
-                                <li>蓝光6M高清画质</li>
-                                <li>独家赛事超前关注</li>
-                                <li>多元玩法精彩互动</li>
-                            </ul>
-                            <div class=css::login_btn>登录</div>
-                            <a href="" class=css::register_clsx>
-                                点我注册
-                            </a>
-                        </div>
-                    </li>
+                    <Show when=move || store.unwrap().user_data_loaded().get()>
+                        <li
+                            style=move || {
+                                if is_logined() {
+                                    format!("--user-avatar: url({})", user_me().unwrap().avatar)
+                                } else {
+                                    "".to_string()
+                                }
+                            }
+                            class=css::login
+                            on:click=move |_| {
+                                if is_logined() {
+                                    return;
+                                }
+                                store
+                                    .unwrap()
+                                    .show_login()
+                                    .update(|logined| {
+                                        *logined = !*logined;
+                                    });
+                            }
+                        >
+                            {move || { if !is_logined() { "登录" } else { "" } }}
+                            <div class=move || {
+                                format!(
+                                    "{} {}",
+                                    css::login_pop_clsx,
+                                    if is_logined() { css::login_box } else { "" },
+                                )
+                            }>
+                                {move || match user_me() {
+                                    Some(user) => {
+                                        Either::Left(
+                                            view! {
+                                                <div class=css::logined_pop>
+                                                    <div class=css::user_info>
+                                                        <img src=user.avatar />
+                                                        <div class=css::info_line>
+                                                            <span>{user.user_name}</span>
+                                                            <i />
+                                                            <i />
+                                                            <i />
+                                                            <i />
+                                                        </div>
+                                                        <div class=css::editor>点击编辑个性签名</div>
+                                                        <div class=css::level>
+                                                            <span>LV1</span>
+                                                            <span>0/200</span>
+                                                            <span>LV2</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class=css::wealth>
+                                                        资产 <span>0</span> <span>0</span> <button>充值</button>
+                                                    </div>
+                                                    <ul class=css::entries>
+                                                        <For
+                                                            each=move || {
+                                                                vec![
+                                                                    "个人中心",
+                                                                    "我的贵族",
+                                                                    "我的消息",
+                                                                    "我的掉宝",
+                                                                    "创造中心",
+                                                                ]
+                                                                    .into_iter()
+                                                            }
+                                                            key=|item| item.to_string()
+                                                            let(label)
+                                                        >
+                                                            <li>{label}</li>
+                                                        </For>
+                                                    </ul>
+                                                    <div
+                                                        class=css::logout
+                                                        on:click=move |_| {
+                                                            spawn_local(async move {
+                                                                if let Err(msg) = logout_query().await {
+                                                                    leptos::logging::log!("logout: {:?}", msg.to_string());
+                                                                }
+                                                                if let Some(store) = store {
+                                                                    store.user().set(None);
+                                                                    store.toast().set("退出成功".to_string());
+                                                                }
+                                                            });
+                                                        }
+                                                    >
+                                                        退出
+                                                    </div>
+                                                </div>
+                                            },
+                                        )
+                                    }
+                                    _ => {
+                                        Either::Right(
+                                            view! {
+                                                <h1>登陆后可享受:</h1>
+                                                <ul class=css::login_tips_clsx>
+                                                    <li>蓝光6M高清画质</li>
+                                                    <li>独家赛事超前关注</li>
+                                                    <li>多元玩法精彩互动</li>
+                                                </ul>
+                                                <div class=css::login_btn>登录</div>
+                                                <a href="" class=css::register_clsx>
+                                                    点我注册
+                                                </a>
+                                            },
+                                        )
+                                    }
+                                }}
+                            </div>
+                        </li>
+                    </Show>
                 </ul>
             </div>
         </header>

@@ -68,7 +68,7 @@ async fn login_query(data: LoginOptions) -> Result<ModelUser, ServerFnError> {
                 .http_only(true)
                 .same_site(SameSite::Lax)
                 .expires(Expiration::DateTime(
-                    OffsetDateTime::now_utc() + Duration::minutes(1),
+                    OffsetDateTime::now_utc() + Duration::days(30),
                 ));
 
             response.insert_header(
@@ -129,8 +129,22 @@ pub fn Login() -> impl IntoView {
     let register_action = ServerAction::<RegisterUser>::new();
     let login_action = ServerAction::<LoginQuery>::new();
 
+    let login_value = login_action.value();
+
     Effect::new(move || {
-        leptos::logging::log!("Zcode is: {:?}", zcode.get());
+        if let Some(store) = store {
+            match login_value.get() {
+                Some(Ok(user)) => {
+                    leptos::logging::log!("登录成功了");
+                    store.user().update(|usr| *usr = Some(user));
+                    store.show_login().set(false);
+                }
+                None => {}
+                _ => {
+                    store.toast().update(|msg| *msg = "登录失败".to_string());
+                }
+            }
+        }
     });
 
     Effect::new(move || {
@@ -153,7 +167,7 @@ pub fn Login() -> impl IntoView {
         <div
             class=css::global_login_pop
             on:click=move |_| {
-                let logined = store.unwrap().logined();
+                let logined = store.unwrap().show_login();
                 logined.set(false);
             }
         >
