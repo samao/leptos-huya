@@ -135,7 +135,6 @@ dependencies = [
  "tokio",
  "wasm-bindgen",
  "web-sys",
- "web_db",
 ]
 
 [[package]]
@@ -3242,21 +3241,6 @@ checksum = "33b6dd2ef9186f1f2072e409e99cd22a975331a6b3591b12c764e0e55c60d5d2"
 dependencies = [
  "js-sys",
  "wasm-bindgen",
-]
-
-[[package]]
-name = "web_db"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "diesel",
- "dotenvy",
- "libsqlite3-sys",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]
