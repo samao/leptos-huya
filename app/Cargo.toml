@@ -26,7 +26,7 @@ stylance = "0.7.0"
 reactive_stores = "0.2.5"
 js-sys = { version = "0.3.77", optional=true }
 web-sys = { version = "0.3.77", features = ["NodeList"] }
-leptos-use = {version = "0.16.2", optional = true}
+leptos-use = {version = "0.16.2", optional = true, features=["use_cookie"]}
 
 web_db = {workspace=true, optional = true}
 models.workspace = true

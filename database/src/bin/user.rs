@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand, arg};
-use database::users::{create, delete, read, update};
+use database::users::{create, delete, read, register, update};
 
 #[derive(Parser)]
 struct Args {
@@ -22,6 +22,10 @@ enum Command {
     R {
         #[arg(short, long, help = "用户id/全部")]
         id: Option<i32>,
+    },
+    E {
+        #[arg(short, long, help = "用户手机号")]
+        phone: String,
     },
     U {
         #[arg(short, long, help = "用户id")]
@@ -55,6 +59,11 @@ async fn main() -> anyhow::Result<()> {
             password: input_password,
         }) => {
             create(conn, input_name, input_head, input_phone, input_password)?;
+        }
+        Some(Command::E { phone }) => {
+            if let Err(er) = register(conn, phone, None) {
+                println!("{:?}", er);
+            }
         }
         Some(Command::U {
             id: input_id,

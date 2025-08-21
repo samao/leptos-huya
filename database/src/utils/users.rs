@@ -75,16 +75,16 @@ pub fn register(
     conn: &mut SqliteConnection,
     input_phone: String,
     input_passowrd: Option<String>,
-) -> Result<models::User, String> {
-    let user = create(
-        conn,
-        "王老二".to_string(),
-        None,
-        input_phone,
-        input_passowrd,
-    )
-    .map_err(|_| format!("register failed"))?;
-    user.try_into()
+) -> Result<ModelUser, String> {
+    let name = mock_rust::mock::cname();
+
+    let user = create(conn, name, None, input_phone, input_passowrd)
+        .map_err(|er| format!("register failed: {:?}", er.to_string()))?;
+    let user: ModelUser = user.try_into()?;
+
+    tokens::create(conn, user.id, user.token.clone())
+        .map_err(|e| format!("{:?}", e.to_string()))?;
+    Ok(user)
 }
 
 pub fn login(

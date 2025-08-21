@@ -631,6 +631,7 @@ dependencies = [
  "dotenvy",
  "hex",
  "libsqlite3-sys",
+ "mock_rust",
  "models",
  "r2d2",
  "serde",
@@ -1714,6 +1715,14 @@ dependencies = [
  "libc",
  "wasi 0.11.1+wasi-snapshot-preview1",
  "windows-sys 0.59.0",
+]
+
+[[package]]
+name = "mock_rust"
+version = "0.1.0"
+dependencies = [
+ "rand",
+ "regex",
 ]
 
 [[package]]

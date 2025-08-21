@@ -217,6 +217,7 @@ async fn logout_query() -> Result<(), ServerFnError> {
         HeaderValue::from_str(&cookie.to_string())
             .map_err(|er| ServerFnError::new(er.to_string()))?,
     );
+
     Ok(())
 }
 
@@ -241,7 +242,6 @@ pub fn Header() -> impl IntoView {
     let matched = use_url();
     let stickied = RwSignal::new(false);
     let node_ref = NodeRef::<leptos::html::Header>::new();
-
     #[cfg(feature = "hydrate")]
     Effect::new(move || {
         if matched.get().path() == "/" {
@@ -519,9 +519,9 @@ pub fn Header() -> impl IntoView {
                                                             <i />
                                                         </div>
                                                         <div class=css::editor>点击编辑个性签名</div>
-                                                        <div class=css::level>
+                                                        <div style="--precent: 75%" class=css::level>
                                                             <span>LV1</span>
-                                                            <span>0/200</span>
+                                                            <span>150/200</span>
                                                             <span>LV2</span>
                                                         </div>
                                                     </div>

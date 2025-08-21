@@ -551,8 +551,8 @@
             background-repeat: no-repeat;
             width: 38px;
             height: 38px;
-
-              opacity: 1;
+            border: 1px solid #fff;
+            opacity: 1;
           }
 
           &::before {
@@ -732,7 +732,7 @@
 
                     &::after {
                       background-color: #f00;
-                      width: 75%;
+                      width: var(--precent);
                     }
                   }
                 }

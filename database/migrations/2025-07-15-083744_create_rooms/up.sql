@@ -5,8 +5,8 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE
     IF NOT EXISTS users (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        user_name TEXT NOT NULL CHECK (length (user_name) BETWEEN 3 AND 8),
-        avatar TEXT NOT NULL DEFAULT '//dummyimg/90/90',
+        user_name TEXT NOT NULL CHECK (length (user_name) BETWEEN 2 AND 10),
+        avatar TEXT NOT NULL DEFAULT '/imgs/user/2ed1bd7ace2c24597a3b2a09238bec_180_135.jpg',
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
 

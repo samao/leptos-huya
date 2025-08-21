@@ -66,4 +66,11 @@ diesel::joinable!(rooms_tags -> rooms (room_id));
 diesel::joinable!(rooms_tags -> tags (tag_id));
 diesel::joinable!(tokens -> users (user_id));
 
-diesel::allow_tables_to_appear_in_same_query!(cates, rooms, rooms_tags, tags, tokens, users,);
+diesel::allow_tables_to_appear_in_same_query!(
+    cates,
+    rooms,
+    rooms_tags,
+    tags,
+    tokens,
+    users,
+);

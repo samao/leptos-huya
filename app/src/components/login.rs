@@ -43,15 +43,11 @@ enum LoginOptions {
 
 #[server]
 async fn login_query(data: LoginOptions) -> Result<ModelUser, ServerFnError> {
-    use axum::http::header::{HeaderValue, SET_COOKIE};
-    use axum_extra::extract::cookie::{Cookie, Expiration, SameSite};
     use database::{
         establish_connection,
         users::{login, phone_login},
     };
     use leptos::logging::log;
-    use leptos_axum::ResponseOptions;
-    use time::{Duration, OffsetDateTime};
 
     log!("用户登录：{:?}", data);
     let conn = &mut establish_connection();
@@ -59,30 +55,43 @@ async fn login_query(data: LoginOptions) -> Result<ModelUser, ServerFnError> {
         LoginOptions::MOBILE { phone, sms } => phone_login(conn, phone, sms),
         LoginOptions::USER { id, password } => login(conn, id, password),
     };
-    let response = expect_context::<ResponseOptions>();
     match user {
         Ok(user) => {
             log!("用户登录成功: {:?}", user.token);
-            let cookie = Cookie::build(("token", user.token.clone()))
-                .path("/")
-                .http_only(true)
-                .same_site(SameSite::Lax)
-                .expires(Expiration::DateTime(
-                    OffsetDateTime::now_utc() + Duration::days(30),
-                ));
-
-            response.insert_header(
-                SET_COOKIE,
-                HeaderValue::from_str(&cookie.to_string())
-                    .map_err(|er| ServerFnError::new(er.to_string()))?,
-            );
+            set_user_cookie(&user)?;
             Ok(user)
         }
         Err(er) => {
             log!("登录失败: {:?}", er);
-            Err(ServerFnError::new("登录失败".to_string()))
+            Err(ServerFnError::new(er.to_string()))
         }
     }
+}
+
+#[cfg(feature = "ssr")]
+fn set_user_cookie(user: &ModelUser) -> Result<(), ServerFnError> {
+    use axum::http::header::{HeaderValue, SET_COOKIE};
+    use axum_extra::extract::cookie::{Cookie, Expiration, SameSite};
+    use leptos_axum::ResponseOptions;
+    use time::{Duration, OffsetDateTime};
+
+    let response = expect_context::<ResponseOptions>();
+
+    let cookie = Cookie::build(("token", user.token.clone()))
+        .path("/")
+        .http_only(true)
+        .same_site(SameSite::Lax)
+        .expires(Expiration::DateTime(
+            OffsetDateTime::now_utc() + Duration::days(30),
+        ));
+
+    response.append_header(
+        SET_COOKIE,
+        HeaderValue::from_str(&cookie.to_string())
+            .map_err(|er| ServerFnError::new(er.to_string()))?,
+    );
+
+    Ok(())
 }
 
 #[server]
@@ -94,14 +103,16 @@ async fn register_user(
     sms: String,
 ) -> Result<ModelUser, ServerFnError> {
     let conn = &mut database::establish_connection();
-    match database::users::register(conn, phone, Some(password)) {
+    match database::users::register(conn, phone.clone(), Some(password.clone())) {
         Ok(user) => {
-            use leptos::logging::log;
-            log!(
-                "user code: <{}>, sms:<{}> token: {:?}",
-                zcode,
+            set_user_cookie(&user)?;
+            leptos::logging::log!(
+                "用户注册成功: <{}-{}-{}-{}> user: {:?}",
+                phone,
                 sms,
-                user.token,
+                zcode,
+                password,
+                user
             );
             Ok(user)
         }
@@ -130,7 +141,23 @@ pub fn Login() -> impl IntoView {
     let login_action = ServerAction::<LoginQuery>::new();
 
     let login_value = login_action.value();
+    let register_value = register_action.value();
 
+    Effect::new(move || match store {
+        Some(store) => match register_value.get() {
+            Some(Ok(user)) => {
+                leptos::logging::log!("注册成功了");
+                store.user().update(|usr| *usr = Some(user));
+                store.show_login().set(false);
+            }
+            None => {}
+            Some(Err(er)) => {
+                leptos::logging::log!("注册失败:{:?}", er.to_string());
+                store.toast().update(|msg| *msg = er.to_string());
+            }
+        },
+        _ => {}
+    });
     Effect::new(move || {
         if let Some(store) = store {
             match login_value.get() {
@@ -140,8 +167,9 @@ pub fn Login() -> impl IntoView {
                     store.show_login().set(false);
                 }
                 None => {}
-                _ => {
-                    store.toast().update(|msg| *msg = "登录失败".to_string());
+                Some(Err(err)) => {
+                    leptos::logging::log!("登录失败:{:?}", err.to_string());
+                    store.toast().update(|msg| *msg = err.to_string());
                 }
             }
         }
