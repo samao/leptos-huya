@@ -1,104 +1,66 @@
-use cfg_block::cfg_block;
-use leptos::{html::Input, logging::log, prelude::*};
+use leptos::{either::Either, prelude::*};
 use leptos_meta::Title;
-use leptos_router::hooks::query_signal;
+use models::SimCate as ModelSimCate;
 use stylance::import_crate_style;
 
 import_crate_style!(css, "src/pages/info_page.module.scss");
 
-cfg_block! {
-    #[cfg(feature="ssr")] {
-        //use leptos::logging::log;
-        use std::time::Duration;
-        use tokio::time::sleep;
-        use axum::http::request::Parts;
-        //use axum::http::header::CONTENT_TYPE;
-    }
-}
-
 #[server]
 #[lazy]
-async fn get_rows() -> Result<usize, ServerFnError> {
-    let req_parts = use_context::<Parts>();
-    if let Some(_req_parts) = req_parts {
-        // log!("GET ROW: {:?}", req_parts.headers.get(CONTENT_TYPE));
-    }
-    sleep(Duration::from_secs(2)).await;
-    Ok(888)
-}
-
-#[server]
-async fn add_row(text: String) -> Result<usize, ServerFnError> {
-    // log!("ADD ROW -> {}", text);
-    sleep(Duration::from_secs(2)).await;
-
-    if text == *"Error" {
-        return Err(ServerFnError::new("Oh no! Could't add to server!"));
-    }
-    Ok(9528)
+async fn get_all_sim() -> Result<Vec<ModelSimCate>, ServerFnError> {
+    use database::{establish_connection, sim_cate};
+    let conn = &mut establish_connection();
+    sim_cate::get_all(conn).map_err(|e| ServerFnError::new(e))
 }
 
 #[component]
 pub fn InfoPage() -> impl IntoView {
-    let action = ServerAction::<AddRow>::new();
-    //action.version().get()
-    let size = Resource::new(move || action.version().get(), |_| get_rows());
-    let input_ref = NodeRef::<Input>::new();
-    let size = move || {
-        size.get().map_or("I Care!".into(), |val| {
-            val.map_or("I HoHo".to_string(), |val| format!("i got {}", val))
-        })
-    };
-
+    let load_task = Resource::new(|| (), |_| async move { get_all_sim().await });
     view! {
         <Title text="信息工程" />
         <div class=css::info_page>
-            <button on:click:target=|evt| {
-                log!("{}", evt.target().node_name());
-            }>"GOD INFO PAGE"</button>
-            <div class=css::inner>
-                <input
-                    class=css::input
-                    type="text"
-                    node_ref=input_ref
-                    placeholder="type something here"
-                />
-                <button
-                    class=css::submit
-                    on:click=move |_| {
-                        let text = input_ref.get().unwrap().value();
-                        action.dispatch(text.into());
+            <Suspense>
+                {move || Suspend::new(async move {
+                    match load_task.await {
+                        Ok(results) => {
+                            Either::Right(
+                                view! {
+                                    <div class=css::right_box>
+                                    <div class=css::cate_nav>
+                                        全部分类
+                                        <ul>
+                                            <For
+                                                each=|| vec!["全部", "网游竞技", "单机热游", "娱乐天地", "手游休闲"]
+                                                key=|item| item.to_string()
+                                                let(label)
+                                            >
+                                                <li>{label}</li>
+
+                                            </For>
+                                        </ul>
+                                    </div>
+                                    <ul class=css::cates>
+                                   <For
+                                       each=move || results.clone().into_iter()
+                                       key=|item| item.src.clone()
+                                       let(item)
+                                   >
+                                       <li>
+                                           <img src=item.src.clone() loading="lazy" />
+                                           <span>{item.name.clone()}</span>
+                                       </li>
+                                   </For>
+                                   </ul>
+                                   </div>
+                                }
+                            )
+                        },
+                        Err(e) => {
+                            Either::Left(e.to_string())
+                        }
                     }
-                >
-                    submit
-                </button>
-                <Show when=move || action.pending().get()>
-                    <div class=css::loading>8</div>
-                </Show>
-                <p>You submitted: {move || format!("{:?}", action.input().get())}</p>
-                <p>You submitted: {move || format!("{:?}", action.value().get())}</p>
-                <Transition fallback=|| "">
-                    <p class=css::result>Total rows: {size}</p>
-                </Transition>
-            </div>
-            <SimpleQueryCounter />
-        </div>
-    }
-}
-
-#[component]
-pub fn SimpleQueryCounter() -> impl IntoView {
-    let (count, set_count) = query_signal::<i32>("count");
-    let clear = move |_| set_count.set(None);
-    let decrement = move |_| set_count.set(Some(count.get().unwrap_or(0) - 1));
-    let increment = move |_| set_count.set(Some(count.get().unwrap_or(0) + 1));
-
-    view! {
-        <div class=css::counter>
-            <button on:click=clear>"Clear"</button>
-            <button on:click=decrement>"-1"</button>
-            <span class=css::c_value>"Value: " {move || count.get().unwrap_or(0)} "!"</span>
-            <button on:click=increment>"+1"</button>
+                })}
+            </Suspense>
         </div>
     }
 }

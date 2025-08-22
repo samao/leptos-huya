@@ -1,0 +1,7 @@
+-- Your SQL goes here
+
+CREATE TABLE IF NOT EXISTS sim_cate (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    src TEXT NOT NULL,
+    name TEXT NOT NULL
+);

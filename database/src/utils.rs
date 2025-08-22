@@ -9,6 +9,7 @@ use tracing::info;
 pub mod categories;
 pub mod rooms;
 pub mod rooms_tags;
+pub mod sim_cate;
 pub mod tags;
 pub mod tokens;
 pub mod users;

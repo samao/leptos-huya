@@ -16,3 +16,10 @@ pub struct User {
     pub phone: String,
     pub token: String,
 }
+
+#[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+pub struct SimCate {
+    pub id: i32,
+    pub src: String,
+    pub name: String,
+}

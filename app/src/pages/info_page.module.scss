@@ -1,69 +1,88 @@
 .info_page {
-    position: relative;
-    margin-inline: auto;
-    width: calc(3/4 * 100%);
+  position: relative;
+  margin-inline: auto;
+  overflow-y: hidden;
+  width: 100%;
 
-    .inner {
-        font-size: 20px;
-        line-height: 2;
+  .right_box {
+    height: 100%;
+    overflow-y: auto;
+    padding: 20px;
+
+    &::-webkit-scrollbar {
+      display: none;
     }
 
-    %line {
-        padding-inline: 8px;
-        border-radius: 6px;
+    .cate_nav {
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      font-weight: 500;
+
+      >ul {
+        font-size: 14px;
+        display: inline-flex;
+        column-gap: 10px;
+        height: 26px;
+        line-height: 26px;
+        margin-left: 20px;
+
+        li {
+          background-color: #fff;
+          border-radius: 16px;
+          color: #999;
+          padding-inline: 10px;
+          border: 1px solid transparent;
+
+          &:hover {
+            color: #f80;
+            border-color: currentColor;
+          }
+        }
+      }
     }
 
-    .input {
-        @extend %line;
-        border: 1px solid gray;
-    }
+    .cates {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-top: 30px;
+      gap: 40px 30px;
+      font-size: 14px;
 
-    .submit {
-       @extend %line;
-        margin-left: 8px;
-        color: #fff;
-        background-color: #f40;
-    }
+      @media (min-width: 1440px) {
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+      }
 
-    .loading {
-        color: #fff;
-        background-color: #000;
-        border-radius: 50%;
-        width: 80px;
-        height: 80px;
+      li {
+        position: relative;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        animation: spin 1s linear infinite;
-    }
+        background-color: #fff;
+        border-radius: 8px;
+        padding-block: 30px;
+        transition: all 300ms;
 
-    .result {
-        font-size: 24px;
-        font-weight: bold;
-    }
-
-    @keyframes spin {
-        to {
-            transform: rotateZ(360deg);
-        }
-    }
-
-    .counter {
-        display: flex;
-        justify-content: center;
-        column-gap: 8px;
-        color: #fff;
-
-        .c_value {
-            margin-inline: 12px;
-            color: red;
-            font-weight: bold;
+        >span {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          width: 70%;
+          text-align: center;
         }
 
-        button {
-            border-radius: 6px;
-            padding-inline: 12px;
-            background-color: oklch(55.5% .163 48.998);
+        &:hover {
+          box-shadow: 0 3px 8px rgba(34, 34, 34, .12);
+          color: #f80;
         }
+
+        >img {
+          width: 60%;
+          height: auto;
+          margin-bottom: 20px;
+        }
+      }
     }
+  }
 }

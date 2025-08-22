@@ -32,6 +32,14 @@ diesel::table! {
 }
 
 diesel::table! {
+    sim_cate (id) {
+        id -> Integer,
+        src -> Text,
+        name -> Text,
+    }
+}
+
+diesel::table! {
     tags (id) {
         id -> Integer,
         title -> Text,
@@ -70,6 +78,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     cates,
     rooms,
     rooms_tags,
+    sim_cate,
     tags,
     tokens,
     users,

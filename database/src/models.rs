@@ -10,3 +10,5 @@ mod room_tag;
 pub use room_tag::*;
 mod token;
 pub use token::*;
+mod sim_cate;
+pub use sim_cate::*;

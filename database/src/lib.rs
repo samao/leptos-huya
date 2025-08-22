@@ -49,6 +49,7 @@ pub fn establish_connection() -> PooledConnection<ConnectionManager<SqliteConnec
     dotenv().ok();
     let subscriber = FmtSubscriber::builder()
         .with_max_level(LevelFilter::DEBUG)
+        .without_time()
         .finish();
     set_global_default(subscriber).ok();
 
