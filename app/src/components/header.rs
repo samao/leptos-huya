@@ -361,7 +361,7 @@ pub fn Header() -> impl IntoView {
                 <nav class=format!("{}", css::navs_clsx)>
                     <A href="">首页</A>
                     <A href="l">直播</A>
-                    <A href="g">
+                    <A href="c">
                         分类 <i />
                         <div
                             on:click:target=move |ev| {
@@ -391,8 +391,8 @@ pub fn Header() -> impl IntoView {
                         </div>
                     </A>
                     <A href="m">赛事<i /></A>
-                    <A href="video">视频<i /></A>
-                    <A href="game">游戏<i /></A>
+                    <A href="v">视频<i /></A>
+                    <A href="g">游戏<i /></A>
 
                     <Form method="GET" action="/search">
                         <input

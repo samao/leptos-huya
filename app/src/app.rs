@@ -11,7 +11,7 @@ use leptos_router::{
 use models::User as ModelUser;
 
 use crate::components::{Footer, Header, LeftNav, Login};
-use crate::pages::{Game, HomePage, InfoPage, MatchPage, NotFound, UserPage, VideoPage};
+use crate::pages::{CatePage, Game, HomePage, LivePage, MatchPage, NotFound, VideoPage};
 
 stylance::import_crate_style!(css, "src/app.module.scss");
 
@@ -92,8 +92,8 @@ pub fn App() -> impl IntoView {
                         }
                     >
                         <Route path=path!("") view=HomePage />
-                        <Route path=path!("video") view=UserPage />
-                        <Route path=path!("game") view=Game />
+                        <Route path=path!("v") view=VideoPage />
+                        <Route path=path!("g") view=Game />
                     </ParentRoute>
                     <ParentRoute
                         path=StaticSegment("/")
@@ -106,8 +106,8 @@ pub fn App() -> impl IntoView {
                             }
                         }
                     >
-                        <Route path=path!("g") view=InfoPage />
-                        <Route path=path!("l") view=VideoPage />
+                        <Route path=path!("c") view=CatePage />
+                        <Route path=path!("l") view=LivePage />
                     </ParentRoute>
                     <Route path=path!("m") view=MatchPage />
                 </Routes>

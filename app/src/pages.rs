@@ -1,17 +1,17 @@
 pub mod home_page;
 pub use home_page::HomePage;
 
-pub mod info_page;
-pub use info_page::InfoPage;
+pub mod cate_page;
+pub use cate_page::CatePage;
 
 pub mod not_found;
 pub use not_found::NotFound;
 
-pub mod video;
-pub use video::VideoPage;
+pub mod live_page;
+pub use live_page::LivePage;
 
-pub mod user;
-pub use user::UserPage;
+pub mod video_page;
+pub use video_page::VideoPage;
 
 mod game;
 pub use game::Game;

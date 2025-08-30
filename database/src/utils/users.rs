@@ -7,6 +7,24 @@ use hex::ToHex;
 use models::User as ModelUser;
 use tracing::info;
 
+pub fn login_by_id_or_phone(
+    conn: &mut SqliteConnection,
+    id_or_phone: i32,
+    pwd: String,
+) -> anyhow::Result<()> {
+    let user = users
+        .filter(
+            id.eq(id_or_phone)
+                .or(phone.eq(id_or_phone.to_string()))
+                .and(password.eq(pwd)),
+        )
+        .select(DbUser::as_select())
+        .get_result(conn)
+        .map_err(|e| anyhow!(format!("用户名/密码错误: {:?}", e.to_string())))?;
+    info!("登录用户: {:?}", user);
+    Ok(())
+}
+
 pub fn create(
     conn: &mut SqliteConnection,
     input_name: String,

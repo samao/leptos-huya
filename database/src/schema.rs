@@ -40,6 +40,14 @@ diesel::table! {
 }
 
 diesel::table! {
+    sub_cate (id) {
+        id -> Integer,
+        vod_cate_id -> Integer,
+        cate_name -> Text,
+    }
+}
+
+diesel::table! {
     tags (id) {
         id -> Integer,
         title -> Text,
@@ -68,18 +76,43 @@ diesel::table! {
     }
 }
 
+diesel::table! {
+    vod_cate (id) {
+        id -> Integer,
+        cate_name -> Text,
+        img_url -> Text,
+    }
+}
+
+diesel::table! {
+    vods (id) {
+        id -> Integer,
+        img_url -> Text,
+        duration -> Integer,
+        user_id -> Integer,
+        title -> Text,
+        vod_cate_id -> Integer,
+    }
+}
+
 diesel::joinable!(rooms -> cates (cate_id));
 diesel::joinable!(rooms -> users (user_id));
 diesel::joinable!(rooms_tags -> rooms (room_id));
 diesel::joinable!(rooms_tags -> tags (tag_id));
+diesel::joinable!(sub_cate -> vod_cate (vod_cate_id));
 diesel::joinable!(tokens -> users (user_id));
+diesel::joinable!(vods -> users (user_id));
+diesel::joinable!(vods -> vod_cate (vod_cate_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     cates,
     rooms,
     rooms_tags,
     sim_cate,
+    sub_cate,
     tags,
     tokens,
     users,
+    vod_cate,
+    vods,
 );
