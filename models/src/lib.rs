@@ -23,3 +23,13 @@ pub struct SimCate {
     pub src: String,
     pub name: String,
 }
+
+#[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+pub struct Vod {
+    pub id: i32,
+    pub img_url: String,
+    pub duration: i32,
+    pub hot: i32,
+    pub title: String,
+    pub owner: String,
+}

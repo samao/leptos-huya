@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand, arg};
-use database::users::{create, delete, read, register, update};
+use database::users::{create, delete, login_by_id_or_phone, read, register, update};
 
 #[derive(Parser)]
 struct Args {
@@ -43,6 +43,12 @@ enum Command {
         #[arg(short, long, help = "用户id")]
         id: i32,
     },
+    L {
+        #[arg(short, long, help = "用户id/手机号")]
+        id_or_phone: i32,
+        #[arg(short, long, help = "密码")]
+        pwd: String,
+    },
 }
 
 #[tokio::main]
@@ -52,6 +58,9 @@ async fn main() -> anyhow::Result<()> {
     let conn = &mut establish_connection();
 
     match Args::parse().cmd {
+        Some(Command::L { id_or_phone, pwd }) => {
+            login_by_id_or_phone(conn, id_or_phone, pwd)?;
+        }
         Some(Command::C {
             name: input_name,
             head: input_head,

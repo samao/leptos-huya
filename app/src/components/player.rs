@@ -31,7 +31,7 @@ pub fn Player(
             JsValue,
             prelude::{Closure, wasm_bindgen},
         };
-
+        #[allow(dead_code)]
         enum Player {
             FLV(FlvPlayer),
             HLS(Hls),
