@@ -23,6 +23,7 @@ CREATE TABLE
         user_id INTEGER NOT NULL,
         title TEXT NOT NULL,
         vod_cate_id INTEGER NOT NULL,
+        hots INTEGER NOT NULL DEFAULT 0,
         FOREIGN KEY (user_id) REFERENCES users (id) on DELETE CASCADE,
         FOREIGN KEY (vod_cate_id) REFERENCES vod_cate (id) on DELETE CASCADE
     );

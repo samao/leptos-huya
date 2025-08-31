@@ -92,6 +92,7 @@ diesel::table! {
         user_id -> Integer,
         title -> Text,
         vod_cate_id -> Integer,
+        hots -> Integer,
     }
 }
 

@@ -26,4 +26,5 @@ pub struct Vod {
     pub user_id: i32,
     pub title: String,
     pub vod_cate_id: i32,
+    pub hots: i32,
 }
