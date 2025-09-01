@@ -1,8 +1,8 @@
 use crate::models::{User as DbUser, Vod as DbVod, VodCate as DbVodCate};
 use diesel::prelude::*;
 use diesel::{Connection, SqliteConnection};
-use models::{Banner, Site, Vod, VodSet, VodUser};
-use serde::{Deserialize, Serialize};
+use models::{Banner, FullVod, Site, Vod, VodSet, VodUser};
+use serde::Deserialize;
 use tracing::info;
 
 pub fn duration_as_string(duration_sec: i64) -> String {
@@ -12,47 +12,6 @@ pub fn duration_as_string(duration_sec: i64) -> String {
     match duration.num_hours() {
         0 => format!("{:02}:{:02}", mins, seconds),
         hours => format!("{:02}:{:02}:{:02}", hours, mins, seconds),
-    }
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct FullVod {
-    pub id: i32,
-    pub img_url: String,
-    pub duration: i32,
-    pub user: VodUser,
-    pub title: String,
-    pub vod_cate_id: i32,
-    pub hots: i32,
-}
-
-impl From<(DbVod, DbUser)> for FullVod {
-    fn from(
-        (
-            DbVod {
-                id,
-                img_url,
-                duration,
-                title: vod_title,
-                vod_cate_id,
-                hots,
-                ..
-            },
-            user,
-        ): (DbVod, DbUser),
-    ) -> Self {
-        Self {
-            id,
-            img_url,
-            duration,
-            title: vod_title,
-            vod_cate_id,
-            hots,
-            user: VodUser {
-                name: user.user_name,
-                avatar: user.avatar,
-            },
-        }
     }
 }
 
@@ -70,11 +29,25 @@ pub fn get_hot_vods(conn: &mut SqliteConnection) -> anyhow::Result<Vec<FullVod>>
     //inner_join 必须有， left_join 可能
     let hot_vods = vods
         .inner_join(user_dsl::users.on(user_id.eq(user_dsl::id)))
-        .limit(6)
+        .limit(9)
         .order(hots.desc())
         .select((DbVod::as_select(), DbUser::as_select()))
         .load::<(DbVod, DbUser)>(conn)?;
-    let result: Vec<FullVod> = hot_vods.into_iter().map(|item| item.into()).collect();
+    let result: Vec<FullVod> = hot_vods
+        .into_iter()
+        .map(|(item, user)| FullVod {
+            id: item.id,
+            img_url: item.img_url,
+            duration: item.duration,
+            user: VodUser {
+                name: user.user_name,
+                avatar: user.avatar,
+            },
+            title: item.title,
+            vod_cate_id: item.vod_cate_id,
+            hots: item.hots,
+        })
+        .collect();
     info!("热度视频: {:?}", result.len());
     Ok(result)
 }

@@ -14,26 +14,32 @@ pub fn HotNews() -> impl IntoView {
                     SlideItem {
                         img_url: "/imgs/room/pic_1750388549.jpg".to_string(),
                         link: Some("#".to_string()),
+                        title: None,
                     },
                     SlideItem {
                         img_url: "/imgs/room/pic_1750413784.jpg".to_string(),
                         link: None,
+                        title: None,
                     },
                     SlideItem {
                         img_url: "/imgs/room/pic_1750388850.png".to_string(),
                         link: None,
+                        title: None,
                     },
                     SlideItem {
                         img_url: "/imgs/room/pic_1750387905.jpg".to_string(),
                         link: None,
+                        title: None,
                     },
                     SlideItem {
                         img_url: "/imgs/room/pic_1750327374.jpg".to_string(),
                         link: None,
+                        title: None,
                     },
                     SlideItem {
                         img_url: "/imgs/room/pic_1750322434.jpg".to_string(),
                         link: None,
+                        title: None,
                     },
                 ] />
             </div>

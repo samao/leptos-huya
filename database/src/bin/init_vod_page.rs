@@ -10,7 +10,7 @@ use tracing::info;
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let conn = &mut establish_connection();
-    // save(conn).await?;
+    save(conn).await?;
     info!("读取热门视频===");
     get_hot_vods(conn)?;
     info!("读取分类视频===");

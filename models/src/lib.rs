@@ -29,6 +29,16 @@ pub struct VodUser {
     pub name: String,
     pub avatar: String,
 }
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct FullVod {
+    pub id: i32,
+    pub img_url: String,
+    pub duration: i32,
+    pub user: VodUser,
+    pub title: String,
+    pub vod_cate_id: i32,
+    pub hots: i32,
+}
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Vod {
@@ -65,13 +75,13 @@ pub struct VodSet {
     pub rank: Vec<Vod>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Site {
     pub title: String,
     pub list: Vec<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Banner {
     pub title: String,
     pub cover: String,

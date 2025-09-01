@@ -8,6 +8,7 @@ pub struct SlideItem {
     pub img_url: String,
     // #[serde(skip_serializing_if = "Option::is_none")]
     pub link: Option<String>,
+    pub title: Option<String>,
 }
 
 #[component]
@@ -50,10 +51,11 @@ pub fn Carousel(#[prop(default=Vec::new())] items: Vec<SlideItem>) -> impl IntoV
                     <For
                         each=move || data.get().into_iter()
                         key=|item| item.to_owned().img_url
-                        let(SlideItem { img_url, link })
+                        let(SlideItem { img_url, link, title })
                     >
                         <a href=link>
                             <div style=format!("--item-img: url({})", img_url) class=css::img />
+                            <span>{title.unwrap_or_default()}</span>
                         </a>
                     </For>
                 </div>

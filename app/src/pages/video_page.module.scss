@@ -1,6 +1,577 @@
 .video_page {
+  margin-inline: auto;
+  width: 1220px;
+  font-size: 14px;
+  color: #666;
+
+  %rounded {
+    border-radius: 6px;
+  }
+
+  .recommends {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-inline: auto;
+    column-gap: 12px;
+    margin-top: 20px;
+
+    .carsoul {
+      position: relative;
+      @extend %rounded;
+      width: 475px;
+      background: gray;
+      flex: none;
+      overflow: hidden;
+
+    }
+
+    .vods {
+      display: grid;
+      flex: auto;
+      width: 720px;
+      gap: 12px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      color: #fff;
+
+      >li {
+        position: relative;
+        @extend %rounded;
+        overflow: hidden;
+
+        &:nth-child(n + 7) {
+          display: none;
+        }
+
+        >img {
+          transform-origin: center;
+          transform: scale(1);
+          transition: all 300ms;
+        }
+
+        &:hover>img {
+          transform: scale(1.2);
+        }
+
+        &:hover>div {
+          background-color: rgba(#000, 0.5);
+
+          span {
+            &:nth-child(1) {
+              position: unset;
+              background: unset;
+              white-space: unset;
+            }
+
+            &:nth-child(n + 1) {
+              display: inline-flex;
+            }
+          }
+        }
+
+        >img {
+          width: 100%;
+          height: auto;
+        }
+
+        >div {
+          position: absolute;
+          display: flex;
+          justify-content: center;
+          inset: 0;
+          align-items: center;
+          transition: all 300ms;
+
+          $padding: 10px;
+
+          span {
+
+            &:nth-child(n + 1) {
+              position: absolute;
+              left: $padding;
+              bottom: $padding;
+              display: none;
+              column-gap: 4px;
+              align-items: center;
+
+              &::before {
+                display: block;
+                content: '';
+              }
+            }
+
+            &:nth-child(2) {
+              &::before {
+                width: 12px;
+                height: 12px;
+                background: url(/imgs/video/i-anchor.3c0739a4edd4efea53af0cd1f852b8c5.png) no-repeat 100%;
+              }
+            }
+
+            &:nth-child(3) {
+              right: $padding;
+              left: unset;
+
+              &::before {
+                width: 9px;
+                height: 12px;
+                background: url(/imgs/video/i-playtimes.e7a60b71871790f92757ddb374c16c20.png) no-repeat 100%;
+              }
+            }
+
+            &:nth-child(1) {
+              display: block;
+              text-align: left;
+              width: 100%;
+              padding-inline: 10px;
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              padding-bottom: $padding;
+              background: linear-gradient(to bottom, transparent 0%, #000 150%);
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              transition: all 300ms;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .sites {
+    margin-top: 20px;
+    @extend %rounded;
+    background-color: #fff;
+    display: flex;
+    padding: 20px 20px 10px;
+    justify-content: space-between;
+    column-gap: 10px;
+
+    .site {
+      &:not(:first-child) {
+        border-left: 1px solid rgba(#999, 0.3);
+        padding-left: 20px;
+      }
+
+      >h2 {
+        display: flex;
+        align-items: center;
+        column-gap: 10px;
+        margin-bottom: 10px;
+
+        &::before {
+          display: block;
+          content: '';
+          width: 14px;
+          height: 15px;
+          background: url(/imgs/video/play-icon.c290e519897c9217f8c5d26c8cc70a42.png) no-repeat 100%;
+        }
+      }
+
+      span {
+        color: gray;
+        float: left;
+        margin-right: 30px;
+        margin-bottom: 10px;
+
+        &:hover {
+          color: #f80;
+        }
+      }
+    }
+  }
+
+  .cate {
+    margin-top: 20px;
+    background-color: #fff;
+    @extend %rounded;
+    padding: 20px;
+
+    .left {
+      width: 880px;
+      flex: none;
+    }
+
+    .right {
+      width: 250px;
+      flex: none;
+    }
+
+    .cate_th {
+      display: flex;
+      column-gap: 30px;
+      align-items: center;
+
+      .left {
+        position: relative;
+        display: flex;
+        align-items: center;
+        column-gap: 20px;
+
+        >h1 {
+          display: flex;
+          align-items: center;
+          column-gap: 10px;
+          font-size: 28px;
+
+          img {
+            width: 32px;
+            height: 32px;
+          }
+        }
+
+        .more {
+          position: absolute;
+          right: 0;
+          display: flex;
+          column-gap: 10px;
+          align-items: center;
+
+          >button {
+            display: flex;
+            align-items: center;
+            column-gap: 5px;
+            padding-inline: 12px;
+            border-radius: 25px;
+            line-height: 25px;
+            border: 1px solid rgba(#000, 0.3);
+            transition-duration: 300ms;
+            transition-property: background-color, color;
+
+            &:hover {
+              background-color: #f80;
+              color: #fff;
+              border-color: transparent;
+
+              &::before {
+                background-image: url(/imgs/video/i-change-hover.963bf51062e497eb70b605ebadffb553.png);
+              }
+            }
+
+            &::before {
+              content: '';
+              display: inline-block;
+              width: 18px;
+              height: 14px;
+              background: url(/imgs/video/i-change.c119f41713b048ba04f91ab93668e673.png) no-repeat 100%;
+            }
+          }
+        }
+
+        >ul {
+          display: flex;
+          column-gap: 10px;
+
+          &:empty {
+            display: none;
+          }
+
+          li {
+            padding-inline: 10px;
+            border: 1px solid rgba(lightgray, 0.6);
+            border-radius: 15px;
+            line-height: 25px;
+            transition: all 300ms;
+            font-size: 12px;
+
+            &:hover {
+              color: #f80;
+              border-color: currentColor;
+            }
+          }
+        }
+      }
+
+      .right {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 18px;
+        color: #555;
+
+        p {
+          font-size: 14px;
+        }
+      }
+    }
+
+    .cate_tb {
+      display: flex;
+      column-gap: 30px;
+      margin-top: 20px;
+
+      .left {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px 20px;
+
+        >li {
+          overflow: hidden;
+          @extend %rounded;
+        }
+
+        .cover {
+          position: relative;
+          overflow: hidden;
+          @extend %rounded;
+
+          &:hover {
+
+            &::before {
+              opacity: 1;
+            }
+
+            &::after {
+              opacity: 1;
+              transform: translate(-50%, -50%) scale(1);
+            }
+
+            +.owner {
+              .title {
+                color: #f80;
+              }
+            }
+          }
+
+          &::before {
+            opacity: 0;
+            content: '';
+            position: absolute;
+            inset: 0;
+            transition: all 300ms;
+            background-color: rgba(#000, 0.5);
+          }
+
+          &::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: url(/imgs/room-play.png) no-repeat 100%;
+            top: 50%;
+            left: 50%;
+            transition: all 300ms;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(1.5);
+          }
+
+          span {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            line-height: 30px;
+            text-align: right;
+            color: #fff;
+            padding-inline: 5px;
+            background: linear-gradient(to bottom, transparent 0%, #000 150%);
+          }
+        }
+
+        .owner {
+          white-space: nowrap;
+          font-size: 12px;
+          color: gray;
+
+          >img {
+            display: none;
+          }
+
+          .title {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 14px;
+            color: #000;
+            margin-block: 5px;
+            transition: all 300ms;
+          }
+
+          .name {
+            display: inline-flex;
+            column-gap: 5px;
+            align-items: center;
+            transition: all 300ms;
+
+            &:hover {
+              color: #f80;
+            }
+
+            &::before {
+              content: '';
+              display: inline-block;
+              width: 11px;
+              height: 12px;
+              background: url(/imgs/video/v-user.1c38b4e2734a3938d1099b204d7c85ff.png) no-repeat 100%;
+            }
+          }
+
+          .hots {
+            float: right;
+            display: inline-flex;
+            align-items: center;
+            column-gap: 5px;
+
+            &::before {
+              display: inline-block;
+              content: '';
+              width: 8px;
+              height: 10px;
+              background: url(/imgs/video/v-playtimes.f92173a8899d33179599380be529251f.png) no-repeat 100%;
+            }
+          }
+        }
+      }
+
+      .rank {
+        width: 250px;
+        display: flex;
+        flex-direction: column;
+        row-gap: 10px;
+        justify-content: space-between;
+        flex: none;
+        line-height: 18px;
+        counter-reset: step-counter 0;
+
+        .item {
+          display: flex;
+          column-gap: 5px;
+          position: relative;
+          align-items: center;
+          counter-increment: step-counter;
+
+          &:hover .rank_info {
+            span:not(:last-child) {
+              color: #f80;
+            }
+          }
+
+          &::before {
+            display: inline-block;
+            content: counter(step-counter);
+            padding-inline: 6px;
+            background-color: gray;
+            height: 20px;
+            line-height: 20px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #fff;
+          }
+
+          >img {
+            width: 112px;
+            height: 62px;
+            @extend %rounded;
+          }
+
+          &:not(:nth-child(n + 4)) {
+            display: flex;
+            column-gap: 5px;
+
+            &::before {
+              position: absolute;
+              background-color: #f80;
+              top: 2px;
+              left: 2px;
+            }
+
+            .rank_info {
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              height: 100%;
+
+              >span {
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+              }
+
+              >span:last-child {
+                font-size: 12px;
+                color: gray;
+              }
+            }
+          }
+
+          &:nth-child(n + 4) {
+            >img {
+              display: none;
+            }
+
+            .rank_info {
+              display: contents;
+
+
+              >span {
+                display: block;
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
+
+              >span:last-child {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1440px) {
+    width: 980px;
+
+    .recommends {
+      .vods>li {
+        font-size: 12px;
+
+        &:nth-child(n + 7) {
+          display: block;
+        }
+
+        &:hover>div {
+          span:first-child {
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+          }
+        }
+      }
+    }
+
+    .sites {
+
+      .site span {
+        margin-right: 15px;
+      }
+    }
+
+    .cate {
+      .cate_th {
+        .left {
+          flex: auto;
+
+          >ul {
+            li:nth-child(n + 3) {
+              display: none;
+            }
+          }
+        }
+      }
+
+      .cate_tb {
+
+        .left {
+          flex: auto;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+
+          >li:nth-child(n + 7) {
+            display: none;
+          }
+        }
+      }
+    }
+  }
 }
