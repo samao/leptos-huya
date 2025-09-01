@@ -80,6 +80,12 @@ pub fn read(conn: &mut SqliteConnection, input_id: Option<i32>) -> anyhow::Resul
     Ok(())
 }
 
+pub fn get_user(conn: &mut SqliteConnection, input_id: i32) -> anyhow::Result<DbUser> {
+    let mut query = users.into_boxed();
+    query = query.filter(id.eq(input_id));
+    let user = query.select(DbUser::as_select()).get_result(conn)?;
+    Ok(user)
+}
 pub fn delete(conn: &mut SqliteConnection, input_id: i32) -> anyhow::Result<()> {
     let count = diesel::delete(users.filter(id.eq(input_id))).execute(conn)?;
     if count == 0 {

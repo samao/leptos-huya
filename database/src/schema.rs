@@ -106,14 +106,5 @@ diesel::joinable!(vods -> users (user_id));
 diesel::joinable!(vods -> vod_cate (vod_cate_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
-    cates,
-    rooms,
-    rooms_tags,
-    sim_cate,
-    sub_cate,
-    tags,
-    tokens,
-    users,
-    vod_cate,
-    vods,
+    cates, rooms, rooms_tags, sim_cate, sub_cate, tags, tokens, users, vod_cate, vods,
 );

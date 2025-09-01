@@ -24,12 +24,63 @@ pub struct SimCate {
     pub name: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct VodUser {
+    pub name: String,
+    pub avatar: String,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Vod {
-    pub id: i32,
-    pub img_url: String,
-    pub duration: i32,
-    pub hot: i32,
     pub title: String,
-    pub owner: String,
+    pub img_url: String,
+    pub hots: i32,
+    pub duration: String,
+    pub owner: VodUser,
+}
+
+impl Vod {
+    pub fn duration_as_sec(&self) -> i32 {
+        let mut index = 0;
+        let times = self
+            .duration
+            .split(":")
+            .map(|item| item.parse::<i32>().unwrap_or_default())
+            .collect::<Vec<_>>()
+            .iter()
+            .rfold(0, |total, acc| {
+                let next_total = total + acc * 60i32.pow(index);
+                index += 1;
+                next_total
+            });
+        times
+    }
+}
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct VodSet {
+    pub title: String,
+    pub cover: String,
+    pub tags: Vec<String>,
+    pub list: Vec<Vod>,
+    pub rank: Vec<Vod>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Site {
+    pub title: String,
+    pub list: Vec<String>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Banner {
+    pub title: String,
+    pub cover: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct VodPage {
+    pub banners: Vec<Banner>,
+    pub sites: Vec<Site>,
+    pub aggregations: Vec<VodSet>,
+    pub recommends: Vec<Vod>,
 }

@@ -1,68 +1,88 @@
-use crate::components::{Carousel, SlideItem};
-use leptos::ev::click;
-use leptos::logging::log;
-use leptos::prelude::*;
+use leptos::{either::Either, prelude::*};
 use leptos_meta::Title;
-use web_sys::Element;
 
-fn add_dot(el: Element, amount: usize) {
-    use leptos::wasm_bindgen::JsCast;
-    let el = el.unchecked_into::<web_sys::HtmlElement>();
-
-    log!("ADD DOT");
-
-    let handle = el.clone().on(click, move |_| {
-        el.set_inner_text(&format!("{}{}", el.inner_text(), ".".repeat(amount)))
-    });
-    on_cleanup(move || {
-        log!("ADD DOT on_cleanup");
-        drop(handle)
-    });
+#[server]
+async fn get_all_vod() -> Result<Vec<models::VodSet>, ServerFnError> {
+    use database::{establish_connection, vod_page::get_cate_vods};
+    let conn = &mut establish_connection();
+    get_cate_vods(conn).map_err(|er| ServerFnError::new(er.to_string()))
 }
 
 #[component]
 pub fn VideoPage() -> impl IntoView {
-    #[cfg(feature = "hydrate")]
-    Effect::new(|| {
-        log!("{:?}", serde_json::json!({"name": "aaa"}));
-
-        log!("{:?}", crate::json! {"name" => "WWW"});
-    });
-
     stylance::import_crate_style!(css, "src/pages/video_page.module.scss");
-
+    let get_all_data = Resource::new(|| (), |_| async move { get_all_vod().await });
     view! {
         <Title text="UserPage" />
         <div class=css::video_page>
-            <p use:add_dot=15 title="UNKNOWN">
-                HAHAHA
-            </p>
-            <Carousel items=vec![
-                SlideItem {
-                    img_url: "/imgs/room/pic_1750388549.jpg".to_string(),
-                    link: None,
-                },
-                SlideItem {
-                    img_url: "/imgs/room/pic_1750413784.jpg".to_string(),
-                    link: None,
-                },
-                SlideItem {
-                    img_url: "/imgs/room/pic_1750388850.png".to_string(),
-                    link: None,
-                },
-                SlideItem {
-                    img_url: "/imgs/room/pic_1750387905.jpg".to_string(),
-                    link: None,
-                },
-                SlideItem {
-                    img_url: "/imgs/room/pic_1750327374.jpg".to_string(),
-                    link: None,
-                },
-                SlideItem {
-                    img_url: "/imgs/room/pic_1750322434.jpg".to_string(),
-                    link: None,
-                },
-            ] />
+            <Suspense fallback=move || {
+                "..."
+            }>
+                {Suspend::new(async move {
+                    match get_all_data.await {
+                        Ok(list) => {
+                            Either::Right(
+                                view! {
+                                    <For
+                                        each=move || list.clone().into_iter()
+                                        key=|item| item.title.clone()
+                                        let(cate)
+                                    >
+                                        <section>
+                                            <div>
+                                                <h1>
+                                                    <img src=format!("/imgs/{}", cate.cover) />
+                                                    {cate.title}
+                                                </h1>
+                                                <ul>
+                                                    <For
+                                                        each=move || cate.tags.clone().into_iter()
+                                                        key=|item| item.clone()
+                                                        let(item)
+                                                    >
+                                                        <li>{item}</li>
+                                                    </For>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <ul>
+                                                    <For
+                                                        each=move || cate.list.clone().into_iter()
+                                                        key=|item| item.title.clone()
+                                                        let(item)
+                                                    >
+                                                        <li>
+                                                            <div>
+                                                                <img src=format!("/imgs/{}", item.img_url) loading="lazy" />
+                                                            </div>
+                                                            <div>
+                                                                <span>{item.title}</span>
+                                                                <img src=format!("/imgs/{}", item.owner.avatar) />
+                                                                <span>{item.owner.name}</span>
+                                                                <span>{item.hots}</span>
+                                                            </div>
+                                                        </li>
+                                                    </For>
+                                                </ul>
+                                                <ul>
+                                                    <For
+                                                        each=move || cate.rank.clone().into_iter()
+                                                        key=|item| item.title.clone()
+                                                        let(item)
+                                                    >
+                                                        <li>{item.title}</li>
+                                                    </For>
+                                                </ul>
+                                            </div>
+                                        </section>
+                                    </For>
+                                },
+                            )
+                        }
+                        Err(er) => Either::Left(er.to_string()),
+                    }
+                })}
+            </Suspense>
         </div>
     }
 }

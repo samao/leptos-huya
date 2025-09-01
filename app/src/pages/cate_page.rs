@@ -26,38 +26,43 @@ pub fn CatePage() -> impl IntoView {
                             Either::Right(
                                 view! {
                                     <div class=css::right_box>
-                                    <div class=css::cate_nav>
-                                        全部分类
-                                        <ul>
-                                            <For
-                                                each=|| vec!["全部", "网游竞技", "单机热游", "娱乐天地", "手游休闲"]
-                                                key=|item| item.to_string()
-                                                let(label)
-                                            >
-                                                <li>{label}</li>
+                                        <div class=css::cate_nav>
+                                            全部分类 <ul>
+                                                <For
+                                                    each=|| {
+                                                        vec![
+                                                            "全部",
+                                                            "网游竞技",
+                                                            "单机热游",
+                                                            "娱乐天地",
+                                                            "手游休闲",
+                                                        ]
+                                                    }
+                                                    key=|item| item.to_string()
+                                                    let(label)
+                                                >
+                                                    <li>{label}</li>
 
+                                                </For>
+                                            </ul>
+                                        </div>
+                                        <ul class=css::cates>
+                                            <For
+                                                each=move || results.clone().into_iter()
+                                                key=|item| item.src.clone()
+                                                let(item)
+                                            >
+                                                <li>
+                                                    <img src=item.src.clone() loading="lazy" />
+                                                    <span>{item.name.clone()}</span>
+                                                </li>
                                             </For>
                                         </ul>
                                     </div>
-                                    <ul class=css::cates>
-                                   <For
-                                       each=move || results.clone().into_iter()
-                                       key=|item| item.src.clone()
-                                       let(item)
-                                   >
-                                       <li>
-                                           <img src=item.src.clone() loading="lazy" />
-                                           <span>{item.name.clone()}</span>
-                                       </li>
-                                   </For>
-                                   </ul>
-                                   </div>
-                                }
+                                },
                             )
-                        },
-                        Err(e) => {
-                            Either::Left(e.to_string())
                         }
+                        Err(e) => Either::Left(e.to_string()),
                     }
                 })}
             </Suspense>
