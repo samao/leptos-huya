@@ -1,0 +1,238 @@
+.game_recommend {
+  position: relative;
+  display: flex;
+  column-gap: 20px;
+  width: 980px;
+  margin-inline: auto;
+  margin-bottom: 60px;
+
+  @media (min-width: 1440px) {
+    width: 1220px;
+  }
+
+  %rounded {
+    border-radius: 6px;
+  }
+
+  .left,
+  .right {
+    >h1 {
+      position: relative;
+      display: flex;
+      font-size: 24px;
+      align-items: center;
+      padding-left: 40px;
+      padding-right: 10px;
+      height: 60px;
+      color: #333;
+      font-weight: 500;
+      justify-content: space-between;
+
+      >span {
+        font-size: 14px;
+
+        &:hover {
+          color: #f80;
+        }
+      }
+
+      &::before {
+        position: absolute;
+        content: '';
+        display: inline-block;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        margin-right: 20px;
+        left: 0;
+        width: 26px;
+        height: 26px;
+      }
+    }
+  }
+
+  .left {
+    width: 300px;
+    flex: none;
+    background-color: #fff;
+    @extend %rounded;
+    padding-inline: 10px;
+
+    h1 {
+      &::before {
+        background-image: url(/imgs/game/icon1.png);
+      }
+    }
+
+    .list {
+
+      .item {
+        .summary {
+          position: relative;
+          font-size: 14px;
+          display: flex;
+          line-height: 55px;
+          align-items: center;
+          justify-content: flex-start;
+          padding-inline: 10px;
+
+          img {
+            width: 16px;
+            height: 16px;
+            flex: none;
+            margin-right: 5px;
+          }
+
+          img+span {
+            margin-right: 20px;
+          }
+
+          span:last-child {
+            position: absolute;
+            display: inline-block;
+            width: 30%;
+            text-align: right;
+            flex: none;
+            right: 10px;
+            color: gray;
+          }
+        }
+
+        &:hover .summary {
+          display: none;
+        }
+
+        &:hover .detail {
+          display: flex;
+        }
+
+        .detail {
+          position: relative;
+          display: none;
+          background-color: lightgray;
+          @extend %rounded;
+          padding: 15px 10px;
+          align-items: center;
+
+          img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+          }
+
+          .group {
+            display: flex;
+            flex-direction: column;
+            font-size: 12px;
+            justify-content: space-between;
+
+            h2 {
+              font-size: 18px;
+              color: #ff9600;
+              font-weight: bold;
+            }
+          }
+
+          button {
+            position: absolute;
+            right: 10px;
+            font-size: 12px;
+            border: 1px solid lightgray;
+            background-color: #fff;
+            color: #f80;
+            line-height: 20px;
+            height: 22px;
+            border-radius: 10px;
+            padding: 0 10px;
+          }
+        }
+      }
+    }
+  }
+
+  .right {
+    flex: auto;
+
+    h1 {
+      &::before {
+        background-image: url(/imgs/game/icon2.png);
+      }
+    }
+
+    .list {
+      display: grid;
+      font-size: 14px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px 20px;
+
+      @media (max-width: 1440px) {
+        row-gap: 60px;
+      }
+
+      .item {
+        background-color: #fff;
+        @extend %rounded;
+        overflow: hidden;
+        transition: all 300ms;
+
+        &:hover {
+          filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.20));
+        }
+
+        .cover {
+          position: relative;
+
+          img {
+            width: 100%;
+          }
+
+          %icon {
+            position: absolute;
+            display: inline-block;
+            width: 47px;
+            height: 16px;
+            top: 4px;
+            left: 4px;
+            background-repeat: no-repeat;
+            background-size: cover;
+          }
+
+          .hot {
+            @extend %icon;
+            background-image: url(/imgs/common/icon-hot.png);
+          }
+
+          .new {
+            @extend %icon;
+            background-image: url(/imgs/common/icon-new.png);
+          }
+        }
+
+        .info {
+          display: flex;
+          justify-content: space-between;
+          padding-inline: 10px;
+          height: 34px;
+          line-height: 34px;
+
+          .right_info {
+            color: gray;
+            font-size: 12px;
+
+            a:hover {
+              color: #f80;
+            }
+
+            a:not(:first-child) {
+
+              &::before {
+                content: '|';
+                margin-inline: 10px;
+                color: gray;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

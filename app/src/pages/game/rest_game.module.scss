@@ -1,0 +1,199 @@
+.game_recommend {
+  display: flex;
+  column-gap: 20px;
+  width: 980px;
+  margin-inline: auto;
+
+  @media (min-width: 1440px) {
+    width: 1220px;
+  }
+
+  %rounded {
+    border-radius: 6px;
+  }
+
+  .left,
+  .right {
+    >h1 {
+      position: relative;
+      display: flex;
+      font-size: 24px;
+      align-items: center;
+      padding-left: 40px;
+      padding-right: 10px;
+      height: 60px;
+      font-weight: 500;
+      color: #333;
+      justify-content: space-between;
+
+      >span {
+        font-size: 14px;
+
+        &:hover {
+          color: #f80;
+        }
+      }
+
+      &::before {
+        position: absolute;
+        content: '';
+        display: inline-block;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        margin-right: 20px;
+        left: 0;
+        width: 26px;
+        height: 26px;
+      }
+    }
+  }
+
+  .left {
+    width: 300px;
+    flex: none;
+
+    h1 {
+      background-color: #fff;
+      @extend %rounded;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+      padding-left: 50px;
+
+      &::before {
+        background-image: url(/imgs/game/icon3.png);
+        margin-left: 10px;
+      }
+    }
+
+    .list {
+      font-size: 14px;
+      line-height: 30px;
+      list-style: inside;
+
+      li {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        background-color: #fff;
+        padding-inline: 20px;
+        transition: all 300ms;
+
+        &:not(.help):hover {
+          color: #f80;
+        }
+
+        &:first-child {
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+
+        &:has(+.help) {
+          border-bottom-left-radius: 6px;
+          border-bottom-right-radius: 6px;
+          padding-bottom: 22px;
+        }
+      }
+
+      .help {
+        display: flex;
+        font-size: 18px;
+        line-height: 80px;
+        padding-inline: 20px;
+        justify-content: center;
+        margin-top: 30px;
+        background-color: #fff;
+        @extend %rounded;
+        color: #555;
+
+        >div {
+          position: relative;
+          display: flex;
+          align-items: center;
+
+          &:first-child::after {
+            content: "|";
+            margin-inline: 10px;
+            color: rgba(#999, 0.5);
+          }
+
+          &:before {
+            content: '';
+            display: inline-block;
+            width: 26px;
+            height: 26px;
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin-right: 5px;
+          }
+
+          &:first-child::before {
+            background-image: url(/imgs/common/kf.png);
+          }
+
+          &:last-child::before {
+            background-image: url(/imgs/common/jb.png);
+          }
+        }
+      }
+    }
+  }
+
+  .right {
+    flex: auto;
+
+    h1 {
+      &::before {
+        background-image: url(/imgs/game/icon4.png);
+      }
+    }
+
+    .list {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      font-size: 14px;
+
+      .item {
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        @extend %rounded;
+        align-items: center;
+        padding: 20px 0 15px;
+
+        &:hover {
+          filter: drop-shadow(0 2px 2px #0003);
+          transition: all 300ms;
+
+          img {
+            box-shadow: 0 10px 16px rgba(0, 0, 0, .2);
+          }
+
+          .game_name {
+            display: none;
+          }
+
+          span:not(.game_name) {
+            display: block;
+          }
+        }
+
+        img {
+          width: 80px;
+          height: 80px;
+          border-radius: 10px;
+          margin-bottom: 15px;
+          background-color: transparent;
+          transition: all 300ms;
+        }
+
+        span:not(.game_name) {
+          display: none;
+          color: #f80;
+        }
+
+        .game_name {}
+      }
+    }
+  }
+}
