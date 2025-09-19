@@ -1,7 +1,8 @@
+use crate::pages::game::hot_game::GameVo;
 use leptos::{either::EitherOf3, prelude::*};
 use serde::{Deserialize, Serialize};
+
 stylance::import_crate_style!(css, "src/pages/game/recommend_game.module.scss");
-use crate::pages::game::hot_game::GameVo;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct InCommingServer {

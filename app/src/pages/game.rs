@@ -254,6 +254,7 @@ cfg_block! {
 type PageDataVo = (Vec<String>, Vec<GameVo>, RecommendVo, RestVo);
 
 #[server]
+#[lazy]
 async fn get_game_data() -> Result<PageDataVo, ServerFnError> {
     let all_data = tokio::join!(get_banner(), get_hot_game(), get_recommend(), get_rest());
     Ok(all_data)

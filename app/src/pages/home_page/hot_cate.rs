@@ -41,6 +41,7 @@ where
 }
 
 #[server]
+#[lazy]
 async fn get_hot_cate() -> Result<HotCateData<String>, ServerFnError> {
     Ok(HotCateData {
         live_count: 478,

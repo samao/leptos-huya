@@ -23,6 +23,7 @@ impl From<PlayBill<&str>> for PlayBill<String> {
 }
 
 #[server]
+#[lazy]
 async fn get_playbills() -> Result<Vec<PlayBill<String>>, ServerFnError> {
     Ok([
         PlayBill {

@@ -42,6 +42,7 @@ enum LoginOptions {
 }
 
 #[server]
+#[lazy]
 async fn login_query(data: LoginOptions) -> Result<ModelUser, ServerFnError> {
     use database::{
         establish_connection,
@@ -95,7 +96,7 @@ fn set_user_cookie(user: &ModelUser) -> Result<(), ServerFnError> {
 }
 
 #[server]
-#[allow(dead_code)]
+#[lazy]
 async fn register_user(
     phone: String,
     password: String,

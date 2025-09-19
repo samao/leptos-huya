@@ -13,6 +13,7 @@ pub struct PageInfo {
 }
 
 #[server]
+#[lazy]
 async fn get_all_vod() -> Result<PageInfo, ServerFnError> {
     use database::{
         establish_connection,

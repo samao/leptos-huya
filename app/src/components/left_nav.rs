@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 stylance::import_crate_style!(css, "src/components/left_nav.module.scss");
 
 #[server]
+#[lazy]
 async fn get_left_nav() -> Result<Vec<BigCate<String>>, ServerFnError> {
     let all_cate = vec![
         BigCate {
