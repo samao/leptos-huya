@@ -7,13 +7,13 @@ edition = "2024"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-leptos = { version = "0.8.8" }
-leptos_router = { version = "0.8.5" }
+leptos = { version = "0.8.9" }
+leptos_router = { version = "0.8.7" }
 axum = { version = "0.8.4", optional = true }
 axum-extra = { version = "0.10.1", optional = true, features=["cookie"] }
 console_error_panic_hook = { version = "0.1", optional = true }
 time = { version = "0.3.41", optional = true}
-leptos_axum = { version = "0.8.5", optional = true }
+leptos_axum = { version = "0.8.6", optional = true }
 leptos_meta = { version = "0.8.5" }
 tokio = { workspace = true, optional = true}
 wasm-bindgen = { version = "=0.2.103", optional = true }
