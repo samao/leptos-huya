@@ -6,7 +6,7 @@ edition = "2024"
 [dependencies]
 anyhow = "1.0.100"
 clap = { version = "4.5.48", features = ["derive"] }
-diesel = { version = "2.3.2", features = ["sqlite", "returning_clauses_for_sqlite_3_35", "serde_json", "chrono", "r2d2"] }
+diesel = { version = "2.3.8", features = ["sqlite", "returning_clauses_for_sqlite_3_35", "serde_json", "chrono", "r2d2"] }
 r2d2 = "0.8.10"
 chrono.workspace = true
 dotenvy = "0.15.7"

@@ -3,6 +3,7 @@ use leptos::{html::Div, prelude::*};
 use leptos_meta::Title;
 use serde::{Deserialize, Serialize};
 
+#[allow(dead_code)]
 #[derive(Debug, Deserialize, Serialize)]
 struct Barrage {
     from: User,

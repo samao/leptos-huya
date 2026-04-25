@@ -7,16 +7,16 @@ edition = "2024"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-leptos = { version = "0.8.11" }
-leptos_router = { version = "0.8.9" }
-axum = { version = "0.8.4", optional = true }
-axum-extra = { version = "0.10.1", optional = true, features=["cookie"] }
+leptos = { version = "0.8.19" }
+leptos_router = { version = "0.8.13" }
+axum = { version = "0.8.9", optional = true }
+axum-extra = { version = "0.12.6", optional = true, features=["cookie"] }
 console_error_panic_hook = { version = "0.1", optional = true }
 time = { version = "0.3.41", optional = true}
-leptos_axum = { version = "0.8.6", optional = true }
-leptos_meta = { version = "0.8.5" }
+leptos_axum = { version = "0.8.9", optional = true }
+leptos_meta = { version = "0.8.6" }
 tokio = { workspace = true, optional = true}
-wasm-bindgen = { version = "=0.2.104", optional = true }
+wasm-bindgen = { version = "0.2.106", optional = true }
 serde.workspace = true
 serde_json.workspace = true
 cfg_block.workspace = true
@@ -24,9 +24,9 @@ chrono.workspace = true
 gloo-timers = { version = "0.3.0", features = ["futures"], optional = true }
 stylance = "0.7.1"
 reactive_stores = "0.2.5"
-js-sys = { version = "0.3.81", optional=true }
-web-sys = { version = "0.3.81", features = ["NodeList"] }
-leptos-use = {version = "0.16.3", optional = true, features=["use_cookie"]}
+js-sys = { version = "0.3.95", optional=true }
+web-sys = { version = "0.3.95", features = ["NodeList"] }
+leptos-use = {version = "0.18.3", optional = true, features=["use_cookie"]}
 
 models.workspace = true
 database = { workspace=true, optional = true}
