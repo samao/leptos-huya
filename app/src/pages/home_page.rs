@@ -35,7 +35,7 @@ pub fn HomePage() -> impl IntoView {
     stylance::import_crate_style!(css, "src/pages/home_page.module.scss");
     let cates = Resource::new(|| (), |_| get_recommends());
     view! {
-        <Title text="Home" />
+        <Title text="Home Page" />
         <div id="top" class=css::section>
             <div class=css::banner />
             <div class=css::top>
